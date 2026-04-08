@@ -1,0 +1,242 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:340px;background:#020c18;overflow:hidden;font-family:'Courier New',monospace}
+#root{position:relative;width:100%;height:340px}
+#bgCanvas{position:absolute;top:0;left:0;width:100%;height:100%}
+#uiLayer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+.popup{
+  position:absolute;pointer-events:none;
+  background:rgba(2,10,24,0.92);
+  border:1px solid;border-radius:4px;
+  padding:5px 9px;opacity:0;
+  transform:scale(0.75);
+  transition:opacity 0.3s ease,transform 0.35s cubic-bezier(.2,1.3,.35,1);
+  white-space:nowrap;
+}
+.popup.show{opacity:1;transform:scale(1)}
+.popup.hide{opacity:0;transform:scale(0.7);transition:opacity 0.35s,transform 0.25s}
+.p-sym{font-size:11px;font-weight:700;letter-spacing:.08em;display:block;margin-bottom:2px}
+.p-row{display:flex;gap:6px;align-items:center}
+.p-conf{font-size:9px;font-weight:700;letter-spacing:.06em}
+.p-type{font-size:9px;font-weight:700;letter-spacing:.1em}
+.p-line{height:1px;margin-top:4px;opacity:0.5;border-radius:1px;transition:width 0.8s ease}
+</style>
+</head>
+<body>
+<div id="root">
+  <canvas id="bgCanvas"></canvas>
+  <div id="uiLayer"></div>
+</div>
+<script>
+const cv = document.getElementById('bgCanvas');
+const ctx = cv.getContext('2d');
+const ui = document.getElementById('uiLayer');
+
+function resize(){
+  cv.width = cv.offsetWidth||500;
+  cv.height = cv.offsetHeight||340;
+}
+resize();
+
+const W=()=>cv.width;
+const H=()=>cv.height;
+const RCX=()=>W()*0.38;
+const RCY=()=>H()*0.5;
+const R=68;
+
+const SIGS=[
+  {sym:'BTCUSDT', conf:94,color:'#00e5ff',type:'LONG',  angle:0.42, r:0.52},
+  {sym:'ETHUSDT', conf:87,color:'#00ff9d',type:'LONG',  angle:1.15, r:0.68},
+  {sym:'SOLUSDT', conf:76,color:'#c77dff',type:'SHORT', angle:2.35, r:0.38},
+  {sym:'BNBUSDT', conf:91,color:'#ffd60a',type:'LONG',  angle:3.7,  r:0.62},
+  {sym:'ADAUSDT', conf:68,color:'#ff6b6b',type:'SHORT', angle:4.5,  r:0.76},
+  {sym:'XRPUSDT', conf:83,color:'#00e5ff',type:'LONG',  angle:5.2,  r:0.44},
+  {sym:'DOTUSDT', conf:72,color:'#00ff9d',type:'SHORT', angle:0.95, r:0.82},
+  {sym:'MATICUSDT',conf:89,color:'#c77dff',type:'LONG', angle:2.8,  r:0.3},
+];
+
+const POPUP_SLOTS=[
+  {x:0.65,y:0.08},{x:0.80,y:0.22},{x:0.88,y:0.48},
+  {x:0.78,y:0.70},{x:0.62,y:0.82},{x:0.54,y:0.20},
+  {x:0.70,y:0.58},{x:0.56,y:0.62},
+];
+
+let sweep=0, lastSweep=0, slotIdx=0;
+const found=new Set();
+const blips=[];
+
+// Warp: only displaces grid lines, NOT the radar drawing itself
+// Edge-pinned: sin damping keeps corners/edges from lifting off
+function warpPoint(x, y){
+  const ox=RCX(), oy=RCY();
+  const w=W(), h=H();
+  const dx=x-ox, dy=y-oy;
+  const dist=Math.sqrt(dx*dx+dy*dy);
+  const warpRadius=200;
+
+  // stronger radial pull, sharper falloff near center
+  const radialFactor=Math.max(0, 1-(dist/warpRadius));
+  const radial=Math.pow(radialFactor, 1.6)*0.82;
+
+  // edge damping — keeps grid lines pinned at canvas edges
+  // use a narrower sin so only the middle portion warps
+  const edgeDampX=Math.pow(Math.sin(Math.PI*(x/w)), 0.45);
+  const edgeDampY=Math.pow(Math.sin(Math.PI*(y/h)), 0.45);
+
+  const wx = x + (ox-x)*radial*edgeDampX;
+  const wy = y + (oy-y)*radial*edgeDampY;
+  return {x:wx, y:wy};
+}
+
+function drawGrid(){
+  const w=W(), h=H();
+  const ox=RCX(), oy=RCY();
+  ctx.save();
+  const step=30;
+
+  for(let gx=0; gx<=w; gx+=step){
+    ctx.beginPath();let first=true;
+    for(let t=0; t<=1; t+=0.004){
+      const y=t*h;
+      const p=warpPoint(gx, y);
+      if(first){ctx.moveTo(p.x,p.y);first=false;}
+      else ctx.lineTo(p.x,p.y);
+    }
+    const d=Math.abs(gx-ox);
+    const br=0.07+0.18*Math.exp(-d*d/(2*170*170));
+    ctx.strokeStyle=`rgba(0,165,255,${br})`;
+    ctx.lineWidth=0.65;ctx.stroke();
+  }
+
+  for(let gy=0; gy<=h; gy+=step){
+    ctx.beginPath();let first=true;
+    for(let t=0; t<=1; t+=0.004){
+      const x=t*w;
+      const p=warpPoint(x, gy);
+      if(first){ctx.moveTo(p.x,p.y);first=false;}
+      else ctx.lineTo(p.x,p.y);
+    }
+    const d=Math.abs(gy-oy);
+    const br=0.07+0.18*Math.exp(-d*d/(2*150*150));
+    ctx.strokeStyle=`rgba(0,165,255,${br})`;
+    ctx.lineWidth=0.65;ctx.stroke();
+  }
+
+  const grd=ctx.createRadialGradient(ox,oy,0,ox,oy,170);
+  grd.addColorStop(0,'rgba(0,55,120,0.28)');
+  grd.addColorStop(0.45,'rgba(0,25,70,0.1)');
+  grd.addColorStop(1,'rgba(0,0,0,0)');
+  ctx.beginPath();ctx.arc(ox,oy,170,0,Math.PI*2);
+  ctx.fillStyle=grd;ctx.fill();
+  ctx.restore();
+}
+
+function drawRadar(){
+  const ox=RCX(), oy=RCY();
+  const now=Date.now();
+
+  // inner rings — drawn with actual radius, not warped
+  [0.32,0.62,0.88].forEach(f=>{
+    ctx.beginPath();ctx.arc(ox,oy,R*f,0,Math.PI*2);
+    ctx.strokeStyle='rgba(0,110,200,0.22)';ctx.lineWidth=0.5;ctx.stroke();
+  });
+
+  // crosshairs
+  ctx.beginPath();ctx.moveTo(ox-R,oy);ctx.lineTo(ox+R,oy);
+  ctx.strokeStyle='rgba(0,110,200,0.15)';ctx.lineWidth=0.5;ctx.stroke();
+  ctx.beginPath();ctx.moveTo(ox,oy-R);ctx.lineTo(ox,oy+R);
+  ctx.strokeStyle='rgba(0,110,200,0.15)';ctx.lineWidth=0.5;ctx.stroke();
+
+  // sweep trail — pure canvas arc, perfectly circular
+  for(let i=0;i<110;i++){
+    const a=sweep-(i/110)*(Math.PI/1.55);
+    ctx.beginPath();ctx.moveTo(ox,oy);
+    ctx.arc(ox,oy,R,a,a+0.03);
+    ctx.closePath();
+    ctx.fillStyle=`rgba(0,215,165,${(1-i/110)*0.2})`;ctx.fill();
+  }
+  ctx.beginPath();ctx.moveTo(ox,oy);
+  ctx.lineTo(ox+Math.cos(sweep)*R, oy+Math.sin(sweep)*R);
+  ctx.strokeStyle='rgba(0,245,195,0.9)';ctx.lineWidth=1.2;ctx.stroke();
+
+  // blips
+  blips.forEach(b=>{
+    const px=ox+Math.cos(b.angle)*R*b.r;
+    const py=oy+Math.sin(b.angle)*R*b.r;
+    const fl=0.6+0.4*Math.sin(now/170+b.angle*8);
+    ctx.beginPath();ctx.arc(px,py,3,0,Math.PI*2);
+    ctx.fillStyle=b.color;ctx.globalAlpha=fl;ctx.fill();ctx.globalAlpha=1;
+    const age=(now-b.born)/1000;
+    if(age<1.8){
+      const rr=age*22;
+      const ra=Math.max(0,0.6-age*0.35);
+      ctx.beginPath();ctx.arc(px,py,rr,0,Math.PI*2);
+      ctx.strokeStyle=b.color+Math.floor(ra*255).toString(16).padStart(2,'0');
+      ctx.lineWidth=1;ctx.stroke();
+    }
+  });
+
+  // center core glow — pure radial, not affected by warp
+  const p=0.5+0.5*Math.sin(now/430);
+  for(let i=3;i>=0;i--){
+    const g=ctx.createRadialGradient(ox,oy,0,ox,oy,11+i*5);
+    g.addColorStop(0,`rgba(0,215,255,${0.15+p*0.1-i*0.025})`);
+    g.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.beginPath();ctx.arc(ox,oy,11+i*5,0,Math.PI*2);
+    ctx.fillStyle=g;ctx.fill();
+  }
+  ctx.beginPath();ctx.arc(ox,oy,4+p*1.5,0,Math.PI*2);
+  ctx.fillStyle=`rgba(0,230,255,${0.85+p*0.15})`;ctx.fill();
+  ctx.beginPath();ctx.arc(ox,oy,2,0,Math.PI*2);
+  ctx.fillStyle='#fff';ctx.fill();
+}
+
+function spawnPopup(sig){
+  const slot=POPUP_SLOTS[slotIdx%POPUP_SLOTS.length];
+  slotIdx++;
+  const w=W(),h=H();
+  const el=document.createElement('div');
+  el.className='popup';
+  el.style.borderColor=sig.color+'55';
+  const tc=sig.type==='LONG'?'#00ff9d':'#ff6b6b';
+  const cc=sig.conf>=85?'#00e5ff':sig.conf>=75?'#ffd60a':'#ff6b6b';
+  el.innerHTML=`<span class="p-sym" style="color:${sig.color}">${sig.sym}</span><div class="p-row"><span class="p-conf" style="color:${cc}">${sig.conf}%</span><span class="p-type" style="color:${tc}">${sig.type}</span></div><div class="p-line" style="background:${sig.color};width:0%" data-w="${sig.conf}%"></div>`;
+  el.style.left=(slot.x*w)+'px';
+  el.style.top=(slot.y*h)+'px';
+  ui.appendChild(el);
+  setTimeout(()=>el.classList.add('show'),30);
+  setTimeout(()=>{const b=el.querySelector('.p-line');if(b)b.style.width=b.dataset.w;},100);
+  setTimeout(()=>{el.classList.remove('show');el.classList.add('hide');setTimeout(()=>el.remove(),400);},4200);
+}
+
+function frame(){
+  ctx.clearRect(0,0,W(),H());
+  ctx.fillStyle='#020c18';ctx.fillRect(0,0,W(),H());
+  drawGrid();
+  drawRadar();
+
+  sweep=(sweep+0.013)%(Math.PI*2);
+  if(sweep<lastSweep) found.clear();
+  lastSweep=sweep;
+
+  SIGS.forEach(s=>{
+    const sa=((s.angle%(Math.PI*2))+(Math.PI*2))%(Math.PI*2);
+    const sw=((sweep+(Math.PI*2))%(Math.PI*2));
+    const diff=(sw-sa+(Math.PI*2))%(Math.PI*2);
+    if(diff<0.05&&!found.has(s.sym)){
+      found.add(s.sym);
+      blips.push({angle:s.angle,r:s.r,color:s.color,born:Date.now()});
+      if(blips.length>20)blips.shift();
+      spawnPopup(s);
+    }
+  });
+  requestAnimationFrame(frame);
+}
+frame();
+</script>
+</body>
+</html>
