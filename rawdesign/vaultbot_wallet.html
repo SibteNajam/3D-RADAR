@@ -1,0 +1,1114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VaultBot | Wallet & Assets</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    #root {
+      width: 100%;
+      height: 100vh;
+      background: #070810;
+      font-family: 'Sora', sans-serif;
+      letter-spacing: -0.015em;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    /* ── SHARED STYLES (FROM DASHBOARD) */
+    #hdr {
+      height: 52px;
+      background: #070810;
+      border-bottom: .5px solid #111828;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      flex-shrink: 0;
+      z-index: 100;
+    }
+
+    .hdr-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-box {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: #0D1020;
+      border: .5px solid #1E2A40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-hex {
+      width: 16px;
+      height: 16px;
+    }
+
+    .brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #BCC2D8;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+
+    .brand em {
+      color: #4DB86A;
+      font-style: normal;
+    }
+
+    .hdr-nav {
+      display: flex;
+      gap: 1px;
+      background: #0A0C16;
+      border-radius: 8px;
+      padding: 3px;
+      margin-left: 16px;
+    }
+
+    .hn {
+      padding: 5px 13px;
+      font-size: 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #252A3A;
+      border: none;
+      background: none;
+      letter-spacing: .04em;
+      transition: all .18s;
+      font-family: 'Sora', sans-serif;
+      text-decoration: none;
+    }
+
+    .hn.act {
+      background: #0E1122;
+      color: #BCC2D8;
+      border: .5px solid #1A2234;
+    }
+
+    .hdr-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .live-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: #0A0C16;
+      border: .5px solid #111828;
+      border-radius: 20px;
+      padding: 4px 11px;
+      font-size: 10px;
+      color: #4DB86A;
+    }
+
+    .live-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #4DB86A;
+      animation: blink 2s infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: .2;
+      }
+    }
+
+    .hdr-btn {
+      background: #0A0C16;
+      border: .5px solid #111828;
+      border-radius: 7px;
+      padding: 5px 11px;
+      font-size: 11px;
+      color: #3A4060;
+      cursor: pointer;
+      transition: all .18s;
+      font-family: 'Sora', sans-serif;
+    }
+
+    .avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #0D1020;
+      border: .5px solid #1E2A40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 11px;
+      color: #BCC2D8;
+    }
+
+    #body {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    #sidebar {
+      width: 52px;
+      background: #070810;
+      border-right: .5px solid #111828;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .sb-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all .18s;
+      border: .5px solid transparent;
+    }
+
+    .sb-icon:hover,
+    .sb-icon.act {
+      background: #0D1020;
+      border-color: #1A2234;
+    }
+
+    .sb-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: #252A3A;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      transition: stroke .18s;
+    }
+
+    .sb-icon:hover svg,
+    .sb-icon.act svg {
+      stroke: #4DB86A;
+    }
+
+    .sb-sep {
+      width: 28px;
+      height: .5px;
+      background: #111828;
+      margin: 6px 0;
+    }
+
+    #ftr {
+      height: 36px;
+      background: #070810;
+      border-top: .5px solid #111828;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      flex-shrink: 0;
+    }
+
+    .ftr-item {
+      font-size: 9px;
+      color: #151C2A;
+      letter-spacing: .07em;
+    }
+
+    .ftr-item span {
+      color: #252A3A;
+    }
+
+    /* ── WALLET SPECIFIC STYLES */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 24px;
+      gap: 24px;
+      background-image:
+        radial-gradient(circle at 0% 0%, rgba(77, 184, 106, 0.03) 0%, transparent 40%),
+        radial-gradient(circle at 100% 100%, rgba(91, 155, 213, 0.03) 0%, transparent 40%);
+    }
+
+    .wallet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 8px;
+    }
+
+    .wallet-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 800;
+      font-size: 24px;
+      color: #e8eaf6;
+      letter-spacing: -0.02em;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .wallet-title span {
+      color: #4DB86A;
+      font-size: 14px;
+      font-family: 'Space Mono', monospace;
+      letter-spacing: 0.15em;
+      opacity: 0.8;
+    }
+
+    .wallet-grid {
+      display: grid;
+      grid-template-columns: 1fr 340px;
+      gap: 24px;
+    }
+
+    /* BALANCE CARD */
+    .balance-card {
+      background: linear-gradient(145deg, rgba(16, 21, 38, 0.6) 0%, rgba(9, 12, 24, 0.8) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      padding: 32px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(20px);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .balance-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(77, 184, 106, 0.3), transparent);
+    }
+
+    .balance-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.2em;
+      color: #7A8AA0;
+    }
+
+    .balance-amount {
+      font-family: 'Sora', sans-serif;
+      font-weight: 700;
+      font-size: 48px;
+      color: #fff;
+      letter-spacing: -0.04em;
+      line-height: 1;
+    }
+
+    .balance-amount span {
+      font-size: 24px;
+      color: #4A5070;
+      margin-right: 8px;
+    }
+
+    .balance-stats {
+      display: flex;
+      gap: 24px;
+      margin-top: 8px;
+    }
+
+    .pnl-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      background: rgba(77, 184, 106, 0.1);
+      border-radius: 8px;
+      border: 1px solid rgba(77, 184, 106, 0.15);
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      color: #4DB86A;
+    }
+
+    .action-row {
+      display: flex;
+      gap: 12px;
+      margin-top: 12px;
+    }
+
+    .action-btn {
+      flex: 1;
+      height: 44px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.03);
+      color: #BCC2D8;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all .2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .action-btn:hover {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.15);
+      color: #fff;
+    }
+
+    .action-btn.pri {
+      background: rgba(77, 184, 106, 0.1);
+      border-color: rgba(77, 184, 106, 0.2);
+      color: #4DB86A;
+    }
+
+    .action-btn.pri:hover {
+      background: rgba(77, 184, 106, 0.15);
+      box-shadow: 0 0 20px rgba(77, 184, 106, 0.1);
+    }
+
+    /* ASSET TABLE */
+    .section-card {
+      background: rgba(13, 16, 28, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .section-hd {
+      padding: 18px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 14px;
+      color: #7A8AA0;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .asset-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .asset-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1fr 80px;
+      padding: 16px 20px;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      transition: background .2s;
+      cursor: pointer;
+    }
+
+    .asset-row:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .asset-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .asset-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #1A1D2D;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 14px;
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .asset-name {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .asset-symbol {
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      color: #e8eaf6;
+    }
+
+    .asset-full {
+      font-size: 11px;
+      color: #4A5070;
+    }
+
+    .asset-val {
+      font-family: 'Space Mono', monospace;
+      font-size: 13px;
+      color: #BCC2D8;
+      text-align: right;
+    }
+
+    .asset-val.main {
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .asset-chg {
+      font-family: 'Space Mono', monospace;
+      font-size: 12px;
+      font-weight: 700;
+      text-align: right;
+    }
+
+    .asset-chg.pos {
+      color: #4DB86A;
+    }
+
+    .asset-chg.neg {
+      color: #D65C5C;
+    }
+
+    .sparkline {
+      width: 80px;
+      height: 24px;
+    }
+
+    /* ALLOCATION CHART SECT */
+    .alloc-container {
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      position: relative;
+    }
+
+    #allocCanvas {
+      width: 200px;
+      height: 200px;
+    }
+
+    .alloc-center {
+      position: absolute;
+      top: 132px;
+      /* middle of 200px + 32px padding */
+      text-align: center;
+    }
+
+    .alloc-center-lbl {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: #4A5070;
+      text-transform: uppercase;
+    }
+
+    .alloc-center-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .alloc-legend {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .leg-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .leg-l {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: #7A8AA0;
+    }
+
+    .leg-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+    }
+
+    .leg-r {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: #BCC2D8;
+    }
+
+    /* TRANSACTION LOG */
+    .history-log {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      padding: 12px 0;
+      overflow-y: auto;
+      max-height: 300px;
+    }
+
+    .tx-row {
+      display: flex;
+      padding: 12px 20px;
+      gap: 16px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      font-family: 'Space Mono', monospace;
+    }
+
+    .tx-time {
+      font-size: 10px;
+      color: #252A3A;
+      width: 60px;
+      flex-shrink: 0;
+    }
+
+    .tx-type {
+      font-size: 11px;
+      font-weight: 700;
+      width: 80px;
+      text-transform: uppercase;
+    }
+
+    .tx-type.dep {
+      color: #4DB86A;
+    }
+
+    .tx-type.wit {
+      color: #D65C5C;
+    }
+
+    .tx-type.swp {
+      color: #5B9BD5;
+    }
+
+    .tx-desc {
+      font-size: 11px;
+      color: #6A7090;
+      flex: 1;
+    }
+
+    .tx-amt {
+      font-size: 11px;
+      font-weight: 700;
+      color: #BCC2D8;
+      text-align: right;
+    }
+
+    /* CUSTOM SCROLLBAR */
+    ::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 10px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    /* TACTICAL OVERLAYS */
+    #main::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='100' height='100'%3E%3Cpath d='M0 0h100v100H0z' fill='none'/%3E%3Cpath d='M0 50h1v1H0zM50 0h1v1h-1z' fill='%234DB86A' opacity='0.05'/%3E%3C/svg%3E");
+      pointer-events: none;
+      z-index: 1000;
+      opacity: 0.5;
+    }
+
+    .scanning-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(77, 184, 106, 0.2), transparent);
+      animation: scanY 6s linear infinite;
+      z-index: 5;
+    }
+
+    @keyframes scanY {
+      0% {
+        transform: translateY(-100px);
+        opacity: 0;
+      }
+
+      10% {
+        opacity: 1;
+      }
+
+      90% {
+        opacity: 1;
+      }
+
+      100% {
+        transform: translateY(800px);
+        opacity: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="root">
+
+    <!-- HEADER -->
+    <div id="hdr">
+      <div class="hdr-left">
+        <div class="logo-box">
+          <svg class="logo-hex" viewBox="0 0 16 16" fill="none">
+            <path d="M8 1L14 4.5V11.5L8 15L2 11.5V4.5L8 1Z" stroke="#4DB86A" stroke-width=".8"
+              fill="rgba(77,184,106,.07)" />
+            <circle cx="8" cy="8" r="2" fill="#4DB86A" opacity=".55" />
+          </svg>
+        </div>
+        <span class="brand"><em>Vault</em>Bot</span>
+        <div class="hdr-nav">
+          <a href="vaultbot_full_dashboard.html" class="hn">Dashboard</a>
+          <button class="hn">Universe 3D</button>
+          <a href="#" class="hn act">Portfolio</a>
+          <button class="hn">Bots</button>
+          <a href="vaultbot_analytics.html" class="hn">Analytics</a>
+          <button class="hn">History</button>
+        </div>
+      </div>
+      <div class="hdr-right">
+        <div class="live-pill">
+          <div class="live-dot"></div>Live feed
+        </div>
+        <button class="hdr-btn">+ Add Asset</button>
+        <div class="avatar">VB</div>
+      </div>
+    </div>
+
+    <!-- BODY -->
+    <div id="body">
+
+      <!-- SIDEBAR -->
+      <div id="sidebar">
+        <a href="vaultbot_full_dashboard.html" class="sb-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+        </a>
+        <div class="sb-icon act">
+          <svg viewBox="0 0 24 24">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
+        </div>
+        <div class="sb-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" />
+            <path
+              d="M12 1v4M12 19v4M4.22 4.22l2.83 2.83M16.95 16.95l2.83 2.83M1 12h4M19 12h4M4.22 19.78l2.83-2.83M16.95 7.05l2.83-2.83" />
+          </svg>
+        </div>
+        <div class="sb-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          </svg>
+        </div>
+        <div class="sb-sep"></div>
+        <div class="sb-icon">
+          <svg viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" />
+            <line x1="21" y1="21" x2="16.65" y2="16.65" />
+          </svg>
+        </div>
+        <div class="sb-icon">
+          <svg viewBox="0 0 24 24">
+            <path d="M18 20V10M12 20V4M6 20v-6" />
+          </svg>
+        </div>
+        <div class="sb-sep"></div>
+        <div class="sb-icon sb-bot">
+          <svg viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14" />
+          </svg>
+        </div>
+        <div class="sb-icon" style="margin-top:4px;">
+          <svg viewBox="0 0 24 24">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+            <circle cx="12" cy="7" r="4" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- MAIN CONTENT -->
+      <div id="main">
+
+        <div class="wallet-header">
+          <h1 class="wallet-title">WALLET <span>// ASSET MANAGEMENT</span></h1>
+          <div class="hdr-btn" style="border-color: #4DB86A44; color: #4DB86A;">System Healthy</div>
+        </div>
+
+        <div class="wallet-grid">
+
+          <!-- LEFT COL: Assets -->
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+
+            <!-- BALANCE CARD -->
+            <div class="balance-card">
+              <div class="scanning-line"></div>
+              <div class="balance-label">Total Estimated Balance</div>
+              <div class="balance-amount"><span>$</span>124,592.38</div>
+              <div class="balance-stats">
+                <div class="pnl-pill">
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                    <path d="M2 8L6 4L10 8" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                      stroke-linejoin="round" />
+                  </svg>
+                  +$4,210.15 (3.5%)
+                </div>
+                <div class="balance-label" style="display: flex; align-items: center; gap: 8px;">
+                  1.8420 BTC <span style="opacity: 0.3;">/</span> 39.12 ETH
+                </div>
+              </div>
+              <div class="action-row">
+                <button class="action-btn pri">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M5 12h14" />
+                  </svg>
+                  Deposit
+                </button>
+                <button class="action-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14" />
+                  </svg>
+                  Withdraw
+                </button>
+                <button class="action-btn">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 3l4 4-4 4M8 21l-4-4 4-4M20 7H4M4 17h16" />
+                  </svg>
+                  Swap
+                </button>
+              </div>
+            </div>
+
+            <!-- ASSET LIST -->
+            <div class="section-card">
+              <div class="section-hd">
+                <span class="section-title">Your Assets</span>
+                <span style="font-family: 'Space Mono', monospace; font-size: 10px; color: #252A3A;">Sort by Value
+                  ▼</span>
+              </div>
+              <div class="asset-list">
+
+                <!-- BTC -->
+                <div class="asset-row">
+                  <div class="asset-info">
+                    <div class="asset-icon" style="color: #F7931A; border-color: #F7931A33;">B</div>
+                    <div class="asset-name">
+                      <span class="asset-symbol">Bitcoin</span>
+                      <span class="asset-full">BTC Network</span>
+                    </div>
+                  </div>
+                  <div class="asset-val main">1.2405</div>
+                  <div class="asset-val">$84,120.30</div>
+                  <div class="asset-chg pos">+2.45%</div>
+                  <div class="sparkline"><canvas id="sp-btc"></canvas></div>
+                </div>
+
+                <!-- ETH -->
+                <div class="asset-row">
+                  <div class="asset-info">
+                    <div class="asset-icon" style="color: #627EEA; border-color: #627EEA33;">E</div>
+                    <div class="asset-name">
+                      <span class="asset-symbol">Ethereum</span>
+                      <span class="asset-full">ERC-20 Assets</span>
+                    </div>
+                  </div>
+                  <div class="asset-val main">8.9142</div>
+                  <div class="asset-val">$28,450.15</div>
+                  <div class="asset-chg neg">-1.12%</div>
+                  <div class="sparkline"><canvas id="sp-eth"></canvas></div>
+                </div>
+
+                <!-- SOL -->
+                <div class="asset-row">
+                  <div class="asset-info">
+                    <div class="asset-icon" style="color: #14F195; border-color: #14F19533;">S</div>
+                    <div class="asset-name">
+                      <span class="asset-symbol">Solana</span>
+                      <span class="asset-full">SPL Network</span>
+                    </div>
+                  </div>
+                  <div class="asset-val main">42.370</div>
+                  <div class="asset-val">$6,820.40</div>
+                  <div class="asset-chg pos">+5.82%</div>
+                  <div class="sparkline"><canvas id="sp-sol"></canvas></div>
+                </div>
+
+                <!-- USDT -->
+                <div class="asset-row">
+                  <div class="asset-info">
+                    <div class="asset-icon" style="color: #26A17B; border-color: #26A17B33;">U</div>
+                    <div class="asset-name">
+                      <span class="asset-symbol">Tether</span>
+                      <span class="asset-full">Omni / TRC / ERC</span>
+                    </div>
+                  </div>
+                  <div class="asset-val main">2,082.38</div>
+                  <div class="asset-val">$2,082.38</div>
+                  <div class="asset-chg">0.00%</div>
+                  <div class="sparkline"><canvas id="sp-usdt"></canvas></div>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+          <!-- RIGHT COL: Stats & Allocation -->
+          <div style="display: flex; flex-direction: column; gap: 24px;">
+
+            <!-- ALLOCATION -->
+            <div class="section-card">
+              <div class="section-hd">
+                <span class="section-title">Portfolio Allocation</span>
+              </div>
+              <div class="alloc-container">
+                <canvas id="allocCanvas"></canvas>
+                <div class="alloc-center">
+                  <div class="alloc-center-lbl">Assets</div>
+                  <div class="alloc-center-val">5 Mixed</div>
+                </div>
+                <div class="alloc-legend">
+                  <div class="leg-item">
+                    <div class="leg-l">
+                      <div class="leg-dot" style="background: #F7931A;"></div> Bitcoin
+                    </div>
+                    <div class="leg-r">68.2%</div>
+                  </div>
+                  <div class="leg-item">
+                    <div class="leg-l">
+                      <div class="leg-dot" style="background: #627EEA;"></div> Ethereum
+                    </div>
+                    <div class="leg-r">23.1%</div>
+                  </div>
+                  <div class="leg-item">
+                    <div class="leg-l">
+                      <div class="leg-dot" style="background: #14F195;"></div> Solana
+                    </div>
+                    <div class="leg-r">5.5%</div>
+                  </div>
+                  <div class="leg-item">
+                    <div class="leg-l">
+                      <div class="leg-dot" style="background: #252A3A;"></div> Others
+                    </div>
+                    <div class="leg-r">3.2%</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- RECENT HISTORY -->
+            <div class="section-card" style="flex: 1;">
+              <div class="section-hd">
+                <span class="section-title">Security Log</span>
+                <span
+                  style="font-family: 'Space Mono', monospace; font-size: 8px; color: #4DB86A; border: 1px solid #4DB86A33; padding: 2px 6px; border-radius: 4px;">ENCRYPTED</span>
+              </div>
+              <div class="history-log">
+                <div class="tx-row">
+                  <div class="tx-time">14:22:05</div>
+                  <div class="tx-type dep">DEPOSIT</div>
+                  <div class="tx-desc">ETH Received from 0x71...f2</div>
+                  <div class="tx-amt">+2.50 ETH</div>
+                </div>
+                <div class="tx-row">
+                  <div class="tx-time">11:05:12</div>
+                  <div class="tx-type swp">SWAP</div>
+                  <div class="tx-desc">SOL → BTC (Aggregated)</div>
+                  <div class="tx-amt">-10.0 SOL</div>
+                </div>
+                <div class="tx-row">
+                  <div class="tx-time">Yesterday</div>
+                  <div class="tx-type wit">WITHDRAW</div>
+                  <div class="tx-desc">USDT to External Wallet</div>
+                  <div class="tx-amt">-1,000 USDT</div>
+                </div>
+                <div class="tx-row">
+                  <div class="tx-time">02 Apr</div>
+                  <div class="tx-type dep">DEPOSIT</div>
+                  <div class="tx-desc">BTC via Lightning Network</div>
+                  <div class="tx-amt">+0.05 BTC</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div id="ftr">
+      <div class="ftr-left">
+        <div class="ftr-item">Wallet Engine <span>v2.1.0</span></div>
+        <div class="ftr-item">Sync <span>99.9%</span></div>
+        <div class="ftr-item">Network <span>Nominal</span></div>
+      </div>
+      <div style="display: flex; gap: 12px;">
+        <div class="ftr-item">Security: <span>Level 5 Bio-Lock</span></div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // ── PORTFOLIO DONUT CHART
+    const acv = document.getElementById('allocCanvas');
+    const actx = acv.getContext('2d');
+    const dpr = window.devicePixelRatio || 1;
+    acv.width = 200 * dpr;
+    acv.height = 200 * dpr;
+    actx.scale(dpr, dpr);
+
+    const data = [68.2, 23.1, 5.5, 3.2];
+    const colors = ['#F7931A', '#627EEA', '#14F195', '#252A3A'];
+    let startAngle = -Math.PI / 2;
+
+    data.forEach((val, i) => {
+      const sliceAngle = (val / 100) * 2 * Math.PI;
+      actx.beginPath();
+      actx.arc(100, 100, 80, startAngle, startAngle + sliceAngle);
+      actx.lineWidth = 14;
+      actx.strokeStyle = colors[i];
+      actx.lineCap = 'round';
+      actx.stroke();
+      startAngle += sliceAngle;
+    });
+
+    // Outer faint ring
+    actx.beginPath();
+    actx.arc(100, 100, 94, 0, 2 * Math.PI);
+    actx.lineWidth = 0.5;
+    actx.strokeStyle = 'rgba(255,255,255,0.05)';
+    actx.stroke();
+
+    // ── MINI SPARKLYINES
+    function drawSparkline(id, color, trend) {
+      const c = document.getElementById(id);
+      const ctx = c.getContext('2d');
+      c.width = 80; c.height = 24;
+      ctx.strokeStyle = color;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath();
+      ctx.moveTo(0, 12);
+      for (let i = 0; i < 10; i++) {
+        const y = 5 + Math.random() * 14;
+        ctx.lineTo(i * 8, y);
+      }
+      ctx.stroke();
+
+      // Gradient fill
+      const grad = ctx.createLinearGradient(0, 0, 0, 24);
+      grad.addColorStop(0, color + '22');
+      grad.addColorStop(1, 'transparent');
+      ctx.lineTo(80, 24);
+      ctx.lineTo(0, 24);
+      ctx.fillStyle = grad;
+      ctx.fill();
+    }
+
+    drawSparkline('sp-btc', '#4DB86A', 'up');
+    drawSparkline('sp-eth', '#D65C5C', 'down');
+    drawSparkline('sp-sol', '#4DB86A', 'up');
+    drawSparkline('sp-usdt', '#7A8AA0', 'flat');
+
+    // Number Materialization Effect
+    function animateValue(obj, start, end, duration) {
+      let startTimestamp = null;
+      const step = (timestamp) => {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const val = (progress * (end - start) + start).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        obj.innerHTML = val;
+        if (progress < 1) {
+          window.requestAnimationFrame(step);
+        }
+      };
+      window.requestAnimationFrame(step);
+    }
+
+    // Small delay to feel the load
+    setTimeout(() => {
+      const bal = document.querySelector('.balance-amount');
+      bal.innerHTML = '<span>$</span>' + (124592.38).toLocaleString();
+    }, 500);
+
+  </script>
+</body>
+
+</html>

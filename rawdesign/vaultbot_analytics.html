@@ -1,0 +1,976 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VaultBot | Core Analytics Hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Outfit:wght@400;500;600;700&display=swap"
+    rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    #root {
+      width: 100%;
+      height: 100vh;
+      background: #070810;
+      font-family: 'Sora', sans-serif;
+      letter-spacing: -0.015em;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      color: #e8eaf6;
+    }
+
+    /* ── SHARED LAYOUT STYLES */
+    #hdr {
+      height: 52px;
+      background: #070810;
+      border-bottom: .5px solid #111828;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 18px;
+      flex-shrink: 0;
+      z-index: 100;
+    }
+
+    .hdr-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-box {
+      width: 30px;
+      height: 30px;
+      border-radius: 8px;
+      background: #0D1020;
+      border: .5px solid #1E2A40;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .logo-hex {
+      width: 16px;
+      height: 16px;
+    }
+
+    .brand {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      color: #BCC2D8;
+      letter-spacing: .02em;
+      text-transform: uppercase;
+    }
+
+    .brand em {
+      color: #4DB86A;
+      font-style: normal;
+    }
+
+    .hdr-nav {
+      display: flex;
+      gap: 1px;
+      background: #0A0C16;
+      border-radius: 8px;
+      padding: 3px;
+      margin-left: 16px;
+    }
+
+    .hn {
+      padding: 5px 13px;
+      font-size: 11px;
+      border-radius: 6px;
+      cursor: pointer;
+      color: #252A3A;
+      border: none;
+      background: none;
+      letter-spacing: .04em;
+      transition: all .18s;
+      font-family: 'Sora', sans-serif;
+      text-decoration: none;
+    }
+
+    .hn.act {
+      background: #0E1122;
+      color: #BCC2D8;
+      border: .5px solid #1A2234;
+    }
+
+    .hdr-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .live-pill {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      background: #0A0C16;
+      border: .5px solid #111828;
+      border-radius: 20px;
+      padding: 4px 11px;
+      font-size: 10px;
+      color: #4DB86A;
+    }
+
+    .live-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      background: #4DB86A;
+      animation: blink 2.5s infinite;
+    }
+
+    @keyframes blink {
+
+      0%,
+      100% {
+        opacity: 1;
+      }
+
+      50% {
+        opacity: .2;
+      }
+    }
+
+    #body {
+      flex: 1;
+      display: flex;
+      overflow: hidden;
+    }
+
+    #sidebar {
+      width: 52px;
+      background: #070810;
+      border-right: .5px solid #111828;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 12px 0;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+
+    .sb-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all .18s;
+      border: .5px solid transparent;
+    }
+
+    .sb-icon:hover,
+    .sb-icon.act {
+      background: #0D1020;
+      border-color: #1A2234;
+    }
+
+    .sb-icon svg {
+      width: 16px;
+      height: 16px;
+      stroke: #252A3A;
+      fill: none;
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .sb-icon.act svg {
+      stroke: #4DB86A;
+    }
+
+    .sb-sep {
+      width: 28px;
+      height: .5px;
+      background: #111828;
+      margin: 6px 0;
+    }
+
+    /* ── HUD TICKER */
+    #hud-ticker {
+      height: 32px;
+      background: #02040a;
+      border-bottom: .5px solid #111828;
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .ticker-inner {
+      display: flex;
+      animation: tickScroll 40s linear infinite;
+    }
+
+    @keyframes tickScroll {
+      0% {
+        transform: translateX(0);
+      }
+
+      100% {
+        transform: translateX(-50%);
+      }
+    }
+
+    .tick {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 0 24px;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: #3A4A5A;
+      border-right: 1px solid rgba(255, 255, 255, 0.02);
+    }
+
+    .tick b {
+      color: #5B9BD5;
+    }
+
+    /* ── MAIN ANALYTICS HUB */
+    #main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 20px;
+      gap: 20px;
+      background: radial-gradient(circle at 50% 50%, rgba(7, 8, 16, 1) 0%, rgba(2, 4, 10, 1) 100%);
+    }
+
+    .analytics-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      grid-template-rows: auto auto auto;
+      gap: 20px;
+    }
+
+    .glass-panel {
+      background: linear-gradient(165deg, rgba(16, 21, 38, 0.4) 0%, rgba(9, 12, 24, 0.6) 100%);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .panel-hdr {
+      padding: 12px 16px;
+      background: rgba(255, 255, 255, 0.01);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .panel-title {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 10px;
+      font-weight: 800;
+      color: #4A5070;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .panel-title i {
+      color: #4DB86A;
+      font-style: normal;
+    }
+
+    /* ── COMPONENT SPECIFICS */
+    .equity-chart {
+      grid-column: span 8;
+      height: 340px;
+    }
+
+    .monte-carlo {
+      grid-column: span 4;
+      height: 340px;
+    }
+
+    .risk-matrix {
+      grid-column: span 4;
+      height: 320px;
+    }
+
+    .market-sentiment {
+      grid-column: span 4;
+      height: 320px;
+    }
+
+    .efficiency-radar {
+      grid-column: span 4;
+      height: 320px;
+    }
+
+    .intensity-heatmap {
+      grid-column: span 5;
+      height: 280px;
+    }
+
+    .correlation-matrix {
+      grid-column: span 4;
+      height: 280px;
+    }
+
+    .pnl-distribution {
+      grid-column: span 3;
+      height: 280px;
+    }
+
+    /* ── PROJECTION & PERFORMANCE VIZ */
+    canvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    /* ── GAUGES */
+    .gauge-wrap {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 32px;
+      padding: 20px;
+    }
+
+    .gauge {
+      position: relative;
+      width: 100px;
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gauge svg {
+      position: absolute;
+      inset: 0;
+      transform: rotate(-90deg);
+    }
+
+    .gauge-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      color: #4A5070;
+      margin-top: 80px;
+      text-transform: uppercase;
+    }
+
+    .gauge-val {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 18px;
+      font-weight: 800;
+      color: #fff;
+      z-index: 2;
+      margin-bottom: -15px;
+    }
+
+    /* ── MATRIX & HEATMAP TABLE */
+    .mat-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      padding: 16px;
+      flex: 1;
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    .mat-cell {
+      aspect-ratio: 1;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      position: relative;
+    }
+
+    .mat-cell.high {
+      background: rgba(77, 184, 106, 0.4);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .mat-cell.med {
+      background: rgba(77, 184, 106, 0.15);
+      color: #4DB86A;
+    }
+
+    .mat-cell.neg {
+      background: rgba(214, 92, 92, 0.15);
+      color: #D65C5C;
+    }
+
+    .risk-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(3, 1fr);
+      gap: 1px;
+      background: rgba(255, 255, 255, 0.05);
+      flex: 1;
+    }
+
+    .risk-stat {
+      background: #070810;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .risk-stat label {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      color: #3A4A5A;
+      text-transform: uppercase;
+    }
+
+    .risk-stat span {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: #e8eaf6;
+    }
+
+    .risk-stat.accent span {
+      color: #4DB86A;
+    }
+
+    /* ── DEPTH CHART SIM */
+    .depth-viz {
+      flex: 1;
+      padding: 0 20px 20px;
+      display: flex;
+      align-items: flex-end;
+      gap: 4px;
+    }
+
+    .depth-bar {
+      flex: 1;
+      background: #4DB86A33;
+      border-top: 2px solid #4DB86A;
+      border-radius: 2px 2px 0 0;
+    }
+
+    .depth-bar.ask {
+      background: #D65C5C33;
+      border-top-color: #D65C5C;
+    }
+
+    /* ── SCANNERS */
+    .scan-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .scan-line {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(77, 184, 106, 0.15), transparent);
+      animation: scanAnim 7s linear infinite;
+    }
+
+    @keyframes scanAnim {
+      0% {
+        top: -10%;
+      }
+
+      100% {
+        top: 110%;
+      }
+    }
+
+    /* ── TABLE EXPANSION */
+    .analytics-table-wrap {
+      grid-column: span 12;
+      background: rgba(13, 16, 28, 0.4);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .at-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+    }
+
+    .at-table th {
+      background: rgba(255, 255, 255, 0.02);
+      padding: 12px 20px;
+      text-align: left;
+      color: #4A5070;
+      text-transform: uppercase;
+      font-size: 8px;
+      letter-spacing: 0.1em;
+    }
+
+    .at-table td {
+      padding: 14px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.02);
+      color: #BCC2D8;
+    }
+
+    .at-table tr:hover {
+      background: rgba(255, 255, 255, 0.02);
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="root">
+
+    <!-- HEADER -->
+    <div id="hdr">
+      <div class="hdr-left">
+        <div class="logo-box">
+          <svg class="logo-hex" viewBox="0 0 16 16" fill="none">
+            <path d="M8 1L14 4.5V11.5L8 15L2 11.5V4.5L8 1Z" stroke="#4DB86A" stroke-width=".8"
+              fill="rgba(77,184,106,.07)" />
+            <circle cx="8" cy="8" r="2" fill="#4DB86A" opacity=".55" />
+          </svg>
+        </div>
+        <span class="brand"><em>Vault</em>Bot</span>
+        <div class="hdr-nav">
+          <a href="vaultbot_full_dashboard.html" class="hn">Dashboard</a>
+          <button class="hn">Universe 3D</button>
+          <a href="vaultbot_wallet.html" class="hn">Portfolio</a>
+          <button class="hn">Bots</button>
+          <a href="#" class="hn act">Analytics</a>
+          <button class="hn">History</button>
+        </div>
+      </div>
+      <div class="hdr-right">
+        <div class="live-pill">
+          <div class="live-dot"></div>Institutional Engine Active
+        </div>
+        <div class="avatar">VB</div>
+      </div>
+    </div>
+
+    <!-- HUD TERMINAL TICKER -->
+    <div id="hud-ticker">
+      <div class="ticker-inner">
+        <div class="tick">SQN SCORE: <b>3.42 (High Quality)</b></div>
+        <div class="tick">KELLY CRITERION: <b>0.124</b></div>
+        <div class="tick">EXPECTANCY: <b>$142.08 / Trade</b></div>
+        <div class="tick">STANDARD DEV: <b>2.14%</b></div>
+        <div class="tick">PROFIT FACTOR: <b>1.94</b></div>
+        <div class="tick">RECOVERY FACTOR: <b>4.85</b></div>
+        <div class="tick">SHARPE RATIO: <b>2.84</b></div>
+        <div class="tick">SORTINO RATIO: <b>3.12</b></div>
+        <!-- Duplicated for loop -->
+        <div class="tick">SQN SCORE: <b>3.42 (High Quality)</b></div>
+        <div class="tick">KELLY CRITERION: <b>0.124</b></div>
+        <div class="tick">EXPECTANCY: <b>$142.08 / Trade</b></div>
+        <div class="tick">STANDARD DEV: <b>2.14%</b></div>
+        <div class="tick">PROFIT FACTOR: <b>1.94</b></div>
+        <div class="tick">RECOVERY FACTOR: <b>4.85</b></div>
+        <div class="tick">SHARPE RATIO: <b>2.84</b></div>
+        <div class="tick">SORTINO RATIO: <b>3.12</b></div>
+      </div>
+    </div>
+
+    <div id="body">
+      <!-- SIDEBAR -->
+      <div id="sidebar">
+        <a href="vaultbot_full_dashboard.html" class="sb-icon">
+          <svg viewBox="0 0 24 24">
+            <rect x="3" y="3" width="7" height="7" rx="1" />
+            <rect x="14" y="3" width="7" height="7" rx="1" />
+            <rect x="3" y="14" width="7" height="7" rx="1" />
+            <rect x="14" y="14" width="7" height="7" rx="1" />
+          </svg>
+        </a>
+        <a href="vaultbot_wallet.html" class="sb-icon">
+          <svg viewBox="0 0 24 24">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" />
+          </svg>
+        </a>
+        <div class="sb-icon act">
+          <svg viewBox="0 0 24 24">
+            <polyline points="4 7 4 4 20 4 20 7" />
+            <line x1="9" y1="20" x2="15" y2="20" />
+            <line x1="12" y1="4" x2="12" y2="20" />
+          </svg>
+        </div>
+        <div class="sb-icon"><svg viewBox="0 0 24 24">
+            <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+          </svg></div>
+      </div>
+
+      <!-- MAIN HUB -->
+      <div id="main">
+
+        <div class="analytics-grid">
+
+          <!-- PERFORMANCE: Main Equity -->
+          <div class="glass-panel equity-chart">
+            <div class="scan-overlay">
+              <div class="scan-line"></div>
+            </div>
+            <div class="panel-hdr">
+              <span class="panel-title"><i>//</i> Performance attribution engine</span>
+              <div class="card-actions">
+                <button class="tab-btn act">1M</button>
+                <button class="tab-btn">1Y</button>
+                <button class="tab-btn">ALL</button>
+              </div>
+            </div>
+            <canvas id="equityCanvas"></canvas>
+          </div>
+
+          <!-- PROJECTION: Monte Carlo -->
+          <div class="glass-panel monte-carlo" style="background: rgba(7, 8, 16, 0.8);">
+            <div class="panel-hdr"><span class="panel-title"><i>//</i> Monte carlo projection</span></div>
+            <canvas id="monteCanvas"></canvas>
+          </div>
+
+          <!-- RISK MATRIX -->
+          <div class="glass-panel risk-matrix">
+            <div class="panel-hdr"><span class="panel-title"><i>//</i> Institutional risk matrix</span></div>
+            <div class="risk-grid">
+              <div class="risk-stat accent"><label>Profit Factor</label><span>1.94</span></div>
+              <div class="risk-stat"><label>Max Drawdown</label><span>-4.12%</span></div>
+              <div class="risk-stat accent"><label>Win Rate</label><span>72.4%</span></div>
+              <div class="risk-stat"><label>Avg Winner</label><span>$482.10</span></div>
+              <div class="risk-stat"><label>Efficiency</label><span>0.842</span></div>
+              <div class="risk-stat accent"><label>Z-Score</label><span>+2.14</span></div>
+            </div>
+          </div>
+
+          <!-- SENTIMENT & DEPTH -->
+          <div class="glass-panel market-sentiment">
+            <div class="panel-hdr"><span class="panel-title"><i>//</i> Market sentiment & depth</span></div>
+            <div class="gauge-wrap">
+              <div class="gauge">
+                <svg width="100" height="100">
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="6" />
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="#4DB86A" stroke-width="6" stroke-dasharray="283"
+                    stroke-dashoffset="60" />
+                </svg>
+                <div class="gauge-val">82%</div>
+                <div class="gauge-label">Fear/Greed</div>
+              </div>
+              <div class="gauge">
+                <svg width="100" height="100">
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="6" />
+                  <circle cx="50" cy="50" r="45" fill="none" stroke="#5B9BD5" stroke-width="6" stroke-dasharray="283"
+                    stroke-dashoffset="120" />
+                </svg>
+                <div class="gauge-val">64%</div>
+                <div class="gauge-label">Signal Index</div>
+              </div>
+            </div>
+            <div class="panel-title" style="padding-left: 20px; margin-bottom: 10px;">Market Depth
+              <span>(Simulated)</span>
+            </div>
+            <div class="depth-viz">
+              <div class="depth-bar" style="height: 40%"></div>
+              <div class="depth-bar" style="height: 55%"></div>
+              <div class="depth-bar" style="height: 80%"></div>
+              <div class="depth-bar ask" style="height: 70%"></div>
+              <div class="depth-bar ask" style="height: 45%"></div>
+              <div class="depth-bar ask" style="height: 30%"></div>
+            </div>
+          </div>
+
+          <!-- STRATEGY EFFICIENCY -->
+          <div class="glass-panel efficiency-radar">
+            <div class="panel-hdr"><span class="panel-title"><i>//</i> Strategy fingerprint</span></div>
+            <canvas id="radarCanvas"></canvas>
+          </div>
+
+          <!-- INTENSITY HEATMAP -->
+          <div class="glass-panel intensity-heatmap">
+            <div class="panel-hdr"><span class="panel-title"><i>//</i> Session intensity</span></div>
+            <canvas id="intensityCanvas"></canvas>
+          </div>
+
+          <!-- CORRELATION MATRIX -->
+          <div class="glass-panel correlation-matrix">
+            <div class="panel-hdr"><span class="panel-title"><i>//</i> Asset Correlation</span></div>
+            <div class="mat-grid">
+              <div class="mat-cell high">1.0</div>
+              <div class="mat-cell med">.82</div>
+              <div class="mat-cell neg">-.12</div>
+              <div class="mat-cell">.05</div>
+              <div class="mat-cell med">.42</div>
+              <div class="mat-cell med">.82</div>
+              <div class="mat-cell high">1.0</div>
+              <div class="mat-cell">.04</div>
+              <div class="mat-cell med">.61</div>
+              <div class="mat-cell">.14</div>
+              <div class="mat-cell neg">-.12</div>
+              <div class="mat-cell">.04</div>
+              <div class="mat-cell high">1.0</div>
+              <div class="mat-cell med">.32</div>
+              <div class="mat-cell neg">-.45</div>
+              <div class="mat-cell">.05</div>
+              <div class="mat-cell med">.61</div>
+              <div class="mat-cell med">.32</div>
+              <div class="mat-cell high">1.0</div>
+              <div class="mat-cell med">.74</div>
+              <div class="mat-cell med">.42</div>
+              <div class="mat-cell">.14</div>
+              <div class="mat-cell neg">-.45</div>
+              <div class="mat-cell med">.74</div>
+              <div class="mat-cell high">1.0</div>
+            </div>
+            <div style="padding: 10px 16px; font-size: 7px; color: #3A4A5A; font-family: 'Space Mono', monospace;">BTC
+              // ETH // SOL // LINK // AVAX</div>
+          </div>
+
+          <!-- PNL DISTRIBUTION -->
+          <div class="glass-panel pnl-distribution">
+            <div class="panel-hdr"><span class="panel-title"><i>//</i> PnL frequency</span></div>
+            <canvas id="distCanvas"></canvas>
+          </div>
+
+          <!-- DETAILED TABLE -->
+          <div class="analytics-table-wrap">
+            <div class="panel-hdr"><span class="panel-title"><i>//</i> Detailed performance attribution by pair</span>
+            </div>
+            <table class="at-table">
+              <thead>
+                <tr>
+                  <th>Asset Pair</th>
+                  <th>Win Rate</th>
+                  <th>Avg PnL</th>
+                  <th>Profit Factor</th>
+                  <th>Expectancy</th>
+                  <th>Max Run</th>
+                  <th>Efficiency</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="color: #fff; font-weight: 700;">BTC / USDT</td>
+                  <td>78.2%</td>
+                  <td style="color: #4DB86A;">+$842.10</td>
+                  <td>2.14</td>
+                  <td>$184.20</td>
+                  <td>12 Wins</td>
+                  <td>0.942</td>
+                </tr>
+                <tr>
+                  <td style="color: #fff; font-weight: 700;">ETH / USDT</td>
+                  <td>64.5%</td>
+                  <td style="color: #4DB86A;">+$312.40</td>
+                  <td>1.82</td>
+                  <td>$112.05</td>
+                  <td>8 Wins</td>
+                  <td>0.812</td>
+                </tr>
+                <tr>
+                  <td style="color: #fff; font-weight: 700;">SOL / USDT</td>
+                  <td>58.1%</td>
+                  <td style="color: #D65C5C;">-$42.10</td>
+                  <td>1.12</td>
+                  <td>-$12.40</td>
+                  <td>3 Loss</td>
+                  <td>0.450</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div id="ftr">
+      <div class="ftr-left">
+        <div class="ftr-item">Model: <span>VAULT-V4.2 [SUPERVISED]</span></div>
+        <div class="ftr-item">Compute: <span>Institutional Grade</span></div>
+      </div>
+      <div class="ftr-item">Security: <span>ENCRYPTED_DATA_STREAM</span></div>
+    </div>
+
+  </div>
+
+  <script>
+    const dpr = window.devicePixelRatio || 1;
+
+    // ── EQUITY CANVAS
+    const ecv = document.getElementById('equityCanvas');
+    const ectx = ecv.getContext('2d');
+    function drawEquity() {
+      const r = ecv.parentElement.getBoundingClientRect();
+      ecv.width = r.width * dpr; ecv.height = r.height * dpr; ectx.scale(dpr, dpr);
+      const w = r.width, h = r.height - 40;
+
+      // Gradient background
+      const grad = ectx.createLinearGradient(0, 0, 0, h);
+      grad.addColorStop(0, 'rgba(77, 184, 106, 0.05)');
+      grad.addColorStop(1, 'transparent');
+
+      ectx.beginPath();
+      ectx.strokeStyle = '#4DB86A';
+      ectx.lineWidth = 2.5;
+      ectx.moveTo(0, h * 0.8);
+
+      for (let i = 1; i <= 60; i++) {
+        const x = (i / 60) * w;
+        const y = (h * 0.8) - (i * 2) + Math.sin(i * 0.5) * 20;
+        ectx.lineTo(x, y);
+      }
+      ectx.stroke();
+    }
+
+    // ── MONTE CARLO CANVAS
+    const mcv = document.getElementById('monteCanvas');
+    const mctx = mcv.getContext('2d');
+    function drawMonte() {
+      const r = mcv.parentElement.getBoundingClientRect();
+      mcv.width = r.width * dpr; mcv.height = r.height * dpr; mctx.scale(dpr, dpr);
+      const w = r.width, h = r.height;
+
+      mctx.lineWidth = 1;
+      for (let j = 0; j < 40; j++) {
+        mctx.beginPath();
+        mctx.strokeStyle = `rgba(91, 155, 213, ${0.03 + Math.random() * 0.08})`;
+        mctx.moveTo(0, h * 0.5);
+        let cy = h * 0.5;
+        for (let i = 1; i <= 20; i++) {
+          cy += (Math.random() - 0.45) * 30;
+          mctx.lineTo((i / 20) * w, cy);
+        }
+        mctx.stroke();
+      }
+
+      // Median path
+      mctx.beginPath();
+      mctx.strokeStyle = '#5B9BD5';
+      mctx.lineWidth = 2;
+      mctx.moveTo(0, h * 0.5);
+      let my = h * 0.5;
+      for (let i = 1; i <= 20; i++) { my -= 4; mctx.lineTo((i / 20) * w, my); }
+      mctx.stroke();
+    }
+
+    // ── RADAR CANVAS
+    const rcv = document.getElementById('radarCanvas');
+    const rctx = rcv.getContext('2d');
+    function drawRadar() {
+      const r = rcv.parentElement.getBoundingClientRect();
+      rcv.width = r.width * dpr; rcv.height = r.height * dpr; rctx.scale(dpr, dpr);
+      const cx = r.width / 2, cy = r.height / 2, rd = 80;
+
+      rctx.strokeStyle = 'rgba(255,255,255,0.05)';
+      for (let i = 1; i <= 4; i++) {
+        rctx.beginPath();
+        for (let j = 0; j < 5; j++) {
+          const a = (j / 5) * 2 * Math.PI - Math.PI / 2;
+          const px = cx + Math.cos(a) * rd * (i / 4);
+          const py = cy + Math.sin(a) * rd * (i / 4);
+          if (j === 0) rctx.moveTo(px, py); else rctx.lineTo(px, py);
+        }
+        rctx.closePath(); rctx.stroke();
+      }
+
+      // Shape
+      rctx.beginPath();
+      rctx.fillStyle = 'rgba(77, 184, 106, 0.2)';
+      rctx.strokeStyle = '#4DB86A';
+      rctx.lineWidth = 2;
+      const vals = [0.8, 0.9, 0.6, 0.85, 0.7];
+      for (let j = 0; j < 5; j++) {
+        const a = (j / 5) * 2 * Math.PI - Math.PI / 2;
+        const px = cx + Math.cos(a) * rd * vals[j];
+        const py = cy + Math.sin(a) * rd * vals[j];
+        if (j === 0) rctx.moveTo(px, py); else rctx.lineTo(px, py);
+      }
+      rctx.closePath(); rctx.stroke(); rctx.fill();
+    }
+
+    // ── HEATMAP CANVAS (BARS)
+    const hcv = document.getElementById('intensityCanvas');
+    const hctx = hcv.getContext('2d');
+    function drawHeatmap() {
+      const r = hcv.parentElement.getBoundingClientRect();
+      hcv.width = r.width * dpr; hcv.height = r.height * dpr; hctx.scale(dpr, dpr);
+      const w = r.width, h = r.height;
+      const bw = (w - 64) / 24;
+
+      for (let i = 0; i < 24; i++) {
+        const v = 20 + Math.random() * 120;
+        hctx.fillStyle = `rgba(77, 184, 106, ${v / 200})`;
+        hctx.fillRect(32 + i * (bw + 2), h - 20 - v, bw, v);
+      }
+    }
+
+    // ── DISTRIBUTION CANVAS
+    const dcv = document.getElementById('distCanvas');
+    const dctx = dcv.getContext('2d');
+    function drawDist() {
+      const r = dcv.parentElement.getBoundingClientRect();
+      dcv.width = r.width * dpr; dcv.height = r.height * dpr; dctx.scale(dpr, dpr);
+      const w = r.width, h = r.height;
+
+      dctx.beginPath();
+      dctx.strokeStyle = '#C9A84C';
+      dctx.lineWidth = 2;
+      dctx.moveTo(20, h - 40);
+      for (let i = 0; i < 40; i++) {
+        const x = 20 + (i / 40) * (w - 40);
+        const y = h - 40 - Math.exp(-Math.pow(i - 25, 2) / 50) * 120;
+        dctx.lineTo(x, y);
+      }
+      dctx.stroke();
+    }
+
+    function init() {
+      drawEquity();
+      drawMonte();
+      drawRadar();
+      drawHeatmap();
+      drawDist();
+    }
+
+    window.addEventListener('resize', init);
+    setTimeout(init, 100);
+
+  </script>
+</body>
+
+</html>
