@@ -2,7 +2,6 @@ import { useState, useCallback } from 'react'
 import './App.css'
 import RadarCard2D from './components/RadarCard2D'
 import RadarScene from './components/RadarScene'
-import { ExpandedCardOverlay } from './components/StarkSignals'
 import { SIGNALS } from './data/signals'
 
 function App() {
@@ -115,20 +114,16 @@ function App() {
           <div className="modal-hud-bottom">
             <div className="hud-instructions">
               <span>⟳</span> DRAG to rotate &nbsp;&nbsp;
-              <span>⊕</span> SCROLL to zoom (into core!) &nbsp;&nbsp;
-              <span>◉</span> CLICK card to expand &nbsp;&nbsp;
-              <span>✋</span> DRAG cards to reposition &nbsp;&nbsp;
-              <span>⇧</span> RIGHT-CLICK to pan
+              <span>⊕</span> SCROLL to zoom (follows cursor) &nbsp;&nbsp;
+              <span>◉</span> CLICK dot to expand &nbsp;&nbsp;
+              <span>🔍</span> FLY CLOSE for exploded view &nbsp;&nbsp;
+              <span>↻</span> DRAG card/dot to rotate it &nbsp;&nbsp;
+              <span>⌂</span> Press H to reset view
             </div>
             <div className="hud-timestamp">
               SYS.TIME {new Date().toLocaleTimeString('en-US', { hour12: false })}
             </div>
           </div>
-
-          {/* ═══ EXPANDED CARD OVERLAY ═══ */}
-          {expandedCard && (
-            <ExpandedCardOverlay data={expandedCard} onClose={handleCloseCard} />
-          )}
         </div>
       )}
     </>
