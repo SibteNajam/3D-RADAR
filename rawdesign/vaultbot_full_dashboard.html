@@ -311,7 +311,7 @@
     #content {
       flex: 1;
       display: grid;
-      grid-template-columns: 1fr 320px;
+      grid-template-columns: 1fr;
       grid-template-rows: auto 1fr;
       gap: 0;
       overflow: hidden;
@@ -2162,6 +2162,394 @@
       opacity: 1;
       transform: translateX(0);
     }
+
+    /* ═════════ CARD COMMON ═════════ */
+    .card {
+      position: relative;
+      height: 300px;
+      width: 230px;
+      flex-shrink: 0;
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    }
+
+    /* ═════════ VERSION 1: GEOMETRIC OPENING BOX ═════════ */
+    .card.v1 .boxshadow {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      border: 1px solid var(--hex-color);
+      transform: scale(0.8);
+      box-shadow: rgb(var(--neon-rgb)) 0px 30px 70px 0px;
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    }
+
+    .card.v1 .main {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: var(--hex-color);
+      background: linear-gradient(0deg, rgb(var(--dark-rgb)) 0%, rgb(var(--neon-rgb)) 60%, rgb(var(--dark-rgb)) 100%);
+      position: relative;
+      -webkit-clip-path: polygon(0 40px, 40px 0, calc(100% - 40px) 0, 100% 40px, 100% calc(100% - 40px), calc(100% - 40px) 100%, 40px 100%, 0 calc(100% - 40px));
+      clip-path: polygon(0 40px, 40px 0, calc(100% - 40px) 0, 100% 40px, 100% calc(100% - 40px), calc(100% - 40px) 100%, 40px 100%, 0 calc(100% - 40px));
+      box-shadow: rgb(var(--neon-rgb)) 0px 7px 29px 0px;
+      transition: all 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    }
+
+    .card.v1 .main .top {
+      position: absolute;
+      top: 0px;
+      left: 0;
+      width: 0px;
+      height: 0px;
+      z-index: 2;
+      border-top: 115px solid black;
+      border-left: 115px solid transparent;
+      border-right: 115px solid transparent;
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    }
+
+    .card.v1 .main .side {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      transform: translateX(-50%);
+      height: 101%;
+      background: black;
+      -webkit-clip-path: polygon(0% 0%, 50% 0, 95% 45%, 100% 100%, 0% 100%);
+      clip-path: polygon(0% 0%, 50% 0, 95% 45%, 100% 100%, 0% 100%);
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86) 1s;
+    }
+
+    .card.v1 .main .left {
+      left: 0;
+    }
+
+    .card.v1 .main .right {
+      right: 0;
+      transform: translateX(50%) scale(-1, 1);
+    }
+
+    .card.v1 .main .title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 90px;
+      font-weight: bold;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 25px;
+      color: #fff;
+      opacity: 0;
+      z-index: -1;
+      transition: all 0.2s ease-out 0s;
+    }
+
+    .card.v1 .main .subtitle {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 130px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      white-space: nowrap;
+      color: var(--hex-color);
+      opacity: 0;
+      z-index: -1;
+      transition: all 0.2s ease-out 0s;
+    }
+
+    .card.v1 .main .button-container {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .card.v1 .main .button-container .button {
+      position: absolute;
+      transform: translateX(-50%);
+      padding: 0;
+      width: 100px;
+      height: 32px;
+      -webkit-clip-path: polygon(0 0, 100% 0, 81% 100%, 21% 100%);
+      clip-path: polygon(0 0, 100% 0, 81% 100%, 21% 100%);
+      background: black;
+      border: none;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    }
+
+    .card.v1 .main .button-container .button .svg {
+      width: 15px;
+      transition: all 0.2s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    }
+
+    .card.v1 .main .button-container .button:nth-child(1) {
+      bottom: 300px;
+      transition-delay: 0.4s;
+    }
+
+    .card.v1 .main .button-container .button:nth-child(2) {
+      bottom: 300px;
+      transition-delay: 0.6s;
+    }
+
+    .card.v1 .main .button-container .button:nth-child(3) {
+      bottom: 300px;
+      transition-delay: 0.8s;
+    }
+
+    .card.v1:hover .main {
+      transform: scale(1.1);
+    }
+
+    .card.v1:hover .main .top {
+      top: -50px;
+    }
+
+    .card.v1:hover .main .left {
+      left: -50px;
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86) 0.1s;
+    }
+
+    .card.v1:hover .main .right {
+      right: -50px;
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86) 0.1s;
+    }
+
+    .card.v1:hover .main .title,
+    .card.v1:hover .main .subtitle {
+      opacity: 1;
+      transition: all 0.2s ease-out 1.3s;
+    }
+
+    .card.v1:hover .main .button-container .button:nth-child(1) {
+      bottom: 80px;
+      transition-delay: 0.8s;
+    }
+
+    .card.v1:hover .main .button-container .button:nth-child(2) {
+      bottom: 40px;
+      transition-delay: 0.6s;
+    }
+
+    .card.v1:hover .main .button-container .button:nth-child(3) {
+      bottom: 0;
+      transition-delay: 0.4s;
+    }
+
+    .card.v1.force-open .main {
+      transform: scale(1.1);
+      transition: none !important;
+    }
+
+    .card.v1.force-open .main .top {
+      top: -50px;
+      transition: none !important;
+    }
+
+    .card.v1.force-open .main .left {
+      left: -50px;
+      transition: none !important;
+    }
+
+    .card.v1.force-open .main .right {
+      right: -50px;
+      transition: none !important;
+    }
+
+    .card.v1.force-open .main .title,
+    .card.v1.force-open .main .subtitle {
+      opacity: 1;
+      transition: none !important;
+    }
+
+    .card.v1.force-open .main .button-container .button {
+      transition: none !important;
+    }
+
+    .card.v1.force-open .main .button-container .button:nth-child(1) {
+      bottom: 80px;
+      transition-delay: 0s !important;
+    }
+
+    .card.v1.force-open .main .button-container .button:nth-child(2) {
+      bottom: 40px;
+      transition-delay: 0s !important;
+    }
+
+    .card.v1.force-open .main .button-container .button:nth-child(3) {
+      bottom: 0;
+      transition-delay: 0s !important;
+    }
+
+    /* ═════════ VERSION 2: LAYERED SLIDE-IN CARD ═════════ */
+    .card.v2 {
+      background: linear-gradient(-45deg, rgb(var(--dark-rgb)) 0%, var(--hex-color) 100%);
+      overflow: hidden;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: rgba(var(--neon-rgb), 0.3) 0px 40px 30px -25px;
+    }
+
+    .card.v2:hover {
+      transform: scale(1.08);
+      box-shadow: rgba(var(--neon-rgb), 0.5) 0px 30px 40px -20px;
+    }
+
+    .card.v2 .logo {
+      width: 50px;
+      padding: 1rem;
+    }
+
+    .card.v2 .logo .svg {
+      fill: white;
+      opacity: 0.8;
+    }
+
+    .card.v2 .title {
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%, -50%);
+      color: White;
+      font-weight: 800;
+      font-size: 1.8rem;
+      font-family: 'Space Grotesk', sans-serif;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    .card.v2 .icons-container {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 1.2rem;
+      z-index: 999;
+    }
+
+    .card.v2 .icons-container .svg {
+      stroke: white;
+      width: 20px;
+      height: 20px;
+      transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .card.v2 .icons-container .svg:hover {
+      transform: scale(1.5);
+      stroke: black;
+    }
+
+    .card.v2 .icons-container .twitter {
+      fill: white;
+    }
+
+    .card.v2 .icons-container .twitter:hover {
+      fill: black;
+      stroke: none;
+    }
+
+    .card.v2 .box {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      box-shadow: rgba(0, 0, 0, 0.2) 5px 0px 15px 0px inset;
+      transition: all 0.6s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+      display: grid;
+      place-content: center;
+      padding: 2rem;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .card.v2 .box .content {
+      position: relative;
+      transform: translateY(-40px);
+      opacity: 0;
+      transition: all 0.4s ease-out 0.2s;
+      text-align: center;
+    }
+
+    .card.v2 .box .content .box-title {
+      display: block;
+      color: white;
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 0.8rem;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    .card.v2 .box .content .box-text {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.85rem;
+      font-family: 'Outfit', sans-serif;
+      line-height: 1.4;
+    }
+
+    .card.v2 .box:hover {
+      right: 0 !important;
+      top: 0 !important;
+      border-radius: 0 !important;
+      z-index: 100;
+    }
+
+    .card.v2 .box:hover .content {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .card.v2 .box1 {
+      top: -85%;
+      right: -40%;
+      background: var(--hex-color);
+      border-radius: 200px;
+      filter: brightness(0.85);
+      shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card.v2 .box2 {
+      top: -70%;
+      right: -45%;
+      background: var(--hex-color);
+      border-radius: 200px;
+      filter: brightness(1.1);
+    }
+
+    .card.v2 .box3 {
+      top: -60%;
+      right: -30%;
+      background: var(--hex-color);
+      border-radius: 200px;
+      filter: brightness(1.3);
+    }
+
+    .card.v2.force-open .box1 {
+      top: 0;
+      right: 0;
+      border-radius: 0;
+    }
+
+    .card.v2.force-open .box1 .content {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    /* OVERRIDE TRACK CSS */
+    #sp-track {
+      display: flex;
+      gap: 40px;
+      padding: 30px;
+      align-items: center;
+    }
   </style>
 
   <div id="root" style="position:relative;">
@@ -2372,59 +2760,7 @@
             </div>
           </div>
 
-          <!-- RIGHT -->
-          <div id="right">
 
-            <!-- 🛰️ SIGNAL MONITOR [RADAR SECTION] -->
-            <div id="radar-sec">
-              <div class="sec-hd">
-                <span class="sec-title">Signal Monitor</span>
-                <div class="live-pill" style="padding:2px 8px; font-size:8px; border-color:#4DB86A33;">
-                  <div class="live-dot" style="width:4px; height:4px;"></div>Active
-                </div>
-              </div>
-              <div id="radar-container">
-                <canvas id="radarCanvas"></canvas>
-                <div id="radarUI"></div>
-              </div>
-            </div>
-
-            <!-- EQUITY CHART -->
-            <div id="eq-sec">
-              <div class="sec-hd"><span class="sec-title">Equity curve</span>
-                <div style="display:flex;gap:3px;">
-                  <button class="sec-btn">1D</button>
-                  <button class="sec-btn" style="color:#4DB86A;border-color:#4DB86A33;">1W</button>
-                  <button class="sec-btn">1M</button>
-                </div>
-              </div>
-              <canvas id="eq-cv" height="100"></canvas>
-              <div class="eq-legend">
-                <div class="eq-li">
-                  <div class="eq-dot" style="background:#4DB86A;"></div>Equity
-                </div>
-                <div class="eq-li">
-                  <div class="eq-dot" style="background:#C9A84C55;border:.5px solid #C9A84C;"></div>Benchmark
-                </div>
-              </div>
-            </div>
-
-            <!-- BOTS -->
-            <div id="bots-sec">
-              <div class="sec-hd"><span class="sec-title">Bot roster</span><button class="sec-btn">Manage</button></div>
-              <div id="bot-list"></div>
-            </div>
-
-            <!-- LEADERBOARD -->
-            <div id="ld-sec">
-              <div class="sec-hd"
-                style="position:sticky;top:0;background:#07080F;z-index:2;border-bottom:.5px solid #111828;">
-                <span class="sec-title">Leaderboard</span>
-              </div>
-              <div id="ld-list"></div>
-            </div>
-
-          </div>
         </div>
       </div>
     </div>
@@ -2452,99 +2788,11 @@
 
     <!-- POPUP -->
     <div id="popup-wrap">
-      <canvas id="pu-conf-cv"></canvas>
-      <div class="pu">
-        <!-- LEFT COL: existing content -->
-        <div>
-          <div class="pu-hd">
-            <div>
-              <div class="pu-sym" id="pu-sym"></div>
-              <div class="pu-pair" id="pu-pair"></div>
-            </div>
-            <button class="pu-x" id="pu-x">✕</button>
-          </div>
-          <div class="pu-pr" id="pu-pr"></div>
-          <div class="pu-row"><span class="bdg" id="pu-ch"></span><span style="font-size:10px;" id="pu-pnl"></span>
-          </div>
-          <div class="pu-spk"><svg id="pu-spk" viewBox="0 0 250 40" preserveAspectRatio="none"></svg></div>
-          <div class="pu-g">
-            <div class="pu-f"><label>P&L</label><span id="pu-gpnl"></span></div>
-            <div class="pu-f"><label>Leverage</label><span id="pu-lev"></span></div>
-            <div class="pu-f"><label>24h High</label><span id="pu-hi"></span></div>
-            <div class="pu-f"><label>24h Low</label><span id="pu-lo"></span></div>
-            <div class="pu-f"><label>Volume</label><span id="pu-vol"></span></div>
-            <div class="pu-f"><label>Direction</label><span id="pu-dir"></span></div>
-          </div>
-          <div class="pu-div"></div>
-          <div class="pu-btns">
-            <button class="pu-b bl">Long</button>
-            <button class="pu-b sh">Short</button>
-          </div>
-        </div>
-
-        <!-- RIGHT COL: Price Level Bar -->
-        <div class="pu-bar-col">
-          <div class="vb2-scene">
-            <div class="vb2-left-labels">
-              <div class="vb2-lbl-l c-tp" style="top:8%">
-                <div class="l-name">TP</div>
-                <div class="l-price" id="pu-bar-tp"></div>
-              </div>
-              <div class="vb2-lbl-l c-tl" style="top:32%">
-                <div class="l-name">LOCK</div>
-                <div class="l-price" id="pu-bar-tl"></div>
-              </div>
-              <div class="vb2-lbl-l c-e" style="top:60%">
-                <div class="l-name">ENTRY</div>
-                <div class="l-price" id="pu-bar-en"></div>
-              </div>
-              <div class="vb2-lbl-l c-sl" style="top:88%">
-                <div class="l-name">SL</div>
-                <div class="l-price" id="pu-bar-sl"></div>
-              </div>
-            </div>
-            <div class="vb2-center">
-              <div class="vb2-rail">
-                <div class="vb2-rail-profit" id="pu-bar-profit"></div>
-                <div class="vb2-rail-loss"></div>
-                <div class="vb2-dot" id="pu-bar-dot" style="top:50%"></div>
-                <div class="vb2-notch nt-tp" style="top:8%">
-                  <div class="vb2-notch-line"></div>
-                  <div class="vb2-notch-badge">TP</div>
-                </div>
-                <div class="vb2-notch nt-tl" style="top:32%">
-                  <div class="vb2-notch-line"></div>
-                  <div class="vb2-notch-badge">TL</div>
-                </div>
-                <div class="vb2-notch nt-e" style="top:60%">
-                  <div class="vb2-notch-line"></div>
-                  <div class="vb2-notch-badge">E</div>
-                </div>
-                <div class="vb2-notch nt-sl" style="top:88%">
-                  <div class="vb2-notch-line"></div>
-                  <div class="vb2-notch-badge">SL</div>
-                </div>
-              </div>
-            </div>
-            <div class="vb2-right-labels">
-              <div class="vb2-lbl-r c-mk" id="pu-bar-mktlbl" style="top:50%">
-                <div class="l-name c-mk" id="pu-bar-mkt"></div>
-                <div class="l-price c-mk">LIVE</div>
-              </div>
-            </div>
-          </div>
-          <div class="vb2-bar-stats">
-            <div class="vb2-bar-stat">
-              <div class="vb2-bar-stat-lbl">LIVE P&amp;L</div>
-              <div class="vb2-bar-stat-val" id="pu-bar-pnl" style="color:#00e676"></div>
-            </div>
-            <div class="vb2-bar-stat">
-              <div class="vb2-bar-stat-lbl">24H RANGE</div>
-              <div class="vb2-bar-stat-val" id="pu-bar-rng" style="color:#42a5f5"></div>
-            </div>
-          </div>
-        </div>
-
+      <button class="pu-x" id="pu-x"
+        style="position:absolute; top:30px; right:40px; z-index:100; font-size:32px; color:#ffffff66; background:none; border:none; cursor:pointer;"
+        onclick="closePopup()">✕</button>
+      <div id="pu-card-mount"
+        style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); transition: opacity 0.3s ease; opacity: 0;">
       </div>
     </div>
     <div id="toast"></div>
@@ -2897,81 +3145,61 @@
       return { line, area, lx: last[0].toFixed(1), ly: last[1].toFixed(1) };
     }
 
-    function makeSpCard(data) {
-      const ip = data.change >= 0;
-      const acc = ip ? '#4DB86A' : '#D65C5C';
-      const rgb = ip ? '77,184,106' : '214,92,92';
-      const glow = ip ? 'rgba(77,184,106,0.22)' : 'rgba(214,92,92,0.22)';
-      const accBg = ip ? 'rgba(77,184,106,0.06)' : 'rgba(214,92,92,0.06)';
-      const pnlSign = data.pnl >= 0 ? '+$' : '\u2212$';
-      const pnlStr = pnlSign + Math.abs(data.pnl).toFixed(0);
-      const chStr = (ip ? '+' : '') + data.change.toFixed(2) + '%';
-      const serial = 'RX-' + Math.floor(1000 + Math.random() * 9000);
-      const healthPct = ip ? (42 + Math.random() * 52).toFixed(0) : (12 + Math.random() * 36).toFixed(0);
-      const winPct = data.dir === 'LONG' ? '68.4' : '54.2';
-      const sp = makeSparkline(data.dir, acc);
-      const uid = serial.replace('RX-', 's');
+    let cardGlobalIndex = 0;
+
+    function makeSpCard(data, forcedIdx = null, isPopup = false) {
+      const idx = forcedIdx !== null ? forcedIdx : cardGlobalIndex++;
+      const isV1 = true; // Forced all cards to v1 design as requested
 
       const el = document.createElement('div');
-      el.className = 'spc' + (ip ? '' : ' neg');
-      el.style.setProperty('--acc', acc);
-      el.style.setProperty('--acc-glow', glow);
-      el.style.setProperty('--acc-bg', accBg);
-      el.setAttribute('data-pnl-base', data.pnl);
+      const ip = data.change >= 0;
+      const rgbMain = ip ? '77,184,106' : '214,92,92';
+      const rgbDark = ip ? '10,34,16' : '62,0,0';
+      const rgbHex = ip ? '#4DB86A' : '#D65C5C';
+      const pnlStr = (data.pnl >= 0 ? '+$' : '−$') + Math.abs(data.pnl).toFixed(2);
 
+      el.className = 'card v1'; // Always v1
+      el.dataset.v = '0'; // Always identifies as version 1
+      el.style.setProperty('--neon-rgb', rgbMain);
+      el.style.setProperty('--dark-rgb', rgbDark);
+      el.style.setProperty('--hex-color', rgbHex);
+
+      /* ----- VERSION 1: GEOMETRIC BOX ----- */
       el.innerHTML = `
-    <div class="spc-top">
-      <div class="spc-icon${ip ? '' : ' neg'}">${data.sym.slice(0, 2)}</div>
-      <div class="spc-pill${ip ? '' : ' neg'}"><div class="spc-pill-dot"></div>${ip ? 'LONG' : 'SHORT'}</div>
-    </div>
-
-    <div class="spc-chart">
-      <svg viewBox="0 0 183 40" preserveAspectRatio="none">
-        <defs>
-          <linearGradient id="${uid}" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stop-color="${acc}" stop-opacity="0.30"/>
-            <stop offset="100%" stop-color="${acc}" stop-opacity="0"/>
-          </linearGradient>
-        </defs>
-        <path d="${sp.area}" fill="url(#${uid})"/>
-        <path d="${sp.line}" fill="none" stroke="${acc}" stroke-width="1.6"
-          stroke-linecap="round" stroke-linejoin="round"/>
-        <circle cx="${sp.lx}" cy="${sp.ly}" r="3" fill="${acc}">
-          <animate attributeName="r" values="2.5;4.5;2.5" dur="1.7s" repeatCount="indefinite"/>
-          <animate attributeName="opacity" values="1;0.35;1" dur="1.7s" repeatCount="indefinite"/>
-        </circle>
-      </svg>
-    </div>
-
-    <div class="spc-sym-row">
-      <span class="spc-sym">${data.sym}</span>
-      <span class="spc-serial">${serial}</span>
-    </div>
-    <div class="spc-price-row">
-      <span class="spc-price">${fp(data.price)}</span>
-      <span class="spc-chg ${ip ? 'pos' : 'neg'}">${chStr}</span>
-    </div>
-
-    <div class="spc-pnl-lbl">Realized P&amp;L</div>
-    <div class="spc-pnl-val" data-base="${data.pnl}">${pnlStr}</div>
-
-    <div class="spc-bar-wrap">
-      <div class="spc-bar" style="width:${healthPct}%"></div>
-    </div>
-
-    <div class="spc-stats">
-      <div class="spc-stat">
-        <div class="spc-stat-lbl">Win Rate</div>
-        <div class="spc-stat-val">${winPct}%</div>
-      </div>
-      <div class="spc-stat">
-        <div class="spc-stat-lbl">Leverage</div>
-        <div class="spc-stat-val acc-color">${data.lev}</div>
-      </div>
-    </div>
-
-    <div class="spc-footer">Analyze Position</div>
-  `;
+        <div class="boxshadow"></div>
+        <div class="main">
+          <div class="top"></div>
+          <div class="left side"></div>
+          <div class="right side"></div>
+          <div class="title">${data.sym}</div>
+          <div class="subtitle">${pnlStr}</div>
+          <div class="button-container">
+            <button class="button">
+              <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hex-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle>
+              </svg>
+              <span>${data.dir === 'LONG' ? '68.4' : '54.2'}%</span>
+            </button>
+            <button class="button">
+              <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hex-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span>${data.lev}</span>
+            </button>
+            <button class="button">
+              <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hex-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+              <span>${ip ? (42 + Math.random() * 52).toFixed(0) : (12 + Math.random() * 36).toFixed(0)}%</span>
+            </button>
+            ${isPopup ? `
+            <div class="pu-row-anim" style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:8px; width:190px;">
+               <div class="pu-f"><label>Entry</label><span>${fp(data.price * 0.98)}</span></div>
+               <div class="pu-f"><label>Liq</label><span>${fp(data.price * (ip ? 0.85 : 1.15))}</span></div>
+               <button class="pu-b bl" style="grid-column: span 2; padding:6px; font-size:10px;" onclick="showToast('CLOSE POSITION...')">CLOSE POSITION</button>
+            </div>` : ''}
+          </div>
+        </div>`;
       return el;
     }
 
@@ -2995,7 +3223,7 @@
           el.style.transition = 'transform .58s cubic-bezier(.22,1,.36,1), opacity .58s';
           el.style.transform = `translateY(0)`;
           el.style.opacity = '1';
-          el.addEventListener('click', () => openPopup(d));
+          el.addEventListener('click', () => openPopup(d, el));
         }, i * 85);
       });
     }
@@ -3011,7 +3239,7 @@
         el.style.transition = 'transform .6s cubic-bezier(.34,1.4,.64,1),opacity .38s';
         el.style.transform = `translateY(0) scale(1)`;
         el.style.opacity = '1';
-        el.addEventListener('click', () => openPopup(data));
+        el.addEventListener('click', () => openPopup(data, el));
       });
       if (rCards.length < 12) {
         rCards.push({ data, angle: Math.PI, entryDone: false, entryAnim: 0 });
@@ -3110,65 +3338,50 @@
       drawConf();
     }
 
-    function openPopup(c) {
+    function openPopup(c, clickedEl) {
       rPaused = true;
-      const ip = c.change >= 0;
-      const col = ip ? '#4DB86A' : '#D65C5C';
-
-      /* Populate fields */
-      document.getElementById('pu-sym').textContent = c.sym;
-      document.getElementById('pu-pair').textContent = c.pair;
-      const pp = document.getElementById('pu-pr'); pp.textContent = fp(c.price); pp.className = 'pu-pr ' + (ip ? 'pos' : 'neg');
-      const pch = document.getElementById('pu-ch'); pch.textContent = (ip ? '+' : '') + c.change.toFixed(2) + '%'; pch.className = 'bdg ' + (ip ? 'pos-bg' : 'neg-bg');
-      const ppl = document.getElementById('pu-pnl'); ppl.textContent = 'P&L ' + (c.pnl >= 0 ? '+$' : '−$') + Math.abs(c.pnl).toFixed(2); ppl.className = c.pnl >= 0 ? 'pos' : 'neg';
-      document.getElementById('pu-gpnl').textContent = (c.pnl >= 0 ? '+$' : '−$') + Math.abs(c.pnl).toFixed(2); document.getElementById('pu-gpnl').style.color = col;
-      document.getElementById('pu-lev').textContent = c.lev; document.getElementById('pu-hi').textContent = fp(c.high); document.getElementById('pu-lo').textContent = fp(c.low); document.getElementById('pu-vol').textContent = c.vol;
-      const gd = document.getElementById('pu-dir'); gd.textContent = c.dir; gd.style.color = col;
-      buildSpk(c.dir, col);
-
-      /* Price level bar */
-      puBarMn = c.low * 0.985; puBarMx = c.high * 1.015;
-      puBarEn = c.price * (1 - c.change / 100);
-      puBarMk = c.price;
-      const tpPct = ip ? 0.08 : 0.92; const slPct = ip ? 0.88 : 0.12;
-      const tp = puBarMn + (puBarMx - puBarMn) * (1 - tpPct * 0.85);
-      const sl = puBarMn + (puBarMx - puBarMn) * (1 - slPct * 0.85);
-      const lockPct = (tpPct + 0.60) / 2;
-      const lock = puBarMn + (puBarMx - puBarMn) * (1 - lockPct * 0.85);
-      document.getElementById('pu-bar-tp').textContent = fp(tp);
-      document.getElementById('pu-bar-tl').textContent = fp(lock);
-      document.getElementById('pu-bar-en').textContent = fp(puBarEn);
-      document.getElementById('pu-bar-sl').textContent = fp(sl);
-      document.getElementById('pu-bar-rng').textContent = fp(c.high - c.low);
-      updatePuBar();
-      clearInterval(puBarInterval);
-      puBarInterval = setInterval(updatePuBar, 1800);
-
-      /* Show Popup */
       const wrap = document.getElementById('popup-wrap');
-      const pu = wrap.querySelector('.pu');
-      wrap.style.setProperty('--pu-acc', col);
+      const mount = document.getElementById('pu-card-mount');
 
-      /* Trigger Animations */
+      // Clear previous popup card
+      mount.innerHTML = '';
+
+      // Determine version from the clicked card's data attribute to maintain comparison accuracy
+      const versionId = parseInt(clickedEl.dataset.v) || 0;
+
+      const puCard = makeSpCard(c, versionId);
+      puCard.classList.add('force-open');
+
+      // Scale it up significantly for the popup!
+      puCard.style.transform = 'scale(2.2)';
+      puCard.style.pointerEvents = 'auto'; // Ensure hover works
+
+      mount.appendChild(puCard);
       wrap.classList.add('on');
-      fireConfetti(col);
 
-      /* Staggered Row revealing based on CSS class */
-      const children = pu.querySelectorAll('.pu-hd, .pu-pr, .pu-row, .pu-spk, .pu-g, .pu-btns, .pu-bar-col');
-      children.forEach((el, i) => {
-        el.classList.remove('pu-row-anim');
-        el.style.transitionDelay = (0.2 + i * 0.06) + 's';
-        requestAnimationFrame(() => el.classList.add('pu-row-anim'));
-      });
+      // Make it visible!
+      mount.style.opacity = '1';
     }
 
     function closePopup() {
       rPaused = false;
-      clearInterval(puBarInterval);
       document.getElementById('popup-wrap').classList.remove('on');
+      document.getElementById('pu-card-mount').style.opacity = '0';
+
+      // Destroy the card cleanly after fadeout
+      setTimeout(() => {
+        document.getElementById('pu-card-mount').innerHTML = '';
+      }, 350);
     }
-    document.getElementById('pu-x').addEventListener('click', closePopup);
-    document.getElementById('popup-wrap').addEventListener('click', e => { if (e.target === document.getElementById('popup-wrap')) closePopup(); });
+
+    // Add click listeners to close popup when clicking off the card or on X
+    const puWrap = document.getElementById('popup-wrap');
+    puWrap.addEventListener('click', e => {
+      if (e.target === puWrap) closePopup();
+    });
+
+    const puXBtn = document.getElementById('pu-x');
+    if (puXBtn) puXBtn.addEventListener('click', closePopup);
 
     /* MAIN LOOP */
     function loop() {
@@ -3185,7 +3398,7 @@
 
     /* 📡 WARP-GRID RADAR ENGINE [Upgrade] */
     const rcv2 = document.getElementById('radarCanvas');
-    const rctx2 = rcv2.getContext('2d');
+    const rctx2 = rcv2 ? rcv2.getContext('2d') : null;
     const rUI = document.getElementById('radarUI');
 
     let radarSweep = 0, lastRadarSweep = 0, rSlotIdx = 0;
@@ -3324,10 +3537,9 @@
     }
 
     /* INIT */
-    const ro = new ResizeObserver(() => { resizeRing(); buildChart(); resizeRadar(); });
+    const ro = new ResizeObserver(() => { resizeRing(); });
     ro.observe(document.getElementById('ring-sec'));
-    ro.observe(document.getElementById('radar-sec'));
-    buildTicker(); resizeRing(); resizeRadar(); initRCards(); initSpread(); buildChart(); buildBots(); buildLeader(); buildActivity(); radarFrame(); loop();
+    buildTicker(); resizeRing(); initRCards(); initSpread(); buildActivity(); loop();
     setInterval(() => { if (!rPaused && rCards.length < 12) dealNew(); }, 12000);
 
     /* 🌐 LIVE DATA STREAM UPDATER [Middle Section HUD] */
