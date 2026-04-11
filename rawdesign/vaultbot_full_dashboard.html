@@ -1260,8 +1260,8 @@
     }
 
     #popup-wrap.on {
-      background: rgba(4, 5, 12, 0.85);
-      backdrop-filter: blur(12px);
+      background: rgba(15, 10, 5, 0.88);
+      backdrop-filter: blur(14px);
       pointer-events: all;
     }
 
@@ -1281,7 +1281,7 @@
       position: absolute;
       width: 400px;
       height: 400px;
-      background: radial-gradient(circle, var(--pu-acc, #4DB86A) 0%, transparent 70%);
+      background: radial-gradient(circle, #FF9F43 0%, transparent 70%);
       opacity: 0;
       filter: blur(60px);
       transition: opacity .8s ease;
@@ -1290,7 +1290,7 @@
     }
 
     #popup-wrap.on::before {
-      opacity: 0.08;
+      opacity: 0.06;
     }
 
     .pu {
@@ -2543,6 +2543,147 @@
       opacity: 1;
     }
 
+    /* ═════════ POPUP CARD ANIMATIONS ═════════ */
+    #pu-card-mount {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 11;
+      width: 90%;
+      max-width: 420px;
+      height: 90vh;
+      max-height: 700px;
+    }
+
+    #popup-wrap.on #pu-card-mount {
+      opacity: 1;
+      pointer-events: auto;
+      transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    /* Popup Card - Full Expanded View */
+    #pu-card-mount .card.popup-card {
+      width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(5,15,20,0.98) 0%, rgba(8,20,25,0.98) 50%, rgba(5,12,18,0.98) 100%);
+      border: 2px solid #00ff88;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 0 30px rgba(0,255,136,0.25), 0 12px 48px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(0,255,136,0.08);
+      transform: scale(1);
+      transform-origin: center center;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #popup-wrap.on #pu-card-mount .card.popup-card {
+      animation: popupCardEnter 0.65s cubic-bezier(0.17, 0.55, 0.55, 1) forwards;
+    }
+
+    @keyframes popupCardEnter {
+      0% {
+        opacity: 0;
+        transform: scale(0.75) translateY(40px);
+      }
+      50% {
+        transform: scale(1.02) translateY(-5px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    /* Button animations in popup */
+    #pu-card-mount .button {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+
+    #popup-wrap.on #pu-card-mount .button {
+      animation: buttonAppear 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    #popup-wrap.on #pu-card-mount .button:nth-child(1) {
+      animation-delay: 0.35s;
+    }
+
+    #popup-wrap.on #pu-card-mount .button:nth-child(2) {
+      animation-delay: 0.45s;
+    }
+
+    @keyframes buttonAppear {
+      0% {
+        opacity: 0;
+        transform: scale(0.6) translateY(10px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        opacity: 1;
+      }
+      50% {
+        opacity: 0.3;
+      }
+    }
+
+    #pu-card-mount .button:hover {
+      transform: scale(1.05) !important;
+      filter: brightness(1.2);
+    }
+
+    /* Popup card scrollbar - Neon styling */
+    #pu-card-mount .card.popup-card::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #pu-card-mount .card.popup-card::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #pu-card-mount .card.popup-card::-webkit-scrollbar-thumb {
+      background: rgba(0,255,136,0.3);
+      border-radius: 3px;
+    }
+
+    #pu-card-mount .card.popup-card::-webkit-scrollbar-thumb:hover {
+      background: rgba(0,255,136,0.6);
+    }
+
+    /* Popup card scroll support */
+    #pu-card-mount .popup-wrap {
+      max-height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    #pu-card-mount .popup-wrap::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    #pu-card-mount .popup-wrap::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #pu-card-mount .popup-wrap::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+    }
+
+    #pu-card-mount .popup-wrap::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
     /* OVERRIDE TRACK CSS */
     #sp-track {
       display: flex;
@@ -2791,8 +2932,7 @@
       <button class="pu-x" id="pu-x"
         style="position:absolute; top:30px; right:40px; z-index:100; font-size:32px; color:#ffffff66; background:none; border:none; cursor:pointer;"
         onclick="closePopup()">✕</button>
-      <div id="pu-card-mount"
-        style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); transition: opacity 0.3s ease; opacity: 0;">
+      <div id="pu-card-mount">
       </div>
     </div>
     <div id="toast"></div>
@@ -3147,59 +3287,203 @@
 
     let cardGlobalIndex = 0;
 
+    // Coin color mapping for cyberpunk neon aesthetic
+    function getCoinColors(symbol) {
+      const colorMap = {
+        'BTC': { neon: '255,170,0', dark: '40,30,0', hex: '#ffaa00' },        // Yellow
+        'ETH': { neon: '98,126,234', dark: '20,15,50', hex: '#627eea' },      // Purple
+        'SOL': { neon: '0,255,136', dark: '8,20,25', hex: '#00ff88' },        // Green
+        'BNB': { neon: '240,165,23', dark: '40,30,0', hex: '#f0a517' },       // Gold
+        'AVAX': { neon: '232,65,66', dark: '40,15,15', hex: '#e84142' },      // Red
+        'ARB': { neon: '40,185,239', dark: '15,25,50', hex: '#28b9ef' },      // Blue
+        'LINK': { neon: '84,71,255', dark: '15,12,50', hex: '#5447ff' },      // Blue-Purple
+        'INJ': { neon: '244,208,63', dark: '40,35,0', hex: '#f4d03f' },       // Yellow
+        'TIA': { neon: '98,71,234', dark: '20,15,50', hex: '#6247ea' },       // Purple
+        'WIF': { neon: '139,95,191', dark: '30,20,45', hex: '#8b5fbf' },      // Purple-Brown
+        'JUP': { neon: '255,215,0', dark: '40,35,0', hex: '#ffd700' },        // Gold
+        'SEI': { neon: '32,185,163', dark: '10,30,25', hex: '#20b9a3' }       // Teal
+      };
+      return colorMap[symbol] || { neon: '0,255,136', dark: '8,20,25', hex: '#00ff88' }; // Default to green
+    }
+
     function makeSpCard(data, forcedIdx = null, isPopup = false) {
       const idx = forcedIdx !== null ? forcedIdx : cardGlobalIndex++;
-      const isV1 = true; // Forced all cards to v1 design as requested
-
       const el = document.createElement('div');
-      const ip = data.change >= 0;
-      const rgbMain = ip ? '77,184,106' : '214,92,92';
-      const rgbDark = ip ? '10,34,16' : '62,0,0';
-      const rgbHex = ip ? '#4DB86A' : '#D65C5C';
-      const pnlStr = (data.pnl >= 0 ? '+$' : '−$') + Math.abs(data.pnl).toFixed(2);
+      const ip = data.change >= 0; // Is Positive
+      
+      if (isPopup) {
+        /* ═════════ POPUP CARD - EXPANDED VIEW ═════════ */
+        el.className = 'card popup-card v1 force-open';
+        const tp = data.price * 1.05;
+        const lock = data.price * 1.02;
+        const entry = data.price;
+        const sl = data.price * (ip ? 0.92 : 1.08);
+        const range24h = data.price * 0.15;
+        const livePnL = ip ? -38.04 : 38.04;
+        const pnlStr = (data.pnl >= 0 ? '+$' : '−$') + Math.abs(data.pnl).toFixed(2);
+        const changePct = Math.abs(data.change).toFixed(2);
 
-      el.className = 'card v1'; // Always v1
-      el.dataset.v = '0'; // Always identifies as version 1
-      el.style.setProperty('--neon-rgb', rgbMain);
-      el.style.setProperty('--dark-rgb', rgbDark);
-      el.style.setProperty('--hex-color', rgbHex);
+        el.innerHTML = `
+          <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 2px solid #00ff88; border-radius: 16px; box-shadow: 0 0 20px rgba(0,255,136,0.3), inset 0 0 20px rgba(0,255,136,0.05); pointer-events: none;"></div>
+          
+          <div style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-size:18px; color:#00ff88; z-index:20; transition:all 0.2s; width:26px; height:26px; display:flex; align-items:center; justify-content:center; background:transparent; border:1.5px solid #00ff88; border-radius:50%; font-family: 'Courier New', monospace;" onclick="closePopup()">×</div>
+          
+          <div style="padding: 16px; background: linear-gradient(135deg, rgba(5,15,20,0.98) 0%, rgba(8,20,25,0.98) 50%, rgba(5,12,18,0.98) 100%); font-family: 'Courier New', monospace; border-radius: 14px; flex: 1; display: flex; flex-direction: column; overflow-y: auto;">
+            
+            <!-- HEADER -->
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,255,136,0.2); gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #00ff88; display: flex; align-items: center; justify-content: center; background: rgba(0,255,136,0.08); font-size: 16px; font-weight: 700; color: #00ff88; font-family: 'Courier New', monospace; box-shadow: 0 0 12px rgba(0,255,136,0.3); flex-shrink: 0;">${data.sym.charAt(0)}</div>
+                <div style="min-width: 0;">
+                  <div style="font-size: 13px; font-weight: 700; color: #00ff88; letter-spacing: 1.5px; font-family: 'Courier New', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.sym} CYCLE</div>
+                  <div style="font-size: 10px; color: #00d4ff; letter-spacing: 0.5px; font-family: 'Courier New', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.pair}</div>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0;">
+                <div style="display: flex; align-items: center; gap: 4px; background: transparent; border: 1.5px solid #00ff88; border-radius: 14px; padding: 2px 8px; white-space: nowrap;">
+                  <div style="width: 5px; height: 5px; border-radius: 50%; background: #00ff88; animation: pulse 1.5s infinite;"></div>
+                  <span style="font-size: 8px; color: #00ff88; letter-spacing: 1px; font-weight: 700; font-family: 'Courier New', monospace;">ACTIVE</span>
+                </div>
+                <div style="font-size: 8px; color: #00d4ff; letter-spacing: 0.5px; font-family: 'Courier New', monospace;">LVL: 04</div>
+              </div>
+            </div>
 
-      /* ----- VERSION 1: GEOMETRIC BOX ----- */
-      el.innerHTML = `
-        <div class="boxshadow"></div>
-        <div class="main">
-          <div class="top"></div>
-          <div class="left side"></div>
-          <div class="right side"></div>
-          <div class="title">${data.sym}</div>
-          <div class="subtitle">${pnlStr}</div>
-          <div class="button-container">
-            <button class="button">
-              <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hex-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle>
-              </svg>
-              <span>${data.dir === 'LONG' ? '68.4' : '54.2'}%</span>
-            </button>
-            <button class="button">
-              <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hex-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-              </svg>
-              <span>${data.lev}</span>
-            </button>
-            <button class="button">
-              <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hex-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
-              </svg>
-              <span>${ip ? (42 + Math.random() * 52).toFixed(0) : (12 + Math.random() * 36).toFixed(0)}%</span>
-            </button>
-            ${isPopup ? `
-            <div class="pu-row-anim" style="margin-top:20px; display:grid; grid-template-columns:1fr 1fr; gap:8px; width:190px;">
-               <div class="pu-f"><label>Entry</label><span>${fp(data.price * 0.98)}</span></div>
-               <div class="pu-f"><label>Liq</label><span>${fp(data.price * (ip ? 0.85 : 1.15))}</span></div>
-               <button class="pu-b bl" style="grid-column: span 2; padding:6px; font-size:10px;" onclick="showToast('CLOSE POSITION...')">CLOSE POSITION</button>
-            </div>` : ''}
+            <!-- PRICE & PNL -->
+            <div style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,255,136,0.15);">
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;">
+                <span style="font-size: 22px; font-weight: 800; color: #fff; font-family: 'Courier New', monospace;">$${data.price.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:2})}</span>
+                <span style="font-size: 10px; color: #00ff88; background: rgba(0,255,136,0.12); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-family: 'Courier New', monospace;">${ip ? '−' : '+'}${changePct}%</span>
+              </div>
+              <div style="font-size: 8px; color: #00d4ff; letter-spacing: 1.5px; margin-bottom: 6px; text-transform: uppercase; font-family: 'Courier New', monospace;">TOTAL PNL // REALTIME</div>
+              <div style="font-size: 24px; font-weight: 900; color: #00ff88; letter-spacing: 1.5px; font-family: 'Courier New', monospace;">+ $ ${Math.abs(data.pnl).toFixed(1)}</div>
+              <div style="height: 2px; background: rgba(0,255,136,0.15); border-radius: 2px; overflow: hidden; margin-top: 6px;">
+                <div style="height: 100%; width: ${Math.min(100, Math.abs(data.pnl) / 5)}%; background: linear-gradient(90deg, #00ff88, #00d4ff); border-radius: 2px;"></div>
+              </div>
+            </div>
+
+            <!-- KEY METRICS GRID -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; padding: 12px; background: rgba(0,255,136,0.05); border: 1px solid rgba(0,255,136,0.2); border-radius: 10px;">
+              <div style="text-align: center; padding: 10px; border: 1px solid rgba(0,255,136,0.25); border-radius: 6px; background: rgba(0,255,136,0.04);">
+                <div style="font-size: 8px; color: #00d4ff; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; font-family: 'Courier New', monospace;">WIN RATE</div>
+                <div style="font-size: 16px; font-weight: 800; color: #00ff88; font-family: 'Courier New', monospace;">${ip ? (42 + Math.random() * 52).toFixed(0) : (12 + Math.random() * 36).toFixed(0)}%</div>
+              </div>
+              <div style="text-align: center; padding: 10px; border: 1px solid rgba(0,255,136,0.25); border-radius: 6px; background: rgba(0,255,136,0.04);">
+                <div style="font-size: 8px; color: #00d4ff; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; font-family: 'Courier New', monospace;">LEVERAGE</div>
+                <div style="font-size: 16px; font-weight: 800; color: #00d4ff; font-family: 'Courier New', monospace;">${data.lev}x</div>
+              </div>
+              <div style="text-align: center; padding: 10px; border: 1px solid rgba(255,170,0,0.25); border-radius: 6px; background: rgba(255,170,0,0.04);">
+                <div style="font-size: 8px; color: #ffaa00; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; font-family: 'Courier New', monospace;">SIG CONF</div>
+                <div style="font-size: 16px; font-weight: 800; color: #ffaa00; font-family: 'Courier New', monospace;">75%</div>
+              </div>
+            </div>
+
+            <!-- PERFORMANCE METRICS -->
+            <div style="padding: 12px; background: rgba(0,200,255,0.05); border: 1px solid rgba(0,200,255,0.15); border-radius: 10px; margin-bottom: 14px;">
+              <div style="font-size: 8px; color: #00d4ff; letter-spacing: 1.5px; margin-bottom: 10px; text-transform: uppercase; font-family: 'Courier New', monospace;">PERFORMANCE METRICS</div>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; border-bottom: 1px solid rgba(0,255,136,0.1);">
+                  <span style="font-size: 9px; color: #00d4ff; letter-spacing: 0.5px; text-transform: uppercase; font-family: 'Courier New', monospace;">TOTAL TRADES</span>
+                  <span style="font-size: 10px; color: #fff; font-weight: 700; font-family: 'Courier New', monospace;">247</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; border-bottom: 1px solid rgba(0,255,136,0.1);">
+                  <span style="font-size: 9px; color: #00d4ff; letter-spacing: 0.5px; text-transform: uppercase; font-family: 'Courier New', monospace;">AVG PROFIT</span>
+                  <span style="font-size: 10px; color: #00ff88; font-weight: 700; font-family: 'Courier New', monospace;">+$4.82</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; border-bottom: 1px solid rgba(0,255,136,0.1);">
+                  <span style="font-size: 9px; color: #00d4ff; letter-spacing: 0.5px; text-transform: uppercase; font-family: 'Courier New', monospace;">MAX DRAWDOWN</span>
+                  <span style="font-size: 10px; color: #ff4466; font-weight: 700; font-family: 'Courier New', monospace;">−$28.4</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <span style="font-size: 9px; color: #00d4ff; letter-spacing: 0.5px; text-transform: uppercase; font-family: 'Courier New', monospace;">EXPOSURE</span>
+                  <span style="font-size: 10px; color: #ffaa00; font-weight: 700; font-family: 'Courier New', monospace;">$142K</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- CYCLE ACTIVITY -->
+            <div style="padding: 12px; background: rgba(0,255,136,0.04); border: 1px solid rgba(0,255,136,0.15); border-radius: 10px; margin-bottom: 12px;">
+              <div style="font-size: 8px; color: #00d4ff; letter-spacing: 1.5px; margin-bottom: 10px; text-transform: uppercase; font-family: 'Courier New', monospace;">CYCLE ACTIVITY</div>
+              <div style="display: flex; align-items: flex-end; justify-content: space-around; height: 50px; gap: 2px;">
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 45%; animation: pulse 0.8s ease-in-out infinite;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 60%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #ff4466, #ff2244); border-radius: 1px; height: 30%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 55%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 50%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 65%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #ff4466, #ff2244); border-radius: 1px; height: 35%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 58%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 70%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 48%;"></div>
+              </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; margin-top: auto;">
+              <button style="background: transparent; border: 1.5px solid #00ff88; color: #00ff88; border-radius: 6px; padding: 10px 12px; font-size: 9px; letter-spacing: 1.5px; cursor: pointer; font-weight: 700; text-transform: uppercase; transition: all 0.3s; font-family: 'Courier New', monospace; box-shadow: 0 0 12px rgba(0,255,136,0.2);">
+                INSPECT
+              </button>
+              <button style="background: transparent; border: 1.5px solid #ff4466; color: #ff4466; border-radius: 6px; padding: 10px 12px; font-size: 9px; letter-spacing: 1.5px; cursor: pointer; font-weight: 700; text-transform: uppercase; transition: all 0.3s; font-family: 'Courier New', monospace; box-shadow: 0 0 12px rgba(255,68,102,0.2);" onclick="closePopup()">
+                CLOSE
+              </button>
+            </div>
+
+            <!-- FOOTER -->
+            <div style="padding-top: 10px; border-top: 1px solid rgba(0,255,136,0.15); display: flex; justify-content: space-between; font-size: 8px; color: #00d4ff; font-family: 'Courier New', monospace; letter-spacing: 0.5px;">
+              <span>SIG_CONF: 75%</span>
+              <span>MODULE v2.4.1</span>
+              <span>SEC_LVL: 04</span>
+            </div>
           </div>
-        </div>`;
+        `;
+
+
+        // Set CSS variables for neon cyberpunk styling
+        el.style.setProperty('--neon-rgb', '0,255,136');
+        el.style.setProperty('--dark-rgb', '5,15,20');
+        el.style.setProperty('--hex-color', '#00ff88');
+      } else {
+        /* ═════════ SMALL CARD - NORMAL VIEW ═════════ */
+        el.className = 'card v1';
+        el.dataset.v = '0';
+        const pnlStr = (data.pnl >= 0 ? '+$' : '−$') + Math.abs(data.pnl).toFixed(2);
+
+        // Apply coin-specific neon colors
+        const colors = getCoinColors(data.sym);
+        el.style.setProperty('--neon-rgb', colors.neon);
+        el.style.setProperty('--dark-rgb', colors.dark);
+        el.style.setProperty('--hex-color', colors.hex);
+
+        el.innerHTML = `
+          <div class="boxshadow"></div>
+          <div class="main">
+            <div class="top"></div>
+            <div class="left side"></div>
+            <div class="right side"></div>
+            <div class="title">${data.sym}</div>
+            <div class="subtitle">${pnlStr}</div>
+            <div class="button-container">
+              <button class="button">
+                <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hex-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle>
+                </svg>
+                <span>${data.dir === 'LONG' ? '68.4' : '54.2'}%</span>
+              </button>
+              <button class="button">
+                <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hex-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                </svg>
+                <span>${data.lev}</span>
+              </button>
+              <button class="button">
+                <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--hex-color)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                  <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+                </svg>
+                <span>${ip ? (42 + Math.random() * 52).toFixed(0) : (12 + Math.random() * 36).toFixed(0)}%</span>
+              </button>
+            </div>
+          </div>
+        `;
+      }
       return el;
     }
 
@@ -3218,12 +3502,24 @@
         const el = makeSpCard(d);
         el.style.transform = `translateY(40px)`;
         el.style.opacity = '0';
+        el.style.cursor = 'pointer';
         track.appendChild(el);
         setTimeout(() => {
-          el.style.transition = 'transform .58s cubic-bezier(.22,1,.36,1), opacity .58s';
+          el.style.transition = 'transform .58s cubic-bezier(.22,1,.36,1), opacity .58s, background-color .3s';
           el.style.transform = `translateY(0)`;
           el.style.opacity = '1';
-          el.addEventListener('click', () => openPopup(d, el));
+          el.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openPopup(d, el);
+          });
+          el.addEventListener('mouseenter', () => {
+            el.style.transform = 'translateY(-8px) scale(1.02)';
+          });
+          el.addEventListener('mouseleave', () => {
+            if (!document.getElementById('popup-wrap').classList.contains('on')) {
+              el.style.transform = 'translateY(0) scale(1)';
+            }
+          });
         }, i * 85);
       });
     }
@@ -3343,45 +3639,61 @@
       const wrap = document.getElementById('popup-wrap');
       const mount = document.getElementById('pu-card-mount');
 
-      // Clear previous popup card
+      // Clear and create new card
       mount.innerHTML = '';
-
-      // Determine version from the clicked card's data attribute to maintain comparison accuracy
-      const versionId = parseInt(clickedEl.dataset.v) || 0;
-
-      const puCard = makeSpCard(c, versionId);
+      const puCard = makeSpCard(c, null, true);
       puCard.classList.add('force-open');
-
-      // Scale it up significantly for the popup!
-      puCard.style.transform = 'scale(2.2)';
-      puCard.style.pointerEvents = 'auto'; // Ensure hover works
-
       mount.appendChild(puCard);
+      
+      // Enable popup - CSS handles the opacity transition
       wrap.classList.add('on');
-
-      // Make it visible!
-      mount.style.opacity = '1';
+      
+      // Clear inline opacity to let CSS take over
+      setTimeout(() => {
+        mount.style.opacity = '';
+      }, 10);
     }
 
     function closePopup() {
       rPaused = false;
-      document.getElementById('popup-wrap').classList.remove('on');
-      document.getElementById('pu-card-mount').style.opacity = '0';
+      const wrap = document.getElementById('popup-wrap');
+      const mount = document.getElementById('pu-card-mount');
+      
+      // Trigger fade out via CSS state removal
+      wrap.classList.remove('on');
+      
+      // Set opacity back to 0 for next open
+      mount.style.opacity = '0';
 
-      // Destroy the card cleanly after fadeout
+      // Destroy the card cleanly after fadeout (0.5s animation)
       setTimeout(() => {
-        document.getElementById('pu-card-mount').innerHTML = '';
-      }, 350);
+        mount.innerHTML = '';
+      }, 500);
     }
 
     // Add click listeners to close popup when clicking off the card or on X
     const puWrap = document.getElementById('popup-wrap');
     puWrap.addEventListener('click', e => {
-      if (e.target === puWrap) closePopup();
+      // Close only if clicking on the overlay itself, not on content
+      if (e.target === puWrap) {
+        closePopup();
+      }
     });
 
     const puXBtn = document.getElementById('pu-x');
-    if (puXBtn) puXBtn.addEventListener('click', closePopup);
+    if (puXBtn) {
+      puXBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closePopup();
+      });
+    }
+
+    // Keyboard support: ESC to close popup
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && puWrap.classList.contains('on')) {
+        closePopup();
+      }
+    });
 
     /* MAIN LOOP */
     function loop() {
