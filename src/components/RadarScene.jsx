@@ -6,6 +6,7 @@ import HoloRadar3D from './HoloRadar3D'
 import StarkSignals from './StarkSignals'
 import RadarEffects from './RadarEffects'
 import SpacetimeFabric from './SpacetimeFabric'
+import AirTraffic from './AirTraffic'
 
 function CameraController({ isCollapsing, onCollapseComplete }) {
   const { camera } = useThree()
@@ -387,6 +388,9 @@ function RadarSceneContent({ isCollapsing, onCollapseComplete, onBlipClick, acti
           controlsRef={controlsRef}
         />
       </group>
+
+      {/* AIR TRAFFIC — jets, airliners, asteroids flying through */}
+      <AirTraffic />
 
       {/* BACKGROUND STARS */}
       <BackgroundStars />
