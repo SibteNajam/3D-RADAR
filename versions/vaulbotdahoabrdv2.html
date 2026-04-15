@@ -1,0 +1,413 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Vaultbot Dashboard v2 — Circular Ring</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#050a12;--card-w:130px;--card-h:180px;--accent:#34d399}
+    *{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;box-sizing:border-box}
+    html,body{height:100%;margin:0;background:linear-gradient(180deg,#020509 0%,#050a12 40%,#07101a 100%);font-family:'Montserrat',sans-serif;color:#e6f0f2;overflow-x:hidden}
+
+    /* header */
+    .header{max-width:1400px;margin:0 auto;padding:20px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid rgba(255,255,255,0.03)}
+    .logo{font-size:20px;font-weight:900;letter-spacing:0.05em;background:linear-gradient(135deg,#34d399,#10b981);-webkit-background-clip:text;-webkit-text-fill-color:transparent;text-transform:uppercase}
+
+    /* ---- RING AREA — directly on bg, no wrapper ---- */
+    .ring-section{position:relative;width:100%;height:620px;display:flex;align-items:center;justify-content:center;overflow:visible}
+
+    /* left detail panel (text only, no card) */
+    .detail-panel{position:absolute;left:48px;top:50%;transform:translateY(-50%);width:320px;pointer-events:none;z-index:50;opacity:0;transition:opacity 0.3s ease}
+    .detail-panel.visible{opacity:1;pointer-events:auto}
+    .detail-panel .dp-line{transform:translateX(-60px);opacity:0;transition:transform 0.55s cubic-bezier(0.22,1,0.36,1),opacity 0.45s ease;will-change:transform,opacity}
+    .detail-panel.visible .dp-line{transform:translateX(0);opacity:1}
+
+    /* stagger: each line gets increasing delay */
+    .detail-panel.visible .dp-line:nth-child(1){transition-delay:0.06s}
+    .detail-panel.visible .dp-line:nth-child(2){transition-delay:0.12s}
+    .detail-panel.visible .dp-line:nth-child(3){transition-delay:0.20s}
+    .detail-panel.visible .dp-line:nth-child(4){transition-delay:0.28s}
+    .detail-panel.visible .dp-line:nth-child(5){transition-delay:0.37s}
+    .detail-panel.visible .dp-line:nth-child(6){transition-delay:0.46s}
+    .detail-panel.visible .dp-line:nth-child(7){transition-delay:0.56s}
+    .detail-panel.visible .dp-line:nth-child(8){transition-delay:0.66s}
+    .detail-panel.visible .dp-line:nth-child(9){transition-delay:0.76s}
+    .detail-panel.visible .dp-line:nth-child(10){transition-delay:0.86s}
+
+    /* detail text styles */
+    .dp-status{font-size:11px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:6px;font-family:'Montserrat',sans-serif}
+    .dp-sym{font-size:40px;font-weight:800;letter-spacing:-0.02em;font-family:'Montserrat',sans-serif;line-height:1;margin-bottom:2px}
+    .dp-pair{font-size:13px;color:rgba(255,255,255,0.35);letter-spacing:0.08em;font-weight:500;margin-bottom:22px;font-family:'Montserrat',sans-serif}
+    .dp-price{font-size:26px;font-weight:700;letter-spacing:-0.01em;margin-bottom:4px}
+    .dp-change{font-size:14px;font-weight:600;margin-bottom:28px}
+    .dp-change.up{color:#34d399}
+    .dp-change.down{color:#ef4444}
+    .dp-label{font-size:10px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:4px;font-family:'Montserrat',sans-serif}
+    .dp-val{font-size:18px;font-weight:700;margin-bottom:20px}
+    .dp-pnl-positive{color:#34d399}
+    .dp-pnl-negative{color:#ef4444}
+    .dp-row{display:flex;gap:28px;margin-bottom:20px}
+    .dp-row .dp-col .dp-label{margin-bottom:3px}
+    .dp-row .dp-col .dp-val{font-size:15px;margin-bottom:0}
+    .dp-divider{width:40px;height:1px;background:rgba(255,255,255,0.06);margin-bottom:20px}
+    .dp-metrics-row{display:flex;gap:20px}
+    .dp-metric{text-align:left}
+    .dp-metric .dp-label{margin-bottom:2px;font-size:9px}
+    .dp-metric .dp-val{font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:0}
+
+    /* ring 3D */
+    .inner{
+      --w:var(--card-w);--h:var(--card-h);--quantity:10;
+      --rotateX:-10deg;--perspective:1200px;
+      position:relative;width:var(--w);height:var(--h);
+      transform-style:preserve-3d;
+      transform:perspective(var(--perspective)) rotateX(var(--rotateX)) rotateY(0deg);
+      animation:rotating 24s linear infinite
+    }
+    @keyframes rotating{from{transform:perspective(var(--perspective)) rotateX(var(--rotateX)) rotateY(0)}to{transform:perspective(var(--perspective)) rotateX(var(--rotateX)) rotateY(1turn)}}
+
+    /* ring cards */
+    .ring-card{position:absolute;border-radius:14px;overflow:hidden;inset:0;display:block;width:var(--w);height:var(--h);
+      box-shadow:0 12px 40px rgba(0,0,0,0.7),0 0 1px rgba(255,255,255,0.05);
+      border:1px solid rgba(var(--color-card),0.15);
+      background:linear-gradient(165deg,rgba(0,0,0,0.65),rgba(var(--color-card),0.04) 50%,rgba(0,0,0,0.75));
+      backdrop-filter:blur(8px);transform-origin:center center;cursor:pointer;
+      transition:box-shadow 0.5s ease,border-color 0.5s ease,filter 0.5s ease,transform 0.6s cubic-bezier(0.22,1,0.36,1)}
+    .ring-card:hover{box-shadow:0 16px 60px rgba(var(--color-card),0.2),0 0 30px rgba(var(--color-card),0.1);border-color:rgba(var(--color-card),0.35);z-index:10}
+
+    /* active (clicked) card — scales up, lifts toward center, intense glow */
+    .ring-card.active{
+      box-shadow:0 0 80px rgba(var(--color-card),0.45),0 0 140px rgba(var(--color-card),0.2),0 24px 60px rgba(0,0,0,0.6);
+      border-color:rgba(var(--color-card),0.7);
+      filter:brightness(1.25) saturate(1.1);z-index:999}
+
+    .ring-card .img{width:100%;height:65%;background:radial-gradient(circle at 50% 40%,rgba(var(--color-card),0.18) 0%,rgba(var(--color-card),0.08) 40%,rgba(0,0,0,0.5) 100%);display:flex;align-items:center;justify-content:center;border-bottom:1px solid rgba(var(--color-card),0.1)}
+    .ring-card .img img{width:64px;height:64px;object-fit:contain;filter:drop-shadow(0 4px 12px rgba(var(--color-card),0.3))}
+    .ring-card .img .fallback-letter{width:64px;height:64px;border-radius:50%;background:rgba(var(--color-card),0.12);border:2px solid rgba(var(--color-card),0.3);display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:800;color:rgb(var(--color-card));font-family:'Montserrat',sans-serif;text-shadow:0 2px 8px rgba(var(--color-card),0.5)}
+    .ring-card .meta{padding:12px 10px 10px;font-size:14px;line-height:1.3;text-align:center}
+    .ring-card .sym{font-weight:700;letter-spacing:0.06em;color:#fff;text-shadow:0 1px 4px rgba(0,0,0,0.4);font-family:'Montserrat',sans-serif}
+    .ring-card .price{font-size:11px;color:rgba(255,255,255,0.5);margin-top:5px;font-weight:500}
+
+    /* ---- CAROUSEL — directly on bg ---- */
+    .carousel-section{max-width:1400px;margin:0 auto;padding:20px 32px 80px}
+    .section-title{font-size:13px;font-weight:700;color:rgba(230,240,242,0.35);text-transform:uppercase;letter-spacing:0.15em;margin-bottom:24px;display:block}
+    .carousel-wrap{overflow-x:auto;overflow-y:visible;padding:60px 0 50px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.08) transparent;scroll-behavior:smooth}
+    .carousel-wrap::-webkit-scrollbar{height:6px}
+    .carousel-wrap::-webkit-scrollbar-track{background:rgba(255,255,255,0.02);border-radius:3px}
+    .carousel-wrap::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.08);border-radius:3px}
+    .carousel-wrap::-webkit-scrollbar-thumb:hover{background:rgba(255,255,255,0.12)}
+    #carousel-track{display:flex;width:max-content;gap:24px;padding:0 16px;align-items:center}
+
+    /* v1 geometric cards */
+    .card.v1{width:230px;height:340px;flex-shrink:0;position:relative;cursor:pointer;transition:all 0.3s ease}
+    .card.v1 .boxshadow{position:absolute;height:100%;width:100%;border:1px solid var(--hex-color);transform:scale(0.8);box-shadow:rgb(var(--neon-rgb)) 0px 30px 70px 0px;transition:all 0.5s cubic-bezier(0.785,0.135,0.15,0.86)}
+    .card.v1 .main{width:100%;height:100%;overflow:hidden;background:linear-gradient(0deg,rgb(var(--dark-rgb)) 0%,rgb(var(--neon-rgb)) 60%,rgb(var(--dark-rgb)) 100%);position:relative;clip-path:polygon(0 40px,40px 0,calc(100% - 40px) 0,100% 40px,100% calc(100% - 40px),calc(100% - 40px) 100%,40px 100%,0 calc(100% - 40px));box-shadow:rgb(var(--neon-rgb)) 0px 7px 29px 0px;transition:all 0.3s cubic-bezier(0.785,0.135,0.15,0.86)}
+    .card.v1 .main .top{position:absolute;top:0;left:0;width:0;height:0;z-index:2;border-top:115px solid var(--bg-primary,#0a0e17);border-left:115px solid transparent;border-right:115px solid transparent;transition:all 0.5s cubic-bezier(0.785,0.135,0.15,0.86)}
+    .card.v1 .main .side{position:absolute;width:100%;top:0;transform:translateX(-50%);height:101%;background:var(--bg-primary,#0a0e17);clip-path:polygon(0% 0%,50% 0,95% 45%,100% 100%,0% 100%);transition:all 0.5s cubic-bezier(0.785,0.135,0.15,0.86) 1s}
+    .card.v1 .main .left{left:0}
+    .card.v1 .main .right{right:0;transform:translateX(50%) scale(-1,1)}
+    .card.v1 .main .title{position:absolute;left:50%;transform:translateX(-50%);top:90px;font-weight:800;font-family:'Montserrat',sans-serif;font-size:20px;color:#fff;opacity:0;z-index:-1;transition:all 0.2s ease-out 0s}
+    .card.v1 .main .subtitle{position:absolute;left:50%;transform:translateX(-50%);top:125px;font-family:'Montserrat',sans-serif;font-size:13px;font-weight:600;white-space:nowrap;color:var(--hex-color);opacity:0;z-index:-1;transition:all 0.2s ease-out 0s}
+    .card.v1 .main .button-container{position:absolute;bottom:10px;left:50%;transform:translateX(-50%)}
+    .card.v1 .main .button-container .button{position:absolute;transform:translateX(-50%);padding:0;width:100px;height:32px;clip-path:polygon(0 0,100% 0,81% 100%,21% 100%);background:black;border:none;color:white;cursor:pointer;display:flex;justify-content:center;align-items:center;gap:8px;font-family:'Montserrat',sans-serif;font-weight:600;font-size:12px;transition:all 0.5s cubic-bezier(0.785,0.135,0.15,0.86)}
+    .card.v1 .main .button-container .button .svg{width:15px;transition:all 0.2s cubic-bezier(0.785,0.135,0.15,0.86)}
+    .card.v1 .main .button-container .button:nth-child(1){bottom:300px;transition-delay:0.4s}
+    .card.v1 .main .button-container .button:nth-child(2){bottom:300px;transition-delay:0.6s}
+    .card.v1 .main .button-container .button:nth-child(3){bottom:300px;transition-delay:0.8s}
+    .card.v1:hover .main{transform:scale(1.1)}
+    .card.v1:hover .main .top{top:-50px}
+    .card.v1:hover .main .left{left:-50px;transition:all 0.5s cubic-bezier(0.785,0.135,0.15,0.86) 0.1s}
+    .card.v1:hover .main .right{right:-50px;transition:all 0.5s cubic-bezier(0.785,0.135,0.15,0.86) 0.1s}
+    .card.v1:hover .main .title,.card.v1:hover .main .subtitle{opacity:1;transition:all 0.2s ease-out 1.3s}
+    .card.v1:hover .main .button-container .button:nth-child(1){bottom:80px;transition-delay:0.8s}
+    .card.v1:hover .main .button-container .button:nth-child(2){bottom:40px;transition-delay:0.6s}
+    .card.v1:hover .main .button-container .button:nth-child(3){bottom:0;transition-delay:0.4s}
+
+    /* responsive */
+    @media(max-width:980px){
+      .header,.carousel-section{padding-left:16px;padding-right:16px}
+      .detail-panel{left:20px;width:240px}
+      .dp-sym{font-size:32px}
+      .dp-price{font-size:22px}
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">Vaultbot</div>
+    <div style="font-size:12px;color:rgba(230,240,242,0.4);letter-spacing:0.05em">v2.0 — Enhanced Ring</div>
+  </div>
+
+  <!-- Ring sits directly on background -->
+  <div class="ring-section">
+    <!-- Left: staggered detail text (no card, just text) -->
+    <div id="detailPanel" class="detail-panel"></div>
+    <!-- Center: 3D ring -->
+    <div id="ring" class="inner" style="--quantity:10"></div>
+  </div>
+
+  <!-- Carousel directly on background -->
+  <div class="carousel-section">
+    <span class="section-title">Position Spread</span>
+    <div class="carousel-wrap">
+      <div id="carousel-track"></div>
+    </div>
+  </div>
+
+  <script>
+    const POOL = [
+      { sym: 'BTC', pair: 'BTC/USDT', price: 64820, change: 3.42, vol: '$42.1B', dir: 'LONG', lev: '10x', pnl: 420.30 },
+      { sym: 'ETH', pair: 'ETH/USDT', price: 3191, change: -1.18, vol: '$18.4B', dir: 'SHORT', lev: '5x', pnl: -88.50 },
+      { sym: 'SOL', pair: 'SOL/USDT', price: 161, change: 5.67, vol: '$4.2B', dir: 'LONG', lev: '3x', pnl: 310.80 },
+      { sym: 'BNB', pair: 'BNB/USDT', price: 594, change: 1.23, vol: '$1.8B', dir: 'LONG', lev: '7x', pnl: 199.70 },
+      { sym: 'AVAX', pair: 'AVAX/USDT', price: 38.4, change: -2.11, vol: '$620M', dir: 'SHORT', lev: '4x', pnl: -44.20 },
+      { sym: 'ARB', pair: 'ARB/USDT', price: 1.12, change: 7.34, vol: '$310M', dir: 'LONG', lev: '5x', pnl: 88.60 },
+      { sym: 'LINK', pair: 'LINK/USDT', price: 14.82, change: 0.88, vol: '$540M', dir: 'LONG', lev: '3x', pnl: 22.10 },
+      { sym: 'INJ', pair: 'INJ/USDT', price: 28.6, change: -3.44, vol: '$290M', dir: 'SHORT', lev: '6x', pnl: -61.40 },
+      { sym: 'JUP', pair: 'JUP/USDT', price: 0.94, change: 6.21, vol: '$140M', dir: 'LONG', lev: '5x', pnl: 44.10 },
+      { sym: 'TIA', pair: 'TIA/USDT', price: 9.14, change: 4.12, vol: '$180M', dir: 'LONG', lev: '4x', pnl: 55.20 }
+    ];
+
+    const COIN_COLORS = {
+      BTC: { neon: '255,170,0', dark: '40,30,0', hex: '#ffaa00' },
+      ETH: { neon: '98,126,234', dark: '20,15,50', hex: '#627eea' },
+      SOL: { neon: '0,255,136', dark: '8,20,25', hex: '#00ff88' },
+      BNB: { neon: '240,165,23', dark: '40,30,0', hex: '#f0a517' },
+      AVAX: { neon: '232,65,66', dark: '40,15,15', hex: '#e84142' },
+      ARB: { neon: '40,185,239', dark: '15,25,50', hex: '#28b9ef' },
+      LINK: { neon: '84,71,255', dark: '15,12,50', hex: '#5447ff' },
+      INJ: { neon: '244,208,63', dark: '40,35,0', hex: '#f4d03f' },
+      TIA: { neon: '98,71,234', dark: '20,15,50', hex: '#6247ea' },
+      WIF: { neon: '139,95,191', dark: '30,20,45', hex: '#8b5fbf' },
+      JUP: { neon: '255,215,0', dark: '40,35,0', hex: '#ffd700' },
+      SEI: { neon: '32,185,163', dark: '10,30,25', hex: '#20b9a3' }
+    };
+
+    const ring = document.getElementById('ring');
+    const detailPanel = document.getElementById('detailPanel');
+    const qty = POOL.length;
+    ring.style.setProperty('--quantity', qty);
+
+    let activeCard = null;
+    let activeIndex = -1;
+
+    // ---- Build ring cards ----
+    POOL.forEach((d, i) => {
+      const card = document.createElement('div');
+      card.className = 'ring-card';
+      card.dataset.index = i;
+
+      const colors = COIN_COLORS[d.sym] || hashColorObj(d.sym);
+      card.style.setProperty('--color-card', colors.neon);
+
+      const angle = (360 / qty) * i;
+      const w = 130, h = 180;
+      const tz = w + h;
+      card.style.transform = `rotateY(${angle}deg) translateZ(${tz}px)`;
+
+      card.innerHTML = `
+        <div class="img"><div class="fallback-letter">${d.sym.charAt(0)}</div></div>
+        <div class="meta"><div class="sym">${d.sym}</div><div class="price">${formatPrice(d.price)}</div></div>
+      `;
+      ring.appendChild(card);
+
+      // fetch logo
+      setLogoForSymbol(d.sym, card.querySelector('.fallback-letter'));
+
+      // CLICK handler
+      card.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (activeIndex === i) {
+          // clicking same card again — dismiss
+          dismissDetail();
+          return;
+        }
+        selectCard(i, card, d, colors);
+      });
+    });
+
+    // ---- Click handler: select card ----
+    function selectCard(idx, cardEl, data, colors) {
+      // remove active from previous card & restore its base transform
+      if (activeCard && activeCard !== cardEl) {
+        activeCard.classList.remove('active');
+        const prevIdx = parseInt(activeCard.dataset.index);
+        const prevAngle = (360 / qty) * prevIdx;
+        const tz = 130 + 180;
+        activeCard.style.transform = `rotateY(${prevAngle}deg) translateZ(${tz}px)`;
+      }
+
+      activeCard = cardEl;
+      activeIndex = idx;
+
+      // 1. Ring keeps spinning — no pause
+
+      // 2. Collapse card to center of ring: translateZ(0) brings it to the origin
+      const cardAngle = (360 / qty) * idx;
+      cardEl.style.transform = `rotateY(${cardAngle}deg) translateZ(0px) scale(1.25) translateY(-20px)`;
+      cardEl.classList.add('active');
+
+      // 3. Build & show staggered detail text
+      showDetail(data, colors);
+    }
+
+    // ---- Show staggered detail lines ----
+    function showDetail(data, colors) {
+      const pnl = data.pnl;
+      const pnlStr = (pnl >= 0 ? '+$' : '−$') + Math.abs(pnl).toFixed(2);
+      const isUp = data.change >= 0;
+      const changePct = (isUp ? '+' : '') + data.change.toFixed(2) + '%';
+      const winRate = data.dir === 'LONG' ? '68.4' : '54.2';
+      const avgProfit = (pnl >= 0 ? '+$' : '−$') + (Math.abs(pnl) * 0.42).toFixed(2);
+      const maxDD = '−$' + (Math.abs(pnl) * 0.28).toFixed(2);
+
+      // first remove visible, clear content
+      detailPanel.classList.remove('visible');
+      detailPanel.innerHTML = '';
+
+      // Build lines — each wrapped in .dp-line for stagger
+      const lines = [
+        `<div class="dp-status">ACTIVE · SEC_LVL: 04</div>`,
+        `<div class="dp-sym" style="color:${colors.hex}">${data.sym}</div>`,
+        `<div class="dp-pair">${data.pair} PERPETUAL</div>`,
+        `<div class="dp-price">${formatPrice(data.price)}</div>`,
+        `<div class="dp-change ${isUp ? 'up' : 'down'}">${changePct}</div>`,
+        `<div class="dp-divider"></div>`,
+        `<div class="dp-label">TOTAL PNL // REALTIME</div>`,
+        `<div class="dp-val ${pnl >= 0 ? 'dp-pnl-positive' : 'dp-pnl-negative'}">${pnlStr}</div>`,
+        `<div class="dp-row">
+          <div class="dp-col"><div class="dp-label">DIRECTION</div><div class="dp-val">${data.dir}</div></div>
+          <div class="dp-col"><div class="dp-label">LEVERAGE</div><div class="dp-val">${data.lev}</div></div>
+          <div class="dp-col"><div class="dp-label">WIN RATE</div><div class="dp-val">${winRate}%</div></div>
+        </div>`,
+        `<div class="dp-metrics-row">
+          <div class="dp-metric"><div class="dp-label">AVG PROFIT</div><div class="dp-val">${avgProfit}</div></div>
+          <div class="dp-metric"><div class="dp-label">DRAWDOWN</div><div class="dp-val">${maxDD}</div></div>
+          <div class="dp-metric"><div class="dp-label">VOLUME</div><div class="dp-val">${data.vol}</div></div>
+        </div>`
+      ];
+
+      lines.forEach(html => {
+        const div = document.createElement('div');
+        div.className = 'dp-line';
+        div.innerHTML = html;
+        detailPanel.appendChild(div);
+      });
+
+      // trigger stagger: add visible after a frame so transitions fire
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          detailPanel.classList.add('visible');
+        });
+      });
+    }
+
+    // ---- Carousel cards ----
+    const track = document.getElementById('carousel-track');
+    POOL.forEach((d, i) => {
+      const card = makeV1Card(d);
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(30px)';
+      track.appendChild(card);
+      setTimeout(() => {
+        card.style.transition = 'all 0.6s cubic-bezier(0.22,1,0.36,1)';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      }, i * 70);
+    });
+
+    function formatPrice(p) {
+      if (Math.abs(p) >= 1000) return '$' + Number(p).toLocaleString();
+      return '$' + p;
+    }
+
+    function makeV1Card(data) {
+      const el = document.createElement('div');
+      el.className = 'card v1';
+      const colors = COIN_COLORS[data.sym] || hashColorObj(data.sym);
+      el.style.setProperty('--neon-rgb', colors.neon);
+      el.style.setProperty('--dark-rgb', colors.dark);
+      el.style.setProperty('--hex-color', colors.hex);
+      const pnlStr = (data.pnl >= 0 ? '+$' : '−$') + Math.abs(data.pnl).toFixed(2);
+      el.innerHTML = `
+        <div class="boxshadow"></div>
+        <div class="main">
+          <div class="top"></div>
+          <div class="left side"></div>
+          <div class="right side"></div>
+          <div class="title">${data.sym}</div>
+          <div class="subtitle">${pnlStr}</div>
+          <div class="button-container">
+            <button class="button">
+              <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${colors.hex}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="10"></circle><circle cx="12" cy="12" r="6"></circle><circle cx="12" cy="12" r="2"></circle>
+              </svg>
+              <span>${data.dir === 'LONG' ? '68.4' : '54.2'}%</span>
+            </button>
+            <button class="button">
+              <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${colors.hex}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+              </svg>
+              <span>${data.lev}</span>
+            </button>
+            <button class="button">
+              <svg class="svg" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="${colors.hex}" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline>
+              </svg>
+              <span>${(12 + Math.random() * 52).toFixed(0)}%</span>
+            </button>
+          </div>
+        </div>
+      `;
+      return el;
+    }
+
+    async function setLogoForSymbol(sym, fallbackEl) {
+      if (!fallbackEl) return;
+      const name = sym.toLowerCase();
+      const urls = [
+        `https://raw.githubusercontent.com/atomiclabs/cryptocurrency-icons/master/128/color/${name}.png`,
+        `https://cryptologos.cc/logos/${name}-${name}-logo.png`
+      ];
+      for (const u of urls) {
+        try {
+          const res = await fetch(u, { mode: 'cors' });
+          if (res.ok) {
+            const img = document.createElement('img');
+            img.src = u;
+            img.alt = sym;
+            img.onload = () => { fallbackEl.replaceWith(img); };
+            return;
+          }
+        } catch (e) { /* keep fallback letter */ }
+      }
+    }
+
+    function hashColorObj(str) {
+      let h = 0;
+      for (let i = 0; i < str.length; i++) h = (h << 5) - h + str.charCodeAt(i);
+      const hue = Math.abs(h) % 360;
+      const rgb = hslToRgb(hue / 360, 0.7, 0.5);
+      return {
+        neon: `${rgb[0]},${rgb[1]},${rgb[2]}`,
+        dark: `${Math.floor(rgb[0] * 0.2)},${Math.floor(rgb[1] * 0.2)},${Math.floor(rgb[2] * 0.2)}`,
+        hex: `#${rgb[0].toString(16).padStart(2, '0')}${rgb[1].toString(16).padStart(2, '0')}${rgb[2].toString(16).padStart(2, '0')}`
+      };
+    }
+
+    function hslToRgb(h, s, l) {
+      let r, g, b;
+      if (s == 0) { r = g = b = l; } else {
+        const hue2rgb = (p, q, t) => { if (t < 0) t += 1; if (t > 1) t -= 1; if (t < 1 / 6) return p + (q - p) * 6 * t; if (t < 1 / 2) return q; if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6; return p; };
+        const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        const p = 2 * l - q;
+        r = hue2rgb(p, q, h + 1 / 3); g = hue2rgb(p, q, h); b = hue2rgb(p, q, h - 1 / 3);
+      }
+      return [Math.round(r * 255), Math.round(g * 255), Math.round(b * 255)];
+    }
+
+
+  </script>
+</body>
+</html>

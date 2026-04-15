@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glassmorphic Y-Card Design</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@600;700;800&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      width: 100%;
+      min-height: 100vh;
+      background: #070810;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 40px;
+      padding: 40px;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+
+    /* Card Container */
+    .card {
+      position: relative;
+      height: 300px;
+      width: 230px;
+      flex-shrink: 0;
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    }
+
+    /* Box Shadow Layer */
+    .card .boxshadow {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      border: 1px solid var(--border-color);
+      transform: scale(0.8);
+      box-shadow: var(--shadow-color) 0px 30px 70px 0px;
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    }
+
+    /* Main Card Body */
+    .card .main {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background: transparent;
+      position: relative;
+      clip-path: polygon(0 40px, 40px 0, calc(100% - 40px) 0, 100% 40px, 100% calc(100% - 40px), calc(100% - 40px) 100%, 40px 100%, 0 calc(100% - 40px));
+      box-shadow: var(--shadow-color) 0px 7px 29px 0px;
+      transition: all 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    }
+
+    /* Colored gradient layer underneath everything */
+    .card .main::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: var(--gradient-bg);
+      opacity: 0.5;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Top Triangle (Glassmorphic) */
+    .card .main .top {
+      position: absolute;
+      top: 0px;
+      left: 0;
+      width: 0px;
+      height: 0px;
+      z-index: 10;
+      border-top: 115px solid rgba(7, 8, 16, 0.85);
+      border-left: 115px solid transparent;
+      border-right: 115px solid transparent;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      box-shadow: 
+        inset 0 1px 2px rgba(255, 255, 255, 0.1),
+        0 4px 12px rgba(0, 0, 0, 0.4);
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    }
+
+    /* Side Panels (Glassmorphic) */
+    .card .main .side {
+      position: absolute;
+      width: 100%;
+      top: 0;
+      transform: translateX(-50%);
+      height: 101%;
+      background: rgba(7, 8, 16, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 
+        inset 1px 1px 2px rgba(255, 255, 255, 0.12),
+        0 8px 24px rgba(0, 0, 0, 0.5);
+      clip-path: polygon(0% 0%, 50% 0, 95% 45%, 100% 100%, 0% 100%);
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86) 1s;
+      z-index: 10;
+    }
+
+    .card .main .left {
+      left: 0;
+    }
+
+    .card .main .right {
+      right: 0;
+      transform: translateX(50%) scale(-1, 1);
+    }
+
+    /* Title */
+    .card .main .title {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 90px;
+      font-weight: 800;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 25px;
+      color: #fff;
+      opacity: 0;
+      z-index: 3;
+      transition: all 0.2s ease-out 0s;
+      letter-spacing: 0.02em;
+    }
+
+    /* Subtitle */
+    .card .main .subtitle {
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      top: 130px;
+      font-family: 'Outfit', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      white-space: nowrap;
+      color: #fff;
+      text-shadow: 0 0 10px var(--border-color), 0 2px 4px rgba(0,0,0,0.5);
+      opacity: 0;
+      z-index: 3;
+      transition: all 0.2s ease-out 0s;
+    }
+
+    /* Button Container */
+    .card .main .button-container {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 3;
+    }
+
+    /* Buttons with Glassmorphism */
+    .card .main .button-container .button {
+      position: absolute;
+      transform: translateX(-50%);
+      padding: 0;
+      width: 100px;
+      height: 32px;
+      clip-path: polygon(0 0, 100% 0, 81% 100%, 21% 100%);
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(12px) saturate(120%);
+      -webkit-backdrop-filter: blur(12px) saturate(120%);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      box-shadow: 
+        inset 1px 1px 1px rgba(255, 255, 255, 0.15),
+        0 4px 12px rgba(0, 0, 0, 0.3);
+      color: white;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    }
+
+    .card .main .button-container .button svg {
+      width: 15px;
+      height: 15px;
+      transition: all 0.2s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+    }
+
+    .card .main .button-container .button:nth-child(1) {
+      bottom: 300px;
+      transition-delay: 0.4s;
+    }
+
+    .card .main .button-container .button:nth-child(2) {
+      bottom: 300px;
+      transition-delay: 0.6s;
+    }
+
+    .card .main .button-container .button:nth-child(3) {
+      bottom: 300px;
+      transition-delay: 0.8s;
+    }
+
+    /* ═══════ HOVER STATES ═══════ */
+    .card:hover .main {
+      transform: scale(1.1);
+    }
+
+    .card:hover .main .top {
+      top: -50px;
+    }
+
+    .card:hover .main .left {
+      left: -50px;
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86) 0.1s;
+    }
+
+    .card:hover .main .right {
+      right: -50px;
+      transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86) 0.1s;
+    }
+
+    .card:hover .main .title,
+    .card:hover .main .subtitle {
+      opacity: 1;
+      transition: all 0.2s ease-out 1.3s;
+    }
+
+    .card:hover .main .button-container .button:nth-child(1) {
+      bottom: 80px;
+      transition-delay: 0.8s;
+    }
+
+    .card:hover .main .button-container .button:nth-child(2) {
+      bottom: 40px;
+      transition-delay: 0.6s;
+    }
+
+    .card:hover .main .button-container .button:nth-child(3) {
+      bottom: 0;
+      transition-delay: 0.4s;
+    }
+
+    /* ═══════ COLOR THEMES ═══════ */
+    .card.red {
+      --border-color: #ef4444;
+      --shadow-color: rgba(239, 68, 68, 0.3);
+      --gradient-bg: linear-gradient(0deg, rgba(127, 29, 29, 0.8) 0%, rgba(239, 68, 68, 0.9) 60%, rgba(127, 29, 29, 0.8) 100%);
+    }
+
+    .card.green {
+      --border-color: #4DB86A;
+      --shadow-color: rgba(77, 184, 106, 0.3);
+      --gradient-bg: linear-gradient(0deg, rgba(21, 94, 117, 0.8) 0%, rgba(77, 184, 106, 0.9) 60%, rgba(21, 94, 117, 0.8) 100%);
+    }
+
+    .card.teal {
+      --border-color: #14b8a6;
+      --shadow-color: rgba(20, 184, 166, 0.3);
+      --gradient-bg: linear-gradient(0deg, rgba(19, 78, 74, 0.8) 0%, rgba(20, 184, 166, 0.9) 60%, rgba(19, 78, 74, 0.8) 100%);
+    }
+
+    /* Force open state for demo */
+    .card.force-open .main {
+      transform: scale(1.1);
+      transition: none !important;
+    }
+
+    .card.force-open .main .top {
+      top: -50px;
+      transition: none !important;
+    }
+
+    .card.force-open .main .left {
+      left: -50px;
+      transition: none !important;
+    }
+
+    .card.force-open .main .right {
+      right: -50px;
+      transition: none !important;
+    }
+
+    .card.force-open .main .title,
+    .card.force-open .main .subtitle {
+      opacity: 1;
+      transition: none !important;
+    }
+
+    .card.force-open .main .button-container .button {
+      transition: none !important;
+    }
+
+    .card.force-open .main .button-container .button:nth-child(1) {
+      bottom: 80px;
+      transition-delay: 0s !important;
+    }
+
+    .card.force-open .main .button-container .button:nth-child(2) {
+      bottom: 40px;
+      transition-delay: 0s !important;
+    }
+
+    .card.force-open .main .button-container .button:nth-child(3) {
+      bottom: 0;
+      transition-delay: 0s !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Card 1: Red (Closed) -->
+  <div class="card red">
+    <div class="boxshadow"></div>
+    <div class="main">
+      <div class="top"></div>
+      <div class="side left"></div>
+      <div class="side right"></div>
+      <div class="title">BTC</div>
+      <div class="subtitle">$64,820</div>
+      <div class="button-container">
+        <button class="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="8"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          72.5%
+        </button>
+        <button class="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          5x
+        </button>
+        <button class="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          64%
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 2: Green (Force Open) -->
+  <div class="card green force-open">
+    <div class="boxshadow"></div>
+    <div class="main">
+      <div class="top"></div>
+      <div class="side left"></div>
+      <div class="side right"></div>
+      <div class="title">SOL</div>
+      <div class="subtitle">SOL/USDT</div>
+      <div class="button-container">
+        <button class="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="8"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          68.4%
+        </button>
+        <button class="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          3x
+        </button>
+        <button class="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          59%
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 3: Teal (Closed) -->
+  <div class="card teal">
+    <div class="boxshadow"></div>
+    <div class="main">
+      <div class="top"></div>
+      <div class="side left"></div>
+      <div class="side right"></div>
+      <div class="title">ETH</div>
+      <div class="subtitle">$3,191</div>
+      <div class="button-container">
+        <button class="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="8"/>
+            <circle cx="12" cy="12" r="3"/>
+          </svg>
+          65.8%
+        </button>
+        <button class="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+          </svg>
+          7x
+        </button>
+        <button class="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          71%
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Optional: Toggle force-open on click
+    document.querySelectorAll('.card').forEach(card => {
+      card.addEventListener('click', () => {
+        card.classList.toggle('force-open');
+      });
+    });
+  </script>
+
+</body>
+</html>

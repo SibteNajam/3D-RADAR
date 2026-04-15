@@ -2569,10 +2569,10 @@
       width: 100%;
       height: 100%;
       border-radius: 16px;
-      background: linear-gradient(135deg, rgba(5,15,20,0.98) 0%, rgba(8,20,25,0.98) 50%, rgba(5,12,18,0.98) 100%);
+      background: linear-gradient(135deg, rgba(5, 15, 20, 0.98) 0%, rgba(8, 20, 25, 0.98) 50%, rgba(5, 12, 18, 0.98) 100%);
       border: 2px solid #00ff88;
       backdrop-filter: blur(16px);
-      box-shadow: 0 0 30px rgba(0,255,136,0.25), 0 12px 48px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(0,255,136,0.08);
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.25), 0 12px 48px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(0, 255, 136, 0.08);
       transform: scale(1);
       transform-origin: center center;
       overflow-y: auto;
@@ -2590,9 +2590,11 @@
         opacity: 0;
         transform: scale(0.75) translateY(40px);
       }
+
       50% {
         transform: scale(1.02) translateY(-5px);
       }
+
       100% {
         opacity: 1;
         transform: scale(1) translateY(0);
@@ -2622,6 +2624,7 @@
         opacity: 0;
         transform: scale(0.6) translateY(10px);
       }
+
       100% {
         opacity: 1;
         transform: scale(1);
@@ -2629,9 +2632,12 @@
     }
 
     @keyframes pulse {
-      0%, 100% {
+
+      0%,
+      100% {
         opacity: 1;
       }
+
       50% {
         opacity: 0.3;
       }
@@ -2652,12 +2658,12 @@
     }
 
     #pu-card-mount .card.popup-card::-webkit-scrollbar-thumb {
-      background: rgba(0,255,136,0.3);
+      background: rgba(0, 255, 136, 0.3);
       border-radius: 3px;
     }
 
     #pu-card-mount .card.popup-card::-webkit-scrollbar-thumb:hover {
-      background: rgba(0,255,136,0.6);
+      background: rgba(0, 255, 136, 0.6);
     }
 
     /* Popup card scroll support */
@@ -3362,7 +3368,7 @@
       const idx = forcedIdx !== null ? forcedIdx : cardGlobalIndex++;
       const el = document.createElement('div');
       const ip = data.change >= 0; // Is Positive
-      
+
       if (isPopup) {
         /* ═════════ POPUP CARD - EXPANDED VIEW ═════════ */
         el.className = 'card popup-card v1 force-open';
@@ -3403,7 +3409,7 @@
             <!-- PRICE & PNL -->
             <div style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,255,136,0.15);">
               <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;">
-                <span style="font-size: 22px; font-weight: 800; color: #fff; font-family: 'Courier New', monospace;">$${data.price.toLocaleString('en-US', {minimumFractionDigits:0, maximumFractionDigits:2})}</span>
+                <span style="font-size: 22px; font-weight: 800; color: #fff; font-family: 'Courier New', monospace;">$${data.price.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</span>
                 <span style="font-size: 10px; color: #00ff88; background: rgba(0,255,136,0.12); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-family: 'Courier New', monospace;">${ip ? '−' : '+'}${changePct}%</span>
               </div>
               <div style="font-size: 8px; color: #00d4ff; letter-spacing: 1.5px; margin-bottom: 6px; text-transform: uppercase; font-family: 'Courier New', monospace;">TOTAL PNL // REALTIME</div>
@@ -3696,10 +3702,10 @@
       const puCard = makeSpCard(c, null, true);
       puCard.classList.add('force-open');
       mount.appendChild(puCard);
-      
+
       // Enable popup - CSS handles the opacity transition
       wrap.classList.add('on');
-      
+
       // Clear inline opacity to let CSS take over
       setTimeout(() => {
         mount.style.opacity = '';
@@ -3710,10 +3716,10 @@
       rPaused = false;
       const wrap = document.getElementById('popup-wrap');
       const mount = document.getElementById('pu-card-mount');
-      
+
       // Trigger fade out via CSS state removal
       wrap.classList.remove('on');
-      
+
       // Set opacity back to 0 for next open
       mount.style.opacity = '0';
 
