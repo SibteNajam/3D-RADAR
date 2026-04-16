@@ -2177,22 +2177,27 @@
       position: absolute;
       height: 100%;
       width: 100%;
-      border: 1px solid var(--hex-color);
-      transform: scale(0.8);
-      box-shadow: rgb(var(--neon-rgb)) 0px 30px 70px 0px;
+      border: 1px solid rgba(var(--neon-rgb), 0.25);
+      border-radius: 20px;
+      transform: scale(0.85);
+      box-shadow: rgba(var(--neon-rgb), 0.35) 0px 15px 45px 0px,
+                  inset rgba(var(--neon-rgb), 0.15) 0px 0px 20px 0px;
       transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+      opacity: 0.85;
     }
 
     .card.v1 .main {
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: var(--hex-color);
-      background: linear-gradient(0deg, rgb(var(--dark-rgb)) 0%, rgb(var(--neon-rgb)) 60%, rgb(var(--dark-rgb)) 100%);
+      background: rgba(var(--neon-rgb), 0.05);
+      background: linear-gradient(0deg, rgba(8, 12, 20, 0.75) 0%, rgba(var(--neon-rgb), 0.4) 60%, rgba(8, 12, 20, 0.75) 100%);
+      backdrop-filter: blur(14px) saturate(1.4);
+      -webkit-backdrop-filter: blur(14px) saturate(1.4);
       position: relative;
       -webkit-clip-path: polygon(0 40px, 40px 0, calc(100% - 40px) 0, 100% 40px, 100% calc(100% - 40px), calc(100% - 40px) 100%, 40px 100%, 0 calc(100% - 40px));
       clip-path: polygon(0 40px, 40px 0, calc(100% - 40px) 0, 100% 40px, 100% calc(100% - 40px), calc(100% - 40px) 100%, 40px 100%, 0 calc(100% - 40px));
-      box-shadow: rgb(var(--neon-rgb)) 0px 7px 29px 0px;
+      box-shadow: inset 0 0 0 1px rgba(var(--neon-rgb), 0.25);
       transition: all 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
     }
 
@@ -2203,9 +2208,10 @@
       width: 0px;
       height: 0px;
       z-index: 2;
-      border-top: 115px solid black;
+      border-top: 115px solid rgba(17, 24, 39, 0.75);
       border-left: 115px solid transparent;
       border-right: 115px solid transparent;
+      filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6)) drop-shadow(0 -1px 2px rgba(var(--neon-rgb), 0.25));
       transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
     }
 
@@ -2215,9 +2221,10 @@
       top: 0;
       transform: translateX(-50%);
       height: 101%;
-      background: black;
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.75) 0%, rgba(10, 14, 26, 0.82) 50%, rgba(7, 10, 20, 0.9) 100%);
       -webkit-clip-path: polygon(0% 0%, 50% 0, 95% 45%, 100% 100%, 0% 100%);
       clip-path: polygon(0% 0%, 50% 0, 95% 45%, 100% 100%, 0% 100%);
+      filter: drop-shadow(1px 0px 3px rgba(var(--neon-rgb), 0.25)) drop-shadow(-1px 0px 3px rgba(0,0,0,0.5));
       transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86) 1s;
     }
 
@@ -2274,9 +2281,9 @@
       height: 32px;
       -webkit-clip-path: polygon(0 0, 100% 0, 81% 100%, 21% 100%);
       clip-path: polygon(0 0, 100% 0, 81% 100%, 21% 100%);
-      background: black;
-      border: none;
-      color: white;
+      background: rgba(15, 20, 30, 0.65);
+      border: 1px solid rgba(var(--neon-rgb), 0.25);
+      color: rgba(255, 255, 255, 0.95);
       cursor: pointer;
       display: flex;
       justify-content: center;
