@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Rotating Ring Cards - VaultBot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: #070810;
+      font-family: 'Montserrat', sans-serif;
+      overflow: hidden;
+    }
+
+    /* RING SECTION */
+    #ring-sec {
+      position: relative;
+      height: 620px;
+      background: #070810;
+      width: 100%;
+    }
+
+    #ring-cv {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .ring-lbl {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      font-size: 9px;
+      letter-spacing: .12em;
+      color: #151C2A;
+      text-transform: uppercase;
+    }
+
+    .ring-hint {
+      position: absolute;
+      bottom: 8px;
+      right: 14px;
+      font-size: 9px;
+      color: #151C2A;
+      letter-spacing: .08em;
+    }
+
+    /* Popup styles loaded from 03-popup-card.css */
+  </style>
+  <link rel="stylesheet" href="03-popup-card.css">
+</head>
+
+<body>
+  <!-- Ring Section -->
+  <div id="ring-sec">
+    <canvas id="ring-cv"></canvas>
+    <div class="ring-lbl">Ring Engine v3.2</div>
+    <div class="ring-hint">DRAG TO ROTATE · CLICK TO INSPECT</div>
+  </div>
+
+  <!-- Popup Modal injected by 03-popup-card.js via initPopup() -->
+  </div>
+
+  <script src="03-popup-card.js"></script>
+  <script>
+    // ========================================
+    // DATA & CONFIG
+    // ========================================
+
+    const POOL = [
+      { sym: 'BTC', pair: 'BTC/USDT', price: 64820, change: 3.42, vol: '$42.1B', dir: 'LONG', lev: '10x', pnl: 420.30 },
+      { sym: 'ETH', pair: 'ETH/USDT', price: 3191, change: -1.18, vol: '$18.4B', dir: 'SHORT', lev: '5x', pnl: -88.50 },
+      { sym: 'SOL', pair: 'SOL/USDT', price: 161, change: 5.67, vol: '$4.2B', dir: 'LONG', lev: '3x', pnl: 310.80 },
+      { sym: 'BNB', pair: 'BNB/USDT', price: 594, change: 1.23, vol: '$1.8B', dir: 'LONG', lev: '7x', pnl: 199.70 },
+      { sym: 'AVAX', pair: 'AVAX/USDT', price: 38.4, change: -2.11, vol: '$620M', dir: 'SHORT', lev: '4x', pnl: -44.20 },
+      { sym: 'ARB', pair: 'ARB/USDT', price: 1.12, change: 7.34, vol: '$310M', dir: 'LONG', lev: '5x', pnl: 88.60 },
+      { sym: 'LINK', pair: 'LINK/USDT', price: 14.82, change: 0.88, vol: '$540M', dir: 'LONG', lev: '3x', pnl: 22.10 }
+    ];
+
+    // Coin color mapping for cyberpunk neon aesthetic
+    function getCoinColors(symbol) {
+      const colorMap = {
+        'BTC': { neon: '255,170,0', dark: '40,30,0', hex: '#ffaa00' },
+        'ETH': { neon: '98,126,234', dark: '20,15,50', hex: '#627eea' },
+        'SOL': { neon: '0,255,136', dark: '8,20,25', hex: '#00ff88' },
+        'BNB': { neon: '240,165,23', dark: '40,30,0', hex: '#f0a517' },
+        'AVAX': { neon: '232,65,66', dark: '40,15,15', hex: '#e84142' },
+        'ARB': { neon: '40,185,239', dark: '15,25,50', hex: '#28b9ef' },
+        'LINK': { neon: '84,71,255', dark: '15,12,50', hex: '#5447ff' }
+      };
+      return colorMap[symbol] || { neon: '0,255,136', dark: '8,20,25', hex: '#00ff88' };
+    }
+
+    // ========================================
+    // RING ENGINE
+    // ========================================
+
+    const rcv = document.getElementById('ring-cv');
+    const rctx = rcv.getContext('2d');
+    let RW, RH, RCX, RCY, RX, RY, CW, CH;
+    let rCards = [], rVel = 0.0055, rDrag = false, rLx = 0, rLvx = 0, rMdx = 0, rMdy = 0, rMdt = 0;
+    let rPaused = false, rTime = 0, rHitList = [], particles = [], stars = [];
+    let selectedCardIdx = -1;
+
+    function resizeRing() {
+      const el = document.getElementById('ring-sec');
+      RW = el.offsetWidth; RH = el.offsetHeight;
+      rcv.width = RW; rcv.height = RH;
+      RCX = RW / 2; RCY = RH * 0.50;
+      RX = Math.min(RW * 0.42, 380);
+      RY = RX * 0.28;
+      CW = Math.min(RW * 0.16, 175);
+      CH = CW * 1.55;
+      if (!stars.length) initStars();
+    }
+
+    function initStars() {
+      stars = [];
+      for (let i = 0; i < 70; i++) {
+        stars.push({
+          x: Math.random() * RW,
+          y: Math.random() * RH,
+          r: Math.random() * .9 + .2,
+          a: 0,
+          ph: Math.random() * Math.PI * 2,
+          sp: .5 + Math.random() * .7
+        });
+      }
+    }
+
+    async function fetchLogoImg(sym) {
+      const name = sym.toLowerCase();
+      const urls = [
+        `https://raw.githubusercontent.com/atomiclabs/cryptocurrency-icons/master/128/color/${name}.png`,
+        `https://cryptologos.cc/logos/${name}-${name}-logo.png`
+      ];
+      for (const u of urls) {
+        try {
+          const res = await fetch(u, { mode: 'cors' });
+          if (res.ok) {
+            return await new Promise((resolve) => {
+              const img = new Image();
+              img.crossOrigin = 'anonymous';
+              img.onload = () => resolve(img);
+              img.onerror = () => resolve(null);
+              img.src = u;
+            });
+          }
+        } catch (e) { /* fallback to letter */ }
+      }
+      return null;
+    }
+
+    function initRCards() {
+      rCards = [];
+      POOL.slice(0, 7).forEach((d, i) => {
+        const th = Math.floor(Math.random() * 12) + 1;
+        const tm = Math.floor(Math.random() * 60);
+        const card = {
+          data: d,
+          angle: (i / 7) * Math.PI * 2,
+          entryDone: true,
+          entryAnim: 1,
+          logoImg: null,
+          tradeTime: `${th}h ${tm}m ago`
+        };
+        rCards.push(card);
+        fetchLogoImg(d.sym).then(img => { if (img) card.logoImg = img; });
+      });
+    }
+
+    function getT(a) {
+      const s = Math.sin(a), c = Math.cos(a);
+      const depth = (s + 1) / 2;
+      const sc = .58 + .54 * depth;
+      return {
+        x: RCX + RX * c,
+        y: RCY + RY * s,
+        scale: sc,
+        depth,
+        alpha: .22 + .78 * depth,
+        sinA: s,
+        cosA: c
+      };
+    }
+
+    function rrx(x, y, w, h, r) {
+      rctx.beginPath();
+      rctx.moveTo(x + r, y);
+      rctx.lineTo(x + w - r, y);
+      rctx.arc(x + w - r, y + r, r, -Math.PI / 2, 0);
+      rctx.lineTo(x + w, y + h - r);
+      rctx.arc(x + w - r, y + h - r, r, 0, Math.PI / 2);
+      rctx.lineTo(x + r, y + h);
+      rctx.arc(x + r, y + h - r, r, Math.PI / 2, Math.PI);
+      rctx.lineTo(x, y + r);
+      rctx.arc(x + r, y + r, r, Math.PI, -Math.PI / 2);
+      rctx.closePath();
+    }
+
+    function drawBg() {
+      rctx.fillStyle = '#070810';
+      rctx.fillRect(0, 0, RW, RH);
+
+      const g = rctx.createRadialGradient(RCX, RCY, 0, RCX, RCY, RX * 2.4);
+      g.addColorStop(0, 'rgba(16,14,52,.6)');
+      g.addColorStop(1, 'rgba(7,8,16,0)');
+      rctx.fillStyle = g;
+      rctx.fillRect(0, 0, RW, RH);
+
+      const g2 = rctx.createRadialGradient(RCX * .25, RCY * .6, 0, RCX * .25, RCY * .6, RW * .32);
+      g2.addColorStop(0, 'rgba(10,28,68,.14)');
+      g2.addColorStop(1, 'rgba(7,8,16,0)');
+      rctx.fillStyle = g2;
+      rctx.fillRect(0, 0, RW, RH);
+
+      stars.forEach(s => {
+        s.a = .08 + .2 * Math.sin(rTime * s.sp + s.ph);
+        rctx.beginPath();
+        rctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+        rctx.fillStyle = `rgba(160,170,225,${s.a})`;
+        rctx.fill();
+      });
+    }
+
+    function drawCard(card) {
+      const t = getT(card.angle), c = card.data;
+      const ep = card.entryDone ? 1 : Math.min(1, card.entryAnim);
+      const w = CW * t.scale, h = CH * t.scale;
+      const px = t.x - w / 2, py = t.y - h / 2;
+      const ip = c.change >= 0;
+      const acc = ip ? '#4DB86A' : '#D65C5C';
+      const rgb = ip ? '77,184,106' : '214,92,92';
+
+      rctx.save();
+      rctx.globalAlpha = t.alpha * ep;
+
+      // Dynamic Outer Glow (Neon Pulse)
+      const pulse = 0.5 + 0.5 * Math.sin(rTime * 2 + card.angle);
+      if (t.sinA > 0) {
+        rctx.shadowBlur = (17 + 8 * pulse) * t.scale;
+        rctx.shadowColor = `rgba(${rgb}, ${0.16 + 0.10 * pulse})`;
+      }
+
+      // Glassmorphism Base
+      rrx(px, py, w, h, 12 * t.scale);
+      const bg = rctx.createLinearGradient(px, py, px + w, py + h);
+      bg.addColorStop(0, 'rgba(17, 24, 39, 0.95)');
+      bg.addColorStop(0.5, 'rgba(10, 14, 26, 0.98)');
+      bg.addColorStop(1, 'rgba(7, 10, 20, 1)');
+      rctx.fillStyle = bg;
+      rctx.fill();
+      rctx.shadowBlur = 0;
+
+      const isFront = t.sinA > -0.15;
+      if (isFront) {
+        // Enhanced HUD Pattern - More visible scan lines
+        rctx.beginPath();
+        rctx.lineWidth = 0.8 * t.scale;
+        rctx.strokeStyle = 'rgba(255,255,255,0.04)';
+        for (let i = 8; i < h; i += 5 * t.scale) {
+          rctx.moveTo(px + 3 * t.scale, py + i);
+          rctx.lineTo(px + w - 3 * t.scale, py + i);
+        }
+        rctx.stroke();
+
+        // Border
+        rrx(px, py, w, h, 12 * t.scale);
+        rctx.strokeStyle = `rgba(${rgb}, ${0.3 + 0.2 * pulse})`;
+        rctx.lineWidth = 1 * t.scale;
+        rctx.stroke();
+
+        // Top Corner HUD Bracket
+        rctx.beginPath();
+        rctx.lineWidth = 2 * t.scale;
+        rctx.strokeStyle = acc;
+        rctx.moveTo(px + 20 * t.scale, py); rctx.lineTo(px, py); rctx.lineTo(px, py + 20 * t.scale);
+        rctx.stroke();
+
+        // Icon HUD Module
+        const m = 12 * t.scale;
+        const ir = 14 * t.scale;
+        rctx.beginPath();
+        rctx.arc(px + m + ir, py + m + ir, ir, 0, Math.PI * 2);
+        rctx.fillStyle = `rgba(${rgb}, 0.08)`;
+        rctx.fill();
+        rctx.strokeStyle = `rgba(${rgb}, 0.4)`;
+        rctx.lineWidth = 0.5 * t.scale;
+        rctx.stroke();
+
+        // Spinning HUD Ring
+        rctx.beginPath();
+        rctx.arc(px + m + ir, py + m + ir, ir + 3 * t.scale, rTime * 2, rTime * 2 + Math.PI * 0.6);
+        rctx.strokeStyle = acc; rctx.lineWidth = 1.2 * t.scale; rctx.stroke();
+
+        // Logo image or letter
+        if (card.logoImg) {
+          const logoSize = ir * 1.5;
+          rctx.save();
+          rctx.beginPath();
+          rctx.arc(px + m + ir, py + m + ir, ir - 1, 0, Math.PI * 2);
+          rctx.clip();
+          rctx.drawImage(card.logoImg, px + m + ir - logoSize / 2, py + m + ir - logoSize / 2, logoSize, logoSize);
+          rctx.restore();
+        } else {
+          rctx.fillStyle = acc;
+          rctx.font = `800 ${11 * t.scale}px Space Mono`;
+          rctx.textAlign = 'center';
+          rctx.textBaseline = 'middle';
+          rctx.fillText(c.sym.slice(0, 1), px + m + ir, py + m + ir + 0.5);
+        }
+
+        // Status Pill - Top right corner
+        const pw = 52 * t.scale, ph = 15 * t.scale;
+        const px2 = px + w - m - pw - 2 * t.scale, py2 = py + m;
+        rrx(px2, py2, pw, ph, ph / 2);
+        rctx.fillStyle = 'rgba(0,0,0,0.5)';
+        rctx.fill();
+        rctx.strokeStyle = `rgba(${rgb}, 0.4)`;
+        rctx.lineWidth = 0.8 * t.scale;
+        rctx.stroke();
+
+        const dr = 2.5 * t.scale;
+        rctx.beginPath();
+        rctx.arc(px2 + 9 * t.scale, py2 + ph / 2, dr, 0, Math.PI * 2);
+        rctx.fillStyle = acc;
+        rctx.globalAlpha = t.alpha * ep * (0.4 + 0.6 * pulse);
+        rctx.fill();
+        rctx.globalAlpha = t.alpha * ep;
+
+        rctx.fillStyle = acc;
+        rctx.font = `700 ${7.5 * t.scale}px Space Mono`;
+        rctx.textAlign = 'left';
+        rctx.fillText(ip ? 'ACTIVE' : 'RISK', px2 + 16 * t.scale, py2 + ph / 2 + 0.5);
+
+        // 8. Technical HUD Labels (Small corner data)
+        rctx.fillStyle = 'rgba(255,255,255,0.2)';
+        rctx.font = `600 ${6 * t.scale}px Space Mono`;
+        rctx.textAlign = 'right';
+        rctx.fillText("SEC_LVL: 04", px + w - m, py + h - m);
+        rctx.textAlign = 'left';
+        rctx.fillText(`SIG_CONF: ${(70 + (Math.abs(card.angle * 10) % 20)).toFixed(0)}%`, px + m, py + h - m);
+
+        // 9. Main Content
+        const contentY = py + m + ir * 2 + 12 * t.scale;
+        rctx.fillStyle = '#E8EAF6'; rctx.font = `800 ${16 * t.scale}px Space Grotesk`;
+        rctx.textAlign = 'left'; rctx.textBaseline = 'top';
+        rctx.fillText(c.sym + ' CYCLE', px + m, contentY);
+
+        const fmtP = (p) => p >= 1000 ? '$' + p.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : '$' + p.toFixed(2);
+        const chStr = (c.change >= 0 ? '+' : '') + c.change.toFixed(2) + '%';
+        rctx.fillStyle = 'rgba(154, 168, 188, 0.6)'; rctx.font = `600 ${9 * t.scale}px Space Mono`;
+        rctx.fillText(fmtP(c.price) + ` (${chStr})`, px + m, contentY + 20 * t.scale);
+
+        // Divider
+        rctx.beginPath(); rctx.moveTo(px + m, contentY + 38 * t.scale); rctx.lineTo(px + w - m, contentY + 38 * t.scale);
+        rctx.strokeStyle = 'rgba(255,255,255,0.06)'; rctx.lineWidth = 0.5 * t.scale; rctx.stroke();
+
+        // PnL HUD
+        const pnlY = contentY + 48 * t.scale;
+        rctx.fillStyle = 'rgba(74, 80, 112, 0.8)'; rctx.font = `700 ${8 * t.scale}px Space Mono`;
+        rctx.fillText('TOTAL PNL // REALTIME', px + m, pnlY);
+
+        const pnlVal = (c.pnl >= 0 ? '+$' : '−$') + Math.abs(c.pnl).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        rctx.fillStyle = acc; rctx.font = `800 ${22 * t.scale}px Space Grotesk`;
+        rctx.fillText(pnlVal, px + m, pnlY + 14 * t.scale);
+
+        // Stats Grid
+        const stY = pnlY + 44 * t.scale;
+        rctx.fillStyle = 'rgba(58, 64, 96, 0.7)'; rctx.font = `700 ${7.5 * t.scale}px Space Mono`;
+        rctx.fillText('WIN RATE', px + m, stY);
+        rctx.fillText('LEVERAGE', px + w / 2 + 2 * t.scale, stY);
+
+        rctx.fillStyle = '#9AA8BC'; rctx.font = `700 ${11 * t.scale}px Space Grotesk`;
+        rctx.fillText('81%', px + m, stY + 10 * t.scale);
+        rctx.fillStyle = acc; rctx.fillText(c.lev, px + w / 2 + 2 * t.scale, stY + 10 * t.scale);
+
+        // Interactive Footer Hint
+        const fy = py + h - 24 * t.scale;
+        rctx.fillStyle = 'rgba(255,255,255,0.15)'; rctx.font = `700 ${8 * t.scale}px Space Grotesk`;
+        rctx.textAlign = 'center';
+        rctx.fillText('--- CLICK TO INSPECT MODULE ---', px + w / 2, fy);
+
+
+      } else {
+        // Backside
+        rrx(px, py, w, h, 12 * t.scale);
+        rctx.strokeStyle = 'rgba(255,255,255,0.05)';
+        rctx.lineWidth = 0.5 * t.scale;
+        rctx.stroke();
+        rctx.fillStyle = 'rgba(255,255,255,0.02)';
+        rctx.font = `700 ${10 * t.scale}px Space Mono`;
+        rctx.textAlign = 'center';
+        rctx.fillText("VB_NODE_" + card.data.sym, px + w / 2, py + h / 2);
+      }
+
+      rctx.restore();
+      return { px, py, w, h, depth: t.sinA, idx: rCards.indexOf(card) };
+    }
+
+    function drawFrame() {
+      drawBg();
+      const sorted = [...rCards].sort((a, b) => Math.sin(a.angle) - Math.sin(b.angle));
+      rHitList = [];
+      sorted.forEach(card => {
+        const r = drawCard(card);
+        if (r) rHitList.unshift(r);
+      });
+      rHitList.sort((a, b) => b.depth - a.depth);
+
+      particles = particles.filter(p => p.life < p.maxLife);
+      particles.forEach(p => {
+        p.life++;
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += .05;
+        const a = (1 - p.life / p.maxLife) * .8;
+        rctx.beginPath();
+        rctx.arc(p.x, p.y, p.r * (1 - p.life / p.maxLife * .5), 0, Math.PI * 2);
+        rctx.fillStyle = `rgba(77,184,106,${a})`;
+        rctx.fill();
+      });
+    }
+
+    function hitTest(mx, my) {
+      for (const r of rHitList) {
+        if (r.depth < -.05) continue;
+        if (mx >= r.px && mx <= r.px + r.w && my >= r.py && my <= r.py + r.h) return r.idx;
+      }
+      return -1;
+    }
+
+    // Mouse/Touch Events
+    rcv.addEventListener('mousedown', e => {
+      if (rPaused) return;
+      rDrag = true;
+      rLx = e.clientX;
+      rLvx = 0;
+      rMdx = e.clientX;
+      rMdy = e.clientY;
+      rMdt = Date.now();
+      rVel = 0;
+    });
+
+    rcv.addEventListener('mousemove', e => {
+      if (!rDrag) return;
+      const dx = e.clientX - rLx;
+      rLvx = dx * .0065;
+      rCards.forEach(c => c.angle += rLvx);
+      rLx = e.clientX;
+    });
+
+    rcv.addEventListener('mouseup', e => {
+      if (!rDrag) return;
+      rDrag = false;
+      const dist = Math.hypot(e.clientX - rMdx, e.clientY - rMdy);
+      if (dist < 6 && Date.now() - rMdt < 280) {
+        const bnd = rcv.getBoundingClientRect();
+        const hit = hitTest(e.clientX - bnd.left, e.clientY - bnd.top);
+        if (hit >= 0) {
+          openPopup(rCards[hit].data);
+          return;
+        }
+      }
+      rVel = rLvx;
+    });
+
+    rcv.addEventListener('mouseleave', () => {
+      if (rDrag) {
+        rDrag = false;
+        rVel = rLvx;
+      }
+    });
+
+    rcv.addEventListener('touchstart', e => {
+      if (rPaused) return;
+      const tt = e.touches[0];
+      rDrag = true;
+      rLx = tt.clientX;
+      rLvx = 0;
+      rMdx = tt.clientX;
+      rMdy = tt.clientY;
+      rMdt = Date.now();
+      rVel = 0;
+    }, { passive: true });
+
+    rcv.addEventListener('touchmove', e => {
+      if (!rDrag) return;
+      const tt = e.touches[0];
+      rLvx = (tt.clientX - rLx) * .0065;
+      rCards.forEach(c => c.angle += rLvx);
+      rLx = tt.clientX;
+    }, { passive: true });
+
+    rcv.addEventListener('touchend', e => {
+      rDrag = false;
+      const tt = e.changedTouches[0];
+      const dist = Math.hypot(tt.clientX - rMdx, tt.clientY - rMdy);
+      if (dist < 8) {
+        const bnd = rcv.getBoundingClientRect();
+        const hit = hitTest(tt.clientX - bnd.left, tt.clientY - bnd.top);
+        if (hit >= 0) {
+          openPopup(rCards[hit].data);
+        }
+      }
+      rVel = rLvx;
+    });
+
+    // Animation Loop
+    function animateRing() {
+      rTime += 0.016;
+      if (!rPaused && !rDrag) {
+        rCards.forEach(c => c.angle += rVel);
+        rVel += (.0038 - rVel) * .03;
+      }
+      drawFrame();
+      requestAnimationFrame(animateRing);
+    }
+
+    let dealIdx = 7;
+
+    function dealNew() {
+      const data = POOL[dealIdx % POOL.length];
+      dealIdx++;
+
+      if (rCards.length < 12) {
+        const th = Math.floor(Math.random() * 12) + 1;
+        const tm = Math.floor(Math.random() * 60);
+        const card = {
+          data: data,
+          angle: Math.PI,
+          entryDone: false,
+          entryAnim: 0,
+          logoImg: null,
+          tradeTime: `${th}h ${tm}m ago`
+        };
+        rCards.push(card);
+
+        const nc = rCards[rCards.length - 1];
+        let st = 0;
+
+        fetchLogoImg(data.sym).then(img => { if (img) nc.logoImg = img; });
+
+        const iv = setInterval(() => {
+          st += .04;
+          nc.entryAnim = st;
+          if (st >= 1) {
+            nc.entryDone = true;
+            clearInterval(iv);
+          }
+        }, 16);
+
+        const N = rCards.length;
+        const ta = rCards.map((_, i) => (i / N) * Math.PI * 2);
+        const sa = rCards.map(c => c.angle);
+
+        let t2 = 0;
+        const iv2 = setInterval(() => {
+          t2 += .04;
+          if (t2 >= 1) {
+            t2 = 1;
+            clearInterval(iv2);
+          }
+          const e = t2 < .5 ? 2 * t2 * t2 : (4 - 2 * t2) * t2 - 1;
+          rCards.forEach((c, i) => {
+            c.angle = sa[i] + (ta[i] - sa[i]) * e;
+          });
+        }, 16);
+
+        for (let i = 0; i < 12; i++) {
+          const a = Math.random() * Math.PI * 2;
+          const sp = 1.5 + Math.random() * 2.5;
+          particles.push({
+            x: RCX + RX * Math.cos(Math.PI),
+            y: RCY + RY * Math.sin(Math.PI),
+            vx: Math.cos(a) * sp,
+            vy: Math.sin(a) * sp - .8,
+            r: 1 + Math.random() * 2,
+            life: 0,
+            maxLife: 44 + Math.random() * 24
+          });
+        }
+      }
+    }
+
+    // Popup modal loaded from 03-popup-card.js
+    initPopup();
+
+    // ========================================
+    // INIT
+    // ========================================
+
+    window.addEventListener('resize', resizeRing);
+    resizeRing();
+    initRCards();
+    animateRing();
+    setInterval(() => { if (!rPaused && rCards.length < 12) dealNew(); }, 12000);
+
+  </script>
+</body>
+
+</html>

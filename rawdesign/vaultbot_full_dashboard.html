@@ -27,7 +27,7 @@
       height: 1250px;
       /* Increased further to comfortably fit all large sections */
       background: #070810;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Sora', sans-serif;
       letter-spacing: -0.015em;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -37,7 +37,7 @@
       overflow-x: hidden;
     }
 
-    /* â”€â”€ HEADER */
+    /* ── HEADER */
     #hdr {
       height: 52px;
       background: #070810;
@@ -47,9 +47,6 @@
       justify-content: space-between;
       padding: 0 18px;
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
       z-index: 100;
     }
 
@@ -76,7 +73,7 @@
     }
 
     .brand {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 15px;
       font-weight: 700;
       color: #BCC2D8;
@@ -179,18 +176,18 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-weight: 600;
     }
 
-    /* â”€â”€ BODY */
+    /* ── BODY */
     #body {
       flex: 1;
       display: flex;
       overflow: hidden;
     }
 
-    /* â”€â”€ SIDEBAR */
+    /* ── SIDEBAR */
     #sidebar {
       width: 52px;
       background: #070810;
@@ -201,9 +198,6 @@
       padding: 12px 0;
       gap: 4px;
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
     }
 
     .sb-icon {
@@ -251,7 +245,7 @@
       margin-top: auto;
     }
 
-    /* â”€â”€ MAIN */
+    /* ── MAIN */
     #main {
       flex: 1;
       display: flex;
@@ -268,9 +262,6 @@
       align-items: center;
       overflow: hidden;
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
     }
 
     #tk-inner {
@@ -303,7 +294,7 @@
       color: #BCC2D8;
       font-weight: 700;
       letter-spacing: .06em;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Outfit', sans-serif;
     }
 
     .tk-p {
@@ -326,7 +317,7 @@
       overflow: hidden;
     }
 
-    /* â”€â”€ LEFT PANEL */
+    /* ── LEFT PANEL */
     #left {
       display: flex;
       flex-direction: column;
@@ -337,9 +328,6 @@
     /* RING SECTION */
     #ring-sec {
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
       position: relative;
       height: 310px;
       background: #070810;
@@ -372,9 +360,89 @@
       letter-spacing: .08em;
     }
 
+    /* STATS BAR */
+    #stats-bar {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-bottom: .5px solid #111828;
+      flex-shrink: 0;
+    }
 
+    .stat {
+      padding: 10px 14px;
+      border-right: .5px solid #111828;
+      position: relative;
+    }
 
-    /* LOWER LEFT â€” SPREAD + ACTIVITY */
+    .stat:last-child {
+      border-right: none;
+    }
+
+    .stat::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 1.5px;
+    }
+
+    .stat.g::after {
+      background: linear-gradient(90deg, transparent, #4DB86A40, transparent);
+    }
+
+    .stat.a::after {
+      background: linear-gradient(90deg, transparent, #C9A84C40, transparent);
+    }
+
+    .stat.r::after {
+      background: linear-gradient(90deg, transparent, #D65C5C40, transparent);
+    }
+
+    .stat.b::after {
+      background: linear-gradient(90deg, transparent, #5B9BD540, transparent);
+    }
+
+    .stat-lbl {
+      font-size: 9px;
+      color: #1A2030;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+    }
+
+    .stat-val {
+      font-family: 'Sora', sans-serif;
+      font-size: 22px;
+      font-weight: 600;
+      line-height: 1;
+      letter-spacing: -0.03em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-val.g {
+      color: #4DB86A;
+    }
+
+    .stat-val.a {
+      color: #C9A84C;
+    }
+
+    .stat-val.r {
+      color: #D65C5C;
+    }
+
+    .stat-val.b {
+      color: #5B9BD5;
+    }
+
+    .stat-sub {
+      font-size: 9px;
+      color: #1A2030;
+      margin-top: 3px;
+    }
+
+    /* LOWER LEFT — SPREAD + ACTIVITY */
     #lower-left {
       flex: 1;
       display: grid;
@@ -389,12 +457,11 @@
       min-height: 460px;
       /* Increased for better card visibility */
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
       position: relative;
-      background-image: none;
-      background-color: rgba(5, 10, 18, 0.3);
+      background-image:
+        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(77, 184, 106, 0.02) 0%, transparent 70%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V17L28 1l28 16v33L28 66zM28 100L0 84V51l28-16 28 16v33L28 100z' fill='none' stroke='%23112238' stroke-width='0.5'/%3E%3C/svg%3E");
+      background-size: auto, 56px 100px;
       overflow: visible;
       /* Allow card hover pop-up */
     }
@@ -463,7 +530,7 @@
     }
 
     .sec-title {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 13px;
       font-weight: 700;
       color: #7A8AA0;
@@ -484,7 +551,7 @@
       border-radius: 4px;
       padding: 4px 10px;
       cursor: pointer;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Mono', monospace;
       font-weight: 700;
       transition: all .18s;
     }
@@ -518,14 +585,11 @@
       /* Cards sit on a common baseline */
     }
 
-    /* â•â• PREMIUM SPREAD CARD â•â• */
+    /* ══ PREMIUM SPREAD CARD ══ */
     .spc {
       width: 215px;
       height: 330px;
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
       margin: 0;
       cursor: pointer;
       position: relative;
@@ -624,7 +688,7 @@
       font-size: 14px;
       font-weight: 900;
       color: var(--acc, #4DB86A);
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       box-shadow: 0 0 10px var(--acc-glow, rgba(77, 184, 106, 0.12));
       transition: box-shadow .3s;
     }
@@ -652,7 +716,7 @@
       font-weight: 900;
       letter-spacing: .12em;
       color: #4DB86A;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Mono', monospace;
       text-transform: uppercase;
     }
 
@@ -700,7 +764,7 @@
     }
 
     .spc-sym {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
       font-size: 16px;
       font-weight: 800;
       color: #e8eaf6;
@@ -709,7 +773,7 @@
     }
 
     .spc-serial {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Mono', monospace;
       font-size: 7px;
       font-weight: 700;
       color: rgba(255, 255, 255, 0.15);
@@ -727,14 +791,14 @@
     }
 
     .spc-price {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Mono', monospace;
       font-size: 11px;
       font-weight: 700;
       color: rgba(255, 255, 255, 0.35);
     }
 
     .spc-chg {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Mono', monospace;
       font-size: 10px;
       font-weight: 800;
       padding: 2px 6px;
@@ -754,7 +818,7 @@
 
     /* PnL Display */
     .spc-pnl-lbl {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Mono', monospace;
       font-size: 8px;
       font-weight: 900;
       letter-spacing: .12em;
@@ -766,7 +830,7 @@
     }
 
     .spc-pnl-val {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Mono', monospace;
       font-size: 28px;
       font-weight: 900;
       line-height: 1;
@@ -818,7 +882,7 @@
     }
 
     .spc-stat-lbl {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Mono', monospace;
       font-size: 6.5px;
       letter-spacing: .08em;
       text-transform: uppercase;
@@ -827,7 +891,7 @@
     }
 
     .spc-stat-val {
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Mono', monospace;
       font-size: 12px;
       font-weight: 800;
       color: #c8cfe0;
@@ -844,7 +908,7 @@
       align-items: center;
       justify-content: center;
       gap: 6px;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Mono', monospace;
       font-size: 7.5px;
       font-weight: 900;
       letter-spacing: .12em;
@@ -858,7 +922,7 @@
     }
 
     .spc-footer::before {
-      content: 'â–¶';
+      content: '▶';
       font-size: 6px;
       opacity: 0;
       transform: translateX(-6px);
@@ -913,9 +977,6 @@
       font-size: 9px;
       font-weight: 500;
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
     }
 
     .act-ico.lng {
@@ -957,7 +1018,7 @@
       margin-top: 1px;
     }
 
-    /* â”€â”€ RIGHT PANEL */
+    /* ── RIGHT PANEL */
     #right {
       display: flex;
       flex-direction: column;
@@ -968,9 +1029,6 @@
     #eq-sec {
       border-bottom: .5px solid #111828;
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
     }
 
     #eq-cv {
@@ -1002,9 +1060,6 @@
     #bots-sec {
       border-bottom: .5px solid #111828;
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
     }
 
     .bot-row {
@@ -1035,9 +1090,6 @@
       font-size: 9px;
       font-weight: 500;
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
     }
 
     .bot-name {
@@ -1105,9 +1157,6 @@
       color: #2A3A4A;
       text-align: center;
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
     }
 
     .ld-rk.top {
@@ -1147,7 +1196,7 @@
       border-radius: 2px;
     }
 
-    /* â”€â”€ FOOTER */
+    /* ── FOOTER */
     #ftr {
       height: 36px;
       background: #070810;
@@ -1157,9 +1206,6 @@
       justify-content: space-between;
       padding: 0 18px;
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
     }
 
     .ftr-left {
@@ -1198,8 +1244,8 @@
       border-radius: 50%;
     }
 
-    /* â”€â”€ POPUP */
-    /* â”€â”€ POPUP (Refined Dramatic) */
+    /* ── POPUP */
+    /* ── POPUP (Refined Dramatic) */
     #popup-wrap {
       position: fixed;
       inset: 0;
@@ -1217,6 +1263,16 @@
       background: rgba(15, 10, 5, 0.88);
       backdrop-filter: blur(14px);
       pointer-events: all;
+    }
+
+    /* Canvas Confetti Layer */
+    #pu-conf-cv {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 5;
     }
 
     /* Cinematic Center Glow */
@@ -1237,6 +1293,247 @@
       opacity: 0.06;
     }
 
+    .pu {
+      width: 460px;
+      background: linear-gradient(165deg, #0F1225 0%, #080A15 100%);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
+      padding: 24px;
+      position: relative;
+      z-index: 10;
+      display: grid;
+      grid-template-columns: 1fr 140px;
+      gap: 20px;
+
+      /* Smooth Scale In */
+      opacity: 0;
+      transform: scale(0.92) translateY(20px);
+      transition:
+        opacity .5s cubic-bezier(0.16, 1, 0.3, 1),
+        transform .6s cubic-bezier(0.16, 1, 0.3, 1);
+
+      box-shadow:
+        0 40px 100px rgba(0, 0, 0, 0.6),
+        0 0 0 1px rgba(255, 255, 255, 0.03),
+        inset 0 1px 1px rgba(255, 255, 255, 0.05);
+      overflow: hidden;
+    }
+
+    #popup-wrap.on .pu {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Holographic Scan Sweep */
+    .pu::after {
+      content: '';
+      position: absolute;
+      top: -100%;
+      left: 0;
+      width: 100%;
+      height: 80%;
+      background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.05), transparent);
+      transform: skewY(-5deg);
+      pointer-events: none;
+      z-index: 5;
+    }
+
+    #popup-wrap.on .pu::after {
+      animation: puSweep 1.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    @keyframes puSweep {
+      0% {
+        top: -100%;
+        opacity: 0;
+      }
+
+      20% {
+        opacity: 1;
+      }
+
+      100% {
+        top: 150%;
+        opacity: 0;
+      }
+    }
+
+    /* Staggered Content reveal */
+    .pu-row-anim {
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .4s ease, transform .4s ease;
+    }
+
+    #popup-wrap.on .pu-row-anim {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* CONTENT STYLING (Refined) */
+    .pu-hd {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .pu-sym {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 28px;
+      font-weight: 800;
+      color: #fff;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+
+    .pu-pair {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      color: rgba(255, 255, 255, 0.3);
+      margin-top: 4px;
+    }
+
+    .pu-x {
+      background: rgba(255, 255, 255, 0.05);
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all .2s;
+    }
+
+    .pu-x:hover {
+      background: rgba(214, 92, 92, 0.2);
+      color: #D65C5C;
+    }
+
+    .pu-pr {
+      font-family: 'Space Mono', monospace;
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      margin-bottom: 8px;
+    }
+
+    .pu-pr.pos {
+      color: #4DB86A;
+    }
+
+    .pu-pr.neg {
+      color: #D65C5C;
+    }
+
+    .pu-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .bdg {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .pos-bg {
+      background: rgba(77, 184, 106, 0.1);
+      color: #4DB86A;
+      border: 1px solid rgba(77, 184, 106, 0.2);
+    }
+
+    .neg-bg {
+      background: rgba(214, 92, 92, 0.1);
+      color: #D65C5C;
+      border: 1px solid rgba(214, 92, 92, 0.2);
+    }
+
+    .pu-spk {
+      height: 50px;
+      margin-bottom: 24px;
+      position: relative;
+    }
+
+    .pu-spk svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .pu-g {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px 24px;
+    }
+
+    .pu-f {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .pu-f label {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: rgba(255, 255, 255, 0.2);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+
+    .pu-f span {
+      font-family: 'Space Mono', monospace;
+      font-size: 14px;
+      font-weight: 700;
+      color: #c8cfe0;
+    }
+
+    .pu-btns {
+      display: flex;
+      gap: 10px;
+      margin-top: 24px;
+    }
+
+    .pu-b {
+      flex: 1;
+      padding: 12px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.03);
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all .2s;
+    }
+
+    .pu-b.bl:hover {
+      background: rgba(77, 184, 106, 0.15);
+      border-color: rgba(77, 184, 106, 0.3);
+      color: #4DB86A;
+    }
+
+    .pu-b.sh:hover {
+      background: rgba(214, 92, 92, 0.15);
+      border-color: rgba(214, 92, 92, 0.3);
+      color: #D65C5C;
+    }
+
+    .pu-bar-col {
+      border-left: 1px solid rgba(255, 255, 255, 0.05);
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
     @keyframes vb2pulse {
       0% {
         box-shadow: 0 0 0 0px rgba(0, 230, 118, 0.4);
@@ -1249,6 +1546,388 @@
 
     .vb2-dot {
       animation: vb2pulse 1.5s infinite;
+    }
+
+    /* price bar spans full height on right */
+    .pu-bar-col {
+      grid-row: 1 / -1;
+      grid-column: 2;
+      display: flex;
+      flex-direction: column;
+      border-left: .5px solid #111828;
+      padding-left: 14px;
+      padding-top: 4px;
+    }
+
+    /* ── VB2 PRICE LEVEL BAR */
+    .vb2-scene {
+      display: flex;
+      gap: 0;
+      height: 240px;
+      position: relative;
+    }
+
+    .vb2-left-labels {
+      width: 44px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .vb2-right-labels {
+      width: 40px;
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .vb2-center {
+      flex: 1;
+      position: relative;
+      display: flex;
+      justify-content: center;
+    }
+
+    .vb2-rail {
+      width: 12px;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: 6px;
+      position: relative;
+      overflow: visible;
+    }
+
+    .vb2-rail-profit {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      border-radius: 6px 6px 0 0;
+      background: rgba(0, 230, 118, 0.25);
+      transition: height .8s cubic-bezier(.4, 0, .2, 1);
+    }
+
+    .vb2-rail-loss {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      border-radius: 0 0 6px 6px;
+      background: rgba(239, 83, 80, 0.10);
+      height: 22%;
+    }
+
+    .vb2-dot {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 40% 35%, #4fffab, #00c853);
+      border: 2.5px solid #0B0E1C;
+      box-shadow: 0 0 0 3px rgba(0, 230, 118, 0.3), 0 0 12px rgba(0, 230, 118, 0.4);
+      z-index: 10;
+      transition: top .8s cubic-bezier(.4, 0, .2, 1);
+      animation: vb2pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes vb2pulse {
+
+      0%,
+      100% {
+        box-shadow: 0 0 0 3px rgba(0, 230, 118, 0.3), 0 0 12px rgba(0, 230, 118, 0.4);
+      }
+
+      50% {
+        box-shadow: 0 0 0 5px rgba(0, 230, 118, 0.45), 0 0 18px rgba(0, 230, 118, 0.55);
+      }
+    }
+
+    .vb2-notch {
+      position: absolute;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 5;
+      width: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: top .8s ease;
+    }
+
+    .vb2-notch-line {
+      position: absolute;
+      left: -22px;
+      right: -22px;
+      height: 0;
+      border-top-width: 1px;
+      border-top-style: dashed;
+    }
+
+    .vb2-notch-badge {
+      font-size: 7px;
+      padding: 1px 4px;
+      border-radius: 2px;
+      z-index: 2;
+      position: relative;
+      font-family: 'Space Mono', monospace;
+      font-weight: 600;
+    }
+
+    .nt-tp .vb2-notch-line {
+      border-color: rgba(0, 230, 118, 0.5);
+    }
+
+    .nt-tp .vb2-notch-badge {
+      background: rgba(0, 230, 118, 0.15);
+      color: #00e676;
+      border: 1px solid rgba(0, 230, 118, 0.3);
+    }
+
+    .nt-tl .vb2-notch-line {
+      border-color: rgba(255, 193, 7, 0.6);
+    }
+
+    .nt-tl .vb2-notch-badge {
+      background: rgba(255, 193, 7, 0.15);
+      color: #ffc107;
+      border: 1px solid rgba(255, 193, 7, 0.35);
+    }
+
+    .nt-e .vb2-notch-line {
+      border-color: rgba(255, 255, 255, 0.2);
+      border-top-style: solid;
+    }
+
+    .nt-e .vb2-notch-badge {
+      background: rgba(255, 255, 255, 0.07);
+      color: rgba(255, 255, 255, 0.5);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .nt-sl .vb2-notch-line {
+      border-color: rgba(239, 83, 80, 0.5);
+    }
+
+    .nt-sl .vb2-notch-badge {
+      background: rgba(239, 83, 80, 0.12);
+      color: #ef5350;
+      border: 1px solid rgba(239, 83, 80, 0.3);
+    }
+
+    .vb2-lbl-l {
+      position: absolute;
+      right: 4px;
+      transform: translateY(-50%);
+      text-align: right;
+      line-height: 1.25;
+      transition: top .8s ease;
+    }
+
+    .vb2-lbl-r {
+      position: absolute;
+      left: 4px;
+      transform: translateY(-50%);
+      line-height: 1.25;
+      transition: top .8s ease;
+    }
+
+    .l-name {
+      font-size: 8px;
+      font-weight: 600;
+      letter-spacing: .04em;
+    }
+
+    .l-price {
+      font-size: 7px;
+      opacity: .55;
+    }
+
+    .c-tp {
+      color: #00e676;
+    }
+
+    .c-tl {
+      color: #ffc107;
+    }
+
+    .c-e {
+      color: rgba(255, 255, 255, 0.4);
+    }
+
+    .c-sl {
+      color: #ef5350;
+    }
+
+    .c-mk {
+      color: #00e676;
+    }
+
+    .vb2-bar-stats {
+      margin-top: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+    }
+
+    .vb2-bar-stat {
+      background: rgba(255, 255, 255, 0.03);
+      border-radius: 6px;
+      padding: 6px 8px;
+      border: .5px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .vb2-bar-stat-lbl {
+      font-size: 7px;
+      color: rgba(255, 255, 255, 0.25);
+      letter-spacing: .08em;
+      margin-bottom: 2px;
+    }
+
+    .vb2-bar-stat-val {
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    #popup-wrap.on .pu {
+      opacity: 1;
+      transform: scale(1) translateY(0);
+    }
+
+    .pu-hd {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .pu-sym {
+      font-size: 18px;
+      font-weight: 500;
+      color: #E2E6F4;
+    }
+
+    .pu-pair {
+      font-size: 9px;
+      color: #1A2030;
+      margin-top: 2px;
+    }
+
+    .pu-x {
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #1A2030;
+      font-size: 15px;
+      line-height: 1;
+      transition: color .15s;
+    }
+
+    .pu-x:hover {
+      color: #6A7090;
+    }
+
+    .pu-pr {
+      font-size: 26px;
+      font-weight: 500;
+      margin-bottom: 5px;
+    }
+
+    .pu-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .bdg {
+      font-size: 9px;
+      padding: 2px 7px;
+      border-radius: 4px;
+    }
+
+    .pos {
+      color: #4DB86A;
+    }
+
+    .neg {
+      color: #D65C5C;
+    }
+
+    .pos-bg {
+      background: rgba(77, 184, 106, .12);
+      color: #4DB86A;
+    }
+
+    .neg-bg {
+      background: rgba(214, 92, 92, .12);
+      color: #D65C5C;
+    }
+
+    .pu-spk {
+      height: 40px;
+      margin-bottom: 10px;
+    }
+
+    .pu-spk svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .pu-g {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 6px;
+      margin-bottom: 10px;
+    }
+
+    .pu-f label {
+      font-size: 8px;
+      color: #1A2030;
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      display: block;
+      margin-bottom: 1px;
+    }
+
+    .pu-f span {
+      font-size: 10px;
+      color: #5A6080;
+    }
+
+    .pu-div {
+      height: .5px;
+      background: #111828;
+      margin-bottom: 10px;
+    }
+
+    .pu-btns {
+      display: flex;
+      gap: 6px;
+    }
+
+    .pu-b {
+      flex: 1;
+      padding: 8px 0;
+      border-radius: 7px;
+      font-size: 11px;
+      font-weight: 500;
+      cursor: pointer;
+      border: .5px solid #1A1F30;
+      background: transparent;
+      color: #3A4060;
+      transition: all .18s;
+    }
+
+    .pu-b.bl:hover {
+      border-color: #4DB86A;
+      color: #4DB86A;
+      background: rgba(77, 184, 106, .06);
+    }
+
+    .pu-b.sh:hover {
+      border-color: #D65C5C;
+      color: #D65C5C;
+      background: rgba(214, 92, 92, .06);
     }
 
     #toast {
@@ -1268,17 +1947,17 @@
       pointer-events: none;
     }
 
-    /* â”€â”€ FUTURISTIC MIDDLE SECTION EFFECTS */
+    /* ── FUTURISTIC MIDDLE SECTION EFFECTS */
 
     /* Hexagonal grid background for ring-sec */
     #ring-sec {
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
       position: relative;
       height: 520px;
-      background: linear-gradient(180deg, #050a12 0%, #070810 50%, #050a12 100%);
+      background-image:
+        radial-gradient(ellipse 60% 50% at 50% 50%, rgba(77, 184, 106, 0.03) 0%, transparent 70%),
+        url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='56' height='100'%3E%3Cpath d='M28 66L0 50V17L28 1l28 16v33L28 66zM28 100L0 84V51l28-16 28 16v33L28 100z' fill='none' stroke='%23112238' stroke-width='0.5'/%3E%3C/svg%3E");
+      background-size: auto, 56px 100px;
     }
 
 
@@ -1307,7 +1986,7 @@
       letter-spacing: 0.1em;
       text-transform: uppercase;
       color: #1E3A2A;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Mono', monospace;
     }
 
     .hud-dot {
@@ -1352,7 +2031,7 @@
     #ring-vignette {
       position: absolute;
       inset: 0;
-      background: radial-gradient(ellipse 90% 90% at 50% 50%, transparent 50%, rgba(5, 10, 18, 0.5) 100%);
+      background: radial-gradient(ellipse 85% 85% at 50% 50%, transparent 40%, rgba(7, 8, 16, 0.65) 100%);
       pointer-events: none;
       z-index: 1;
     }
@@ -1363,7 +2042,7 @@
       top: 50%;
       transform: translateY(-50%);
       font-size: 7px;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Mono', monospace;
       color: rgba(77, 184, 106, 0.18);
       letter-spacing: 0.05em;
       line-height: 1.8;
@@ -1382,15 +2061,12 @@
       text-align: right;
     }
 
-    /* â”€â”€ RADAR SECTION [Warp-Grid Upgrade] */
+    /* ── RADAR SECTION [Warp-Grid Upgrade] */
     #radar-sec {
       background: #020c18;
       border-bottom: .5px solid #111828;
       padding: 0;
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
       position: relative;
       height: 340px;
       /* Expanded for warp effect */
@@ -1421,7 +2097,7 @@
       pointer-events: none;
     }
 
-    /* â”€â”€ HOLOGRAPHIC POPUPS */
+    /* ── HOLOGRAPHIC POPUPS */
     .popup {
       position: absolute;
       pointer-events: none;
@@ -1434,7 +2110,7 @@
       transition: opacity 0.3s ease, transform 0.35s cubic-bezier(.2, 1.3, .35, 1);
       white-space: nowrap;
       z-index: 20;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Mono', monospace;
     }
 
     .popup.show {
@@ -1487,79 +2163,42 @@
       transform: translateX(0);
     }
 
-    /* --------- CARD COMMON --------- */
+    /* ═════════ CARD COMMON ═════════ */
     .card {
       position: relative;
-      height: 250px;
-      width: 190px;
+      height: 300px;
+      width: 230px;
       flex-shrink: 0;
-      transform: scale(0.92);
-      opacity: 0.9;
-      filter: brightness(0.92);
       transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
     }
 
-    .card:hover {
-      transform: scale(0.96);
-      opacity: 1;
-      filter: brightness(1);
-    }
-
-    /* --------- VERSION 1: GEOMETRIC OPENING BOX --------- */
+    /* ═════════ VERSION 1: GEOMETRIC OPENING BOX ═════════ */
     .card.v1 .boxshadow {
       position: absolute;
       height: 100%;
       width: 100%;
-      border: 1px solid var(--hex-color);
-      opacity:0.18;
-      transform: scale(0.8);
-      box-shadow: rgb(var(--neon-rgb)) 0px 20px 50px 0px;
+      border: 1px solid rgba(var(--neon-rgb), 0.25);
+      border-radius: 20px;
+      transform: scale(0.85);
+      box-shadow: rgba(var(--neon-rgb), 0.35) 0px 15px 45px 0px,
+        inset rgba(var(--neon-rgb), 0.15) 0px 0px 20px 0px;
       transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
+      opacity: 0.85;
     }
 
     .card.v1 .main {
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background: transparent;
+      background: rgba(var(--neon-rgb), 0.05);
+      background: linear-gradient(0deg, rgba(8, 12, 20, 0.75) 0%, rgba(var(--neon-rgb), 0.4) 60%, rgba(8, 12, 20, 0.75) 100%);
+      backdrop-filter: blur(14px) saturate(1.4);
+      -webkit-backdrop-filter: blur(14px) saturate(1.4);
       position: relative;
-      -webkit-clip-path: polygon(0 33px, 33px 0, calc(100% - 33px) 0, 100% 33px, 100% calc(100% - 33px), calc(100% - 33px) 100%, 33px 100%, 0 calc(100% - 33px));
-      clip-path: polygon(0 33px, 33px 0, calc(100% - 33px) 0, 100% 33px, 100% calc(100% - 33px), calc(100% - 33px) 100%, 33px 100%, 0 calc(100% - 33px));
-      filter: 
-        drop-shadow(0 0 2px rgba(var(--neon-rgb), 0.6))
-        drop-shadow(0 0 4px rgba(var(--neon-rgb), 0.4))
-        drop-shadow(0 0 8px rgba(var(--neon-rgb), 0.2));
+      -webkit-clip-path: polygon(0 40px, 40px 0, calc(100% - 40px) 0, 100% 40px, 100% calc(100% - 40px), calc(100% - 40px) 100%, 40px 100%, 0 calc(100% - 40px));
+      clip-path: polygon(0 40px, 40px 0, calc(100% - 40px) 0, 100% 40px, 100% calc(100% - 40px), calc(100% - 40px) 100%, 40px 100%, 0 calc(100% - 40px));
+      box-shadow: inset 0 0 0 1px rgba(var(--neon-rgb), 0.25);
       transition: all 0.3s cubic-bezier(0.785, 0.135, 0.15, 0.86);
-    }
-
-    .card.v1 .main::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      border: 1.5px solid rgba(var(--neon-rgb), 0.5);
-      -webkit-clip-path: polygon(0 33px, 33px 0, calc(100% - 33px) 0, 100% 33px, 100% calc(100% - 33px), calc(100% - 33px) 100%, 33px 100%, 0 calc(100% - 33px));
-      clip-path: polygon(0 33px, 33px 0, calc(100% - 33px) 0, 100% 33px, 100% calc(100% - 33px), calc(100% - 33px) 100%, 33px 100%, 0 calc(100% - 33px));
-      box-shadow: 
-        inset 0 0 3px rgba(var(--neon-rgb), 0.5),
-        0 0 2px rgba(var(--neon-rgb), 0.5);
-      pointer-events: none;
-      z-index: 100;
-    }
-
-    .card.v1 .main::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(0deg, rgb(var(--dark-rgb)) 0%, rgb(var(--neon-rgb)) 60%, rgb(var(--dark-rgb)) 100%);
-      opacity: 0.15;
-      z-index: 0;
-      pointer-events: none;
     }
 
     .card.v1 .main .top {
@@ -1568,13 +2207,11 @@
       left: 0;
       width: 0px;
       height: 0px;
-      z-index: 10;
-      border-top: 95px solid rgba(7, 8, 16, 0.85);
-      border-left: 95px solid transparent;
-      border-right: 95px solid transparent;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.1), 0 4px 12px rgba(0, 0, 0, 0.4);
+      z-index: 2;
+      border-top: 115px solid rgba(17, 24, 39, 0.75);
+      border-left: 115px solid transparent;
+      border-right: 115px solid transparent;
+      filter: drop-shadow(0 2px 3px rgba(0, 0, 0, 0.6)) drop-shadow(0 -1px 2px rgba(var(--neon-rgb), 0.25));
       transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
     }
 
@@ -1584,15 +2221,11 @@
       top: 0;
       transform: translateX(-50%);
       height: 101%;
-      background: rgba(7, 8, 16, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.12), 0 8px 24px rgba(0, 0, 0, 0.5);
+      background: linear-gradient(180deg, rgba(17, 24, 39, 0.75) 0%, rgba(10, 14, 26, 0.82) 50%, rgba(7, 10, 20, 0.9) 100%);
       -webkit-clip-path: polygon(0% 0%, 50% 0, 95% 45%, 100% 100%, 0% 100%);
       clip-path: polygon(0% 0%, 50% 0, 95% 45%, 100% 100%, 0% 100%);
+      filter: drop-shadow(1px 0px 3px rgba(var(--neon-rgb), 0.25)) drop-shadow(-1px 0px 3px rgba(0, 0, 0, 0.5));
       transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86) 1s;
-      z-index: 10;
     }
 
     .card.v1 .main .left {
@@ -1608,13 +2241,13 @@
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      top: 75px;
+      top: 90px;
       font-weight: bold;
-      font-family: 'Montserrat', sans-serif;
-      font-size: 21px;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 25px;
       color: #fff;
       opacity: 0;
-      z-index: 11;
+      z-index: -1;
       transition: all 0.2s ease-out 0s;
     }
 
@@ -1622,68 +2255,63 @@
       position: absolute;
       left: 50%;
       transform: translateX(-50%);
-      top: 108px;
+      top: 130px;
       font-family: 'Outfit', sans-serif;
-      font-size: 13px;
+      font-size: 16px;
       font-weight: 600;
       white-space: nowrap;
-      color: #fff;
-      text-shadow: 0 0 10px var(--hex-color), 0 2px 4px rgba(0,0,0,0.5);
+      color: var(--hex-color);
       opacity: 0;
-      z-index: 11;
+      z-index: -1;
       transition: all 0.2s ease-out 0s;
     }
 
     .card.v1 .main .button-container {
       position: absolute;
-      bottom: 8px;
+      bottom: 10px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 11;
     }
 
     .card.v1 .main .button-container .button {
       position: absolute;
       transform: translateX(-50%);
       padding: 0;
-      width: 83px;
-      height: 27px;
+      width: 100px;
+      height: 32px;
       -webkit-clip-path: polygon(0 0, 100% 0, 81% 100%, 21% 100%);
       clip-path: polygon(0 0, 100% 0, 81% 100%, 21% 100%);
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(10px) saturate(120%);
-      -webkit-backdrop-filter: blur(10px) saturate(120%);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      box-shadow: inset 1px 1px 1px rgba(255, 255, 255, 0.15), 0 4px 12px rgba(0, 0, 0, 0.3);
-      color: white;
+      background: rgba(15, 20, 30, 0.65);
+      border: 1px solid rgba(var(--neon-rgb), 0.25);
+      color: rgba(255, 255, 255, 0.95);
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 7px;
-      font-family: 'Montserrat', sans-serif;
+      gap: 8px;
+      font-family: 'Space Grotesk', sans-serif;
       font-weight: 600;
-      font-size: 11px;
+      font-size: 13px;
       transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86);
     }
 
     .card.v1 .main .button-container .button .svg {
-      width: 12px;
+      width: 15px;
       transition: all 0.2s cubic-bezier(0.785, 0.135, 0.15, 0.86);
     }
 
     .card.v1 .main .button-container .button:nth-child(1) {
-      bottom: 250px;
+      bottom: 300px;
       transition-delay: 0.4s;
     }
 
     .card.v1 .main .button-container .button:nth-child(2) {
-      bottom: 250px;
+      bottom: 300px;
       transition-delay: 0.6s;
     }
 
     .card.v1 .main .button-container .button:nth-child(3) {
-      bottom: 250px;
+      bottom: 300px;
       transition-delay: 0.8s;
     }
 
@@ -1692,16 +2320,16 @@
     }
 
     .card.v1:hover .main .top {
-      top: -42px;
+      top: -50px;
     }
 
     .card.v1:hover .main .left {
-      left: -42px;
+      left: -50px;
       transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86) 0.1s;
     }
 
     .card.v1:hover .main .right {
-      right: -42px;
+      right: -50px;
       transition: all 0.5s cubic-bezier(0.785, 0.135, 0.15, 0.86) 0.1s;
     }
 
@@ -1712,17 +2340,17 @@
     }
 
     .card.v1:hover .main .button-container .button:nth-child(1) {
-      bottom: 85px;
+      bottom: 80px;
       transition-delay: 0.8s;
     }
 
     .card.v1:hover .main .button-container .button:nth-child(2) {
-      bottom: 55px;
+      bottom: 40px;
       transition-delay: 0.6s;
     }
 
     .card.v1:hover .main .button-container .button:nth-child(3) {
-      bottom: 27px;
+      bottom: 0;
       transition-delay: 0.4s;
     }
 
@@ -1732,17 +2360,17 @@
     }
 
     .card.v1.force-open .main .top {
-      top: -42px;
+      top: -50px;
       transition: none !important;
     }
 
     .card.v1.force-open .main .left {
-      left: -42px;
+      left: -50px;
       transition: none !important;
     }
 
     .card.v1.force-open .main .right {
-      right: -42px;
+      right: -50px;
       transition: none !important;
     }
 
@@ -1757,32 +2385,31 @@
     }
 
     .card.v1.force-open .main .button-container .button:nth-child(1) {
-      bottom: 78px;
+      bottom: 80px;
       transition-delay: 0s !important;
     }
 
     .card.v1.force-open .main .button-container .button:nth-child(2) {
-      bottom: 48px;
+      bottom: 40px;
       transition-delay: 0s !important;
     }
 
     .card.v1.force-open .main .button-container .button:nth-child(3) {
-      bottom: 18px;
+      bottom: 0;
       transition-delay: 0s !important;
     }
 
-    /* â•â•â•â•â•â•â•â•â• VERSION 2: LAYERED SLIDE-IN CARD â•â•â•â•â•â•â•â•â• */
+    /* ═════════ VERSION 2: LAYERED SLIDE-IN CARD ═════════ */
     .card.v2 {
       background: linear-gradient(-45deg, rgb(var(--dark-rgb)) 0%, var(--hex-color) 100%);
       overflow: hidden;
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 12px;
-      box-shadow: rgba(var(--neon-rgb), 0.15) 0px 18px 24px -18px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: rgba(var(--neon-rgb), 0.3) 0px 40px 30px -25px;
     }
 
     .card.v2:hover {
-      transform: scale(1.06);
-      box-shadow: rgba(var(--neon-rgb), 0.28) 0px 20px 32px -14px;
+      transform: scale(1.08);
+      box-shadow: rgba(var(--neon-rgb), 0.5) 0px 30px 40px -20px;
     }
 
     .card.v2 .logo {
@@ -1801,10 +2428,10 @@
       top: 50%;
       transform: translate(-50%, -50%);
       color: White;
-      font-weight: 700;
-      font-size: 1.6rem;
-      font-family: 'Montserrat', sans-serif;
-      text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+      font-weight: 800;
+      font-size: 1.8rem;
+      font-family: 'Space Grotesk', sans-serif;
+      text-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     }
 
     .card.v2 .icons-container {
@@ -1826,7 +2453,7 @@
     }
 
     .card.v2 .icons-container .svg:hover {
-      transform: scale(1.4);
+      transform: scale(1.5);
       stroke: black;
     }
 
@@ -1843,17 +2470,17 @@
       position: absolute;
       width: 100%;
       height: 100%;
-      box-shadow: rgba(0, 0, 0, 0.15) 5px 0px 15px 0px inset;
+      box-shadow: rgba(0, 0, 0, 0.2) 5px 0px 15px 0px inset;
       transition: all 0.6s cubic-bezier(0.785, 0.135, 0.15, 0.86);
       display: grid;
       place-content: center;
       padding: 2rem;
-      border: 1px solid rgba(0, 0, 0, 0.05);
+      border: 1px solid rgba(0, 0, 0, 0.1);
     }
 
     .card.v2 .box .content {
       position: relative;
-      transform: translateY(-30px);
+      transform: translateY(-40px);
       opacity: 0;
       transition: all 0.4s ease-out 0.2s;
       text-align: center;
@@ -1863,14 +2490,15 @@
       display: block;
       color: white;
       font-size: 1.1rem;
-      font-weight: 700;
+      font-weight: 800;
       margin-bottom: 0.8rem;
-      font-family: 'Montserrat', sans-serif;
+      font-family: 'Space Grotesk', sans-serif;
     }
 
     .card.v2 .box .content .box-text {
-      color: rgba(255, 255, 255, 0.85);
+      color: rgba(255, 255, 255, 0.9);
       font-size: 0.85rem;
+      font-family: 'Outfit', sans-serif;
       line-height: 1.4;
     }
 
@@ -1892,6 +2520,7 @@
       background: var(--hex-color);
       border-radius: 200px;
       filter: brightness(0.85);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
     }
 
     .card.v2 .box2 {
@@ -1921,18 +2550,19 @@
       opacity: 1;
     }
 
-    /* â•â•â•â•â•â•â•â•â• POPUP CARD ANIMATIONS â•â•â•â•â•â•â•â•â• */
+    /* ═════════ POPUP CARD ANIMATIONS ═════════ */
     #pu-card-mount {
-      position: relative;
-      margin: 0 auto;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       opacity: 0;
       pointer-events: none;
       z-index: 11;
-      width: 300px;
-      max-height: 90vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 90%;
+      max-width: 420px;
+      height: 90vh;
+      max-height: 700px;
     }
 
     #popup-wrap.on #pu-card-mount {
@@ -1941,10 +2571,21 @@
       transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    /* Popup Card */
+    /* Popup Card - Full Expanded View */
     #pu-card-mount .card.popup-card {
       width: 100%;
+      height: 100%;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(5, 15, 20, 0.98) 0%, rgba(8, 20, 25, 0.98) 50%, rgba(5, 12, 18, 0.98) 100%);
+      border: 2px solid #00ff88;
+      backdrop-filter: blur(16px);
+      box-shadow: 0 0 30px rgba(0, 255, 136, 0.25), 0 12px 48px rgba(0, 0, 0, 0.7), inset 0 0 30px rgba(0, 255, 136, 0.08);
+      transform: scale(1);
       transform-origin: center center;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
     #popup-wrap.on #pu-card-mount .card.popup-card {
@@ -1956,22 +2597,104 @@
         opacity: 0;
         transform: scale(0.75) translateY(40px);
       }
+
       50% {
         transform: scale(1.02) translateY(-5px);
       }
+
       100% {
         opacity: 1;
         transform: scale(1) translateY(0);
       }
     }
 
+    /* Button animations in popup */
+    #pu-card-mount .button {
+      opacity: 0;
+      transform: scale(0.6);
+    }
+
+    #popup-wrap.on #pu-card-mount .button {
+      animation: buttonAppear 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+
+    #popup-wrap.on #pu-card-mount .button:nth-child(1) {
+      animation-delay: 0.35s;
+    }
+
+    #popup-wrap.on #pu-card-mount .button:nth-child(2) {
+      animation-delay: 0.45s;
+    }
+
+    @keyframes buttonAppear {
+      0% {
+        opacity: 0;
+        transform: scale(0.6) translateY(10px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
     @keyframes pulse {
-      0%, 100% {
+
+      0%,
+      100% {
         opacity: 1;
       }
+
       50% {
         opacity: 0.3;
       }
+    }
+
+    #pu-card-mount .button:hover {
+      transform: scale(1.05) !important;
+      filter: brightness(1.2);
+    }
+
+    /* Popup card scrollbar - Neon styling */
+    #pu-card-mount .card.popup-card::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    #pu-card-mount .card.popup-card::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #pu-card-mount .card.popup-card::-webkit-scrollbar-thumb {
+      background: rgba(0, 255, 136, 0.3);
+      border-radius: 3px;
+    }
+
+    #pu-card-mount .card.popup-card::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 255, 136, 0.6);
+    }
+
+    /* Popup card scroll support */
+    #pu-card-mount .popup-wrap {
+      max-height: 100%;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    #pu-card-mount .popup-wrap::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    #pu-card-mount .popup-wrap::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    #pu-card-mount .popup-wrap::-webkit-scrollbar-thumb {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 2px;
+    }
+
+    #pu-card-mount .popup-wrap::-webkit-scrollbar-thumb:hover {
+      background: rgba(255, 255, 255, 0.2);
     }
 
     /* OVERRIDE TRACK CSS */
@@ -1981,131 +2704,7 @@
       padding: 30px;
       align-items: center;
     }
-
-    /* ═════════ LEFT DETAIL PANEL (staggered text, no card) ═════════ */
-    .detail-panel{position:absolute;left:28px;top:50%;transform:translateY(-50%);width:300px;pointer-events:none;z-index:50;opacity:0;transition:opacity 0.3s ease}
-    .detail-panel.visible{opacity:1;pointer-events:auto}
-    .detail-panel .dp-line{transform:translateX(-50px);opacity:0;transition:transform 0.55s cubic-bezier(0.22,1,0.36,1),opacity 0.45s ease;will-change:transform,opacity}
-    .detail-panel.visible .dp-line{transform:translateX(0);opacity:1}
-    .detail-panel.visible .dp-line:nth-child(1){transition-delay:0.06s}
-    .detail-panel.visible .dp-line:nth-child(2){transition-delay:0.12s}
-    .detail-panel.visible .dp-line:nth-child(3){transition-delay:0.20s}
-    .detail-panel.visible .dp-line:nth-child(4){transition-delay:0.28s}
-    .detail-panel.visible .dp-line:nth-child(5){transition-delay:0.37s}
-    .detail-panel.visible .dp-line:nth-child(6){transition-delay:0.46s}
-    .detail-panel.visible .dp-line:nth-child(7){transition-delay:0.56s}
-    .detail-panel.visible .dp-line:nth-child(8){transition-delay:0.66s}
-    .detail-panel.visible .dp-line:nth-child(9){transition-delay:0.76s}
-    .detail-panel.visible .dp-line:nth-child(10){transition-delay:0.86s}
-    .dp-status{font-size:11px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:rgba(255,255,255,0.35);margin-bottom:6px;font-family:'Montserrat',sans-serif}
-    .dp-sym{font-size:40px;font-weight:800;letter-spacing:-0.02em;font-family:'Montserrat',sans-serif;line-height:1;margin-bottom:2px}
-    .dp-pair{font-size:13px;color:rgba(255,255,255,0.35);letter-spacing:0.08em;font-weight:500;margin-bottom:22px;font-family:'Montserrat',sans-serif}
-    .dp-price{font-size:28px;font-weight:700;color:#e6f0f2;letter-spacing:-0.01em;margin-bottom:4px;font-family:'Montserrat',sans-serif}
-    .dp-change{font-size:14px;font-weight:600;margin-bottom:26px}
-    .dp-change.up{color:#34d399}
-    .dp-change.down{color:#ef4444}
-    .dp-divider{width:40px;height:1px;background:rgba(255,255,255,0.06);margin-bottom:22px}
-    .dp-label{font-size:10px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.25);margin-bottom:4px;font-family:'Montserrat',sans-serif}
-    .dp-val{font-size:18px;font-weight:700;margin-bottom:18px;font-family:'Montserrat',sans-serif;color:#e6f0f2}
-    .dp-pnl-pos{color:#34d399}
-    .dp-pnl-neg{color:#ef4444}
-    .dp-row{display:flex;gap:26px;margin-bottom:18px}
-    .dp-row .dp-col .dp-label{margin-bottom:3px}
-    .dp-row .dp-col .dp-val{font-size:15px;margin-bottom:0}
-    .dp-metrics-row{display:flex;gap:22px}
-    .dp-metric{text-align:left}
-    .dp-metric .dp-label{margin-bottom:2px;font-size:9px}
-    .dp-metric .dp-val{font-size:13px;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:0}
-    .dp-divider{width:36px;height:1px;background:rgba(255,255,255,0.05);margin-bottom:16px}
-    .dp-metrics-row{display:flex;gap:16px}
-    .dp-metric{text-align:left}
-    .dp-metric .dp-label{margin-bottom:2px;font-size:8px}
-    .dp-metric .dp-val{font-size:12px;font-weight:600;color:rgba(255,255,255,0.6);margin-bottom:0}
-
-    /* ═════════ FULL-SCREEN CARD MODAL ═════════ */
-    .card-modal-overlay{
-      position:fixed;top:0;left:0;width:100%;height:100%;z-index:9999;
-      display:flex;align-items:center;justify-content:center;
-      background:rgba(3,6,15,0.65);
-      backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px);
-      opacity:0;pointer-events:none;
-      transition:opacity 0.7s cubic-bezier(0.16,1,0.3,1);
-    }
-    .card-modal-overlay.active{opacity:1;pointer-events:auto}
-    .card-modal-card{
-      width:380px;
-      background:linear-gradient(145deg,rgba(17,24,39,0.97),rgba(10,14,26,0.99),rgba(7,10,20,1));
-      border:1px solid rgba(77,184,106,0.12);
-      border-radius:20px;padding:0;
-      box-shadow:0 0 20px rgba(0,255,120,0.03), 0 8px 32px rgba(0,0,0,0.35);
-      transform:scale(0.6) translateY(60px);opacity:0;
-      transition:transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.1s, opacity 0.6s cubic-bezier(0.16,1,0.3,1) 0.1s;
-      font-family:'Montserrat',sans-serif;position:relative;overflow:hidden;
-    }
-    .card-modal-overlay.active .card-modal-card{transform:scale(1) translateY(0);opacity:1}
-    .card-modal-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(77,184,106,0.25),transparent)}
-    .card-modal-card .cm-scanlines{position:absolute;top:0;left:0;right:0;bottom:0;pointer-events:none;background:repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(255,255,255,0.006) 3px,rgba(255,255,255,0.006) 4px)}
-
-    /* Header */
-    .cm-header{display:flex;align-items:center;gap:14px;padding:24px 24px 16px}
-    .cm-logo{width:52px;height:52px;border-radius:50%;border:1.5px solid rgba(77,184,106,0.25);display:flex;align-items:center;justify-content:center;overflow:hidden;background:rgba(77,184,106,0.05);position:relative;flex-shrink:0}
-    .cm-logo img{width:38px;height:38px;object-fit:contain}
-    .cm-logo .cm-letter{font-size:22px;font-weight:800}
-    .cm-logo-ring{position:absolute;top:-2px;left:-2px;right:-2px;bottom:-2px;border-radius:50%;border:1.5px solid transparent;border-top-color:#4DB86A;animation:cmSpin 2.5s linear infinite}
-    @keyframes cmSpin{to{transform:rotate(360deg)}}
-    .cm-header-info{flex:1}
-    .cm-sym{font-size:18px;font-weight:800;color:#F0F2FF;letter-spacing:0.01em;line-height:1.2}
-    .cm-pair{font-size:10px;color:rgba(255,255,255,0.3);letter-spacing:0.08em;font-weight:600;margin-top:2px}
-    .cm-badge{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:9px;font-weight:700;letter-spacing:0.08em;border:1px solid rgba(77,184,106,0.2);background:rgba(77,184,106,0.06);color:#4DB86A;margin-top:6px}
-    .cm-badge-dot{width:5px;height:5px;border-radius:50%;background:#4DB86A;animation:cmPulse 1.8s ease infinite}
-    @keyframes cmPulse{0%,100%{opacity:0.4}50%{opacity:1}}
-
-    /* PNL Section */
-    .cm-pnl-section{padding:0 24px 18px;text-align:center;border-bottom:1px solid rgba(255,255,255,0.04)}
-    .cm-price-row{display:flex;align-items:baseline;justify-content:center;gap:10px;margin-bottom:6px}
-    .cm-price{font-size:22px;font-weight:700;color:#e6f0f2}
-    .cm-change{font-size:12px;font-weight:700;padding:2px 8px;border-radius:6px}
-    .cm-change.up{color:#4DB86A;background:rgba(77,184,106,0.08)}
-    .cm-change.down{color:#D65C5C;background:rgba(214,92,92,0.08)}
-    .cm-pnl-label{font-size:9px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;color:rgba(190,200,230,0.35);margin-bottom:4px}
-    .cm-pnl{font-size:30px;font-weight:800;line-height:1.1}
-    .cm-pnl.pos{color:#4DB86A}.cm-pnl.neg{color:#D65C5C}
-
-    /* Stats Grid */
-    .cm-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:16px 20px}
-    .cm-stat{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.04);border-radius:12px;padding:12px 14px;transform:translateY(20px);opacity:0;transition:transform 0.7s cubic-bezier(0.16,1,0.3,1),opacity 0.5s ease}
-    .card-modal-overlay.active .cm-stat{transform:translateY(0);opacity:1}
-    .cm-stat-label{font-size:8.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(140,155,180,0.45);margin-bottom:6px}
-    .cm-stat-val{font-size:16px;font-weight:800;color:#e6f0f2}
-
-    /* Win Rate Bar */
-    .cm-winrate-section{padding:6px 20px 14px;transform:translateY(20px);opacity:0;transition:transform 0.7s cubic-bezier(0.16,1,0.3,1),opacity 0.5s ease}
-    .card-modal-overlay.active .cm-winrate-section{transform:translateY(0);opacity:1}
-    .cm-wr-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
-    .cm-wr-label{font-size:8.5px;font-weight:600;letter-spacing:0.14em;text-transform:uppercase;color:rgba(140,155,180,0.45)}
-    .cm-wr-val{font-size:13px;font-weight:800}
-    .cm-wr-track{width:100%;height:4px;background:rgba(255,255,255,0.04);border-radius:4px;overflow:hidden}
-    .cm-wr-fill{height:100%;border-radius:4px;transition:width 1.2s cubic-bezier(0.16,1,0.3,1) 0.6s}
-
-    /* Bottom bar */
-    .cm-bottom{display:flex;justify-content:space-between;align-items:center;padding:12px 20px;border-top:1px solid rgba(255,255,255,0.04);transform:translateY(20px);opacity:0;transition:transform 0.7s cubic-bezier(0.16,1,0.3,1) 0.8s,opacity 0.5s ease 0.8s}
-    .card-modal-overlay.active .cm-bottom{transform:translateY(0);opacity:1}
-    .cm-bottom-item{text-align:center}
-    .cm-bottom-label{font-size:7.5px;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:rgba(140,155,180,0.35);margin-bottom:2px}
-    .cm-bottom-val{font-size:11px;font-weight:700;color:rgba(255,255,255,0.6)}
-
-    .cm-close{position:absolute;top:14px;right:16px;width:28px;height:28px;border-radius:50%;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);display:flex;align-items:center;justify-content:center;cursor:pointer;color:rgba(255,255,255,0.25);font-size:14px;transition:all 0.2s ease;z-index:2}
-    .cm-close:hover{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.5)}
   </style>
-
-  <!-- FULL-SCREEN CARD MODAL -->
-  <div id="cardModalOverlay" class="card-modal-overlay">
-    <div class="card-modal-card" id="cardModalCard">
-      <div class="cm-scanlines"></div>
-      <div class="cm-close" id="cardModalClose">&times;</div>
-      <div id="cardModalContent"></div>
-    </div>
-  </div>
 
   <div id="root" style="position:relative;">
 
@@ -2219,9 +2818,6 @@
             <div id="ring-sec">
               <canvas id="ring-cv"></canvas>
 
-              <!-- Detail panel for staggered text -->
-              <div id="detailPanel" class="detail-panel"></div>
-
               <!-- Vignette depth layer -->
               <div id="ring-vignette"></div>
 
@@ -2262,8 +2858,32 @@
                 </div>
               </div>
 
-              <div class="ring-lbl">Active positions â€” orbit view</div>
-              <div class="ring-hint">drag to spin Â· click to inspect</div>
+              <div class="ring-lbl">Active positions — orbit view</div>
+              <div class="ring-hint">drag to spin · click to inspect</div>
+            </div>
+
+            <!-- STATS BAR -->
+            <div id="stats-bar">
+              <div class="stat g">
+                <div class="stat-lbl">Total P&L</div>
+                <div class="stat-val g" id="st-pnl">+$891</div>
+                <div class="stat-sub">8 winning positions</div>
+              </div>
+              <div class="stat a">
+                <div class="stat-lbl">Deck size</div>
+                <div class="stat-val a" id="st-deck">7</div>
+                <div class="stat-sub">active cards</div>
+              </div>
+              <div class="stat r">
+                <div class="stat-lbl">Exposure</div>
+                <div class="stat-val r">$142K</div>
+                <div class="stat-sub">2 at risk</div>
+              </div>
+              <div class="stat b">
+                <div class="stat-lbl">Win rate</div>
+                <div class="stat-val b">68.4%</div>
+                <div class="stat-sub">↑ 4.2% today</div>
+              </div>
             </div>
 
             <!-- LOWER LEFT -->
@@ -2324,7 +2944,7 @@
     <div id="popup-wrap">
       <button class="pu-x" id="pu-x"
         style="position:absolute; top:30px; right:40px; z-index:100; font-size:32px; color:#ffffff66; background:none; border:none; cursor:pointer;"
-        onclick="closePopup()">âœ•</button>
+        onclick="closePopup()">✕</button>
       <div id="pu-card-mount">
       </div>
     </div>
@@ -2437,25 +3057,24 @@
     </div>`).join('');
     }
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• RING ENGINE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* ═══════════════════════════════ RING ENGINE ═══════════════════════════════ */
 
-    /* â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• RING ENGINE â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â•â• */
+    /* ═══════════════════════════════ RING ENGINE ═══════════════════════════════ */
     const rcv = document.getElementById('ring-cv');
     const rctx = rcv.getContext('2d');
     let RW, RH, RCX, RCY, RX, RY, CW, CH;
     let rCards = [], rVel = 0.0038, rDrag = false, rLx = 0, rLvx = 0, rMdx = 0, rMdy = 0, rMdt = 0;
     let rPaused = false, rTime = 0, rHitList = [], particles = [], stars = [];
-    let selectedCardIdx = -1, centerAnim = 0, centerRotY = 0; // center animation state
 
     function resizeRing() {
       const el = document.getElementById('ring-sec');
       RW = el.offsetWidth; RH = el.offsetHeight;
       rcv.width = RW; rcv.height = RH;
-      RCX = RW / 2; RCY = RH * 0.50;
-      RX = Math.min(RW * 0.42, 380);
-      RY = RX * 0.28;
-      CW = Math.min(RW * 0.16, 175);
-      CH = CW * 1.55;
+      RCX = RW / 2; RCY = RH * 0.50; // Centered vertically
+      RX = Math.min(RW * 0.42, 380); // Widened horizontal orbit for broader cards
+      RY = RX * 0.28; // Maintaining tilt
+      CW = Math.min(RW * 0.16, 175); // Broader prominence (Up from 0.12 / 120)
+      CH = CW * 1.55; // Broader aspect ratio (Up from 1.76)
       if (!stars.length) initStars();
     }
 
@@ -2464,46 +3083,14 @@
       for (let i = 0; i < 70; i++)stars.push({ x: Math.random() * RW, y: Math.random() * RH, r: Math.random() * .9 + .2, a: 0, ph: Math.random() * Math.PI * 2, sp: .5 + Math.random() * .7 });
     }
 
-    async function fetchLogoImg(sym) {
-      const name = sym.toLowerCase();
-      const urls = [
-        `https://raw.githubusercontent.com/atomiclabs/cryptocurrency-icons/master/128/color/${name}.png`,
-        `https://cryptologos.cc/logos/${name}-${name}-logo.png`
-      ];
-      for (const u of urls) {
-        try {
-          const res = await fetch(u, { mode: 'cors' });
-          if (res.ok) {
-            return await new Promise((resolve) => {
-              const img = new Image();
-              img.crossOrigin = 'anonymous';
-              img.onload = () => resolve(img);
-              img.onerror = () => resolve(null);
-              img.src = u;
-            });
-          }
-        } catch (e) { /* fallback to letter */ }
-      }
-      return null;
-    }
-
     function initRCards() {
       rCards = [];
-      POOL.slice(0, 7).forEach((d, i) => {
-        const th = Math.floor(Math.random() * 12) + 1;
-        const tm = Math.floor(Math.random() * 60);
-        const card = { data: d, angle: (i / 7) * Math.PI * 2, entryDone: true, entryAnim: 1, logoImg: null, tradeTime: `${th}h ${tm}m ago` };
-        rCards.push(card);
-        fetchLogoImg(d.sym).then(img => { if (img) card.logoImg = img; });
-      });
+      POOL.slice(0, 7).forEach((d, i) => rCards.push({ data: d, angle: (i / 7) * Math.PI * 2, entryDone: true, entryAnim: 1 }));
     }
 
-    function getT(a, cardIdx) {
-      const s = Math.sin(a), c = Math.cos(a), depth = (s + 1) / 2, sc = .58 + .54 * depth;
-      let x = RCX + RX * c, y = RCY + RY * s, scale = sc, alpha = .22 + .78 * depth;
-
-      // No canvas center animation — modal overlay handles it
-      return { x, y, scale, depth, alpha, sinA: s, cosA: c };
+    function getT(a) {
+      const s = Math.sin(a), c = Math.cos(a), depth = (s + 1) / 2, sc = .58 + .54 * depth; // More subtle scale range
+      return { x: RCX + RX * c, y: RCY + RY * s, scale: sc, depth, alpha: .22 + .78 * depth, sinA: s, cosA: c };
     }
 
     function rrx(x, y, w, h, r) {
@@ -2516,20 +3103,14 @@
     }
 
     function drawBg() {
-      // Smooth dark gradient like v2
-      const bgGrad = rctx.createLinearGradient(0, 0, 0, RH);
-      bgGrad.addColorStop(0, '#050a12');
-      bgGrad.addColorStop(0.5, '#070810');
-      bgGrad.addColorStop(1, '#050a12');
-      rctx.fillStyle = bgGrad; rctx.fillRect(0, 0, RW, RH);
-
-      // Subtle center radial glow
-      const g = rctx.createRadialGradient(RCX, RCY, 0, RCX, RCY, RX * 2);
-      g.addColorStop(0, 'rgba(12,14,40,.35)'); g.addColorStop(1, 'rgba(5,10,18,0)');
+      rctx.fillStyle = '#070810'; rctx.fillRect(0, 0, RW, RH);
+      const g = rctx.createRadialGradient(RCX, RCY, 0, RCX, RCY, RX * 2.4);
+      g.addColorStop(0, 'rgba(16,14,52,.6)'); g.addColorStop(1, 'rgba(7,8,16,0)');
       rctx.fillStyle = g; rctx.fillRect(0, 0, RW, RH);
-
-      // Sparse subtle stars
-      stars.forEach(s => { s.a = .04 + .12 * Math.sin(rTime * s.sp + s.ph); rctx.beginPath(); rctx.arc(s.x, s.y, s.r * 0.7, 0, Math.PI * 2); rctx.fillStyle = `rgba(140,150,200,${s.a})`; rctx.fill(); });
+      const g2 = rctx.createRadialGradient(RCX * .25, RCY * .6, 0, RCX * .25, RCY * .6, RW * .32);
+      g2.addColorStop(0, 'rgba(10,28,68,.14)'); g2.addColorStop(1, 'rgba(7,8,16,0)');
+      rctx.fillStyle = g2; rctx.fillRect(0, 0, RW, RH);
+      stars.forEach(s => { s.a = .08 + .2 * Math.sin(rTime * s.sp + s.ph); rctx.beginPath(); rctx.arc(s.x, s.y, s.r, 0, Math.PI * 2); rctx.fillStyle = `rgba(160,170,225,${s.a})`; rctx.fill(); });
     }
 
     function drawFloor() {/* orbit rings removed */ }
@@ -2544,117 +3125,133 @@
       rctx.save();
       rctx.globalAlpha = t.alpha * ep;
 
-      // Subtle glow for front cards
+      // 1. Dynamic Outer Glow (Neon Pulse)
+      const pulse = 0.5 + 0.5 * Math.sin(rTime * 2 + card.angle);
       if (t.sinA > 0) {
-        rctx.shadowBlur = 12 * t.scale;
-        rctx.shadowColor = `rgba(${rgb}, 0.1)`;
+        rctx.shadowBlur = (15 + 10 * pulse) * t.scale;
+        rctx.shadowColor = `rgba(${rgb}, ${0.15 + 0.1 * pulse})`;
       }
 
-      // Card background
+      // 2. Hyper-Tech Glassmorphism Base
       rrx(px, py, w, h, 12 * t.scale);
       const bg = rctx.createLinearGradient(px, py, px + w, py + h);
-      bg.addColorStop(0, 'rgba(19, 24, 36, 0.97)');
-      bg.addColorStop(1, 'rgba(13, 17, 28, 0.99)');
+      bg.addColorStop(0, 'rgba(17, 24, 39, 0.95)');
+      bg.addColorStop(0.5, 'rgba(10, 14, 26, 0.98)');
+      bg.addColorStop(1, 'rgba(7, 10, 20, 1)');
       rctx.fillStyle = bg; rctx.fill();
-      rctx.shadowBlur = 0;
+      rctx.shadowBlur = 0; // Reset shadow
 
       const isFront = t.sinA > -0.15;
       if (isFront) {
-        // Border
+        // 3. Technical HUD Pattern (Subtle horizontal scan lines)
+        rctx.beginPath();
+        rctx.lineWidth = 0.5 * t.scale;
+        rctx.strokeStyle = 'rgba(255,255,255,0.03)';
+        for (let i = 10; i < h; i += 6 * t.scale) {
+          rctx.moveTo(px + 4 * t.scale, py + i);
+          rctx.lineTo(px + w - 4 * t.scale, py + i);
+        }
+        rctx.stroke();
+
+
+        // 5. Border with High-Tech Highlights
         rrx(px, py, w, h, 12 * t.scale);
-        rctx.strokeStyle = `rgba(255,255,255, 0.06)`;
+        rctx.strokeStyle = `rgba(${rgb}, ${0.3 + 0.2 * pulse})`;
         rctx.lineWidth = 1 * t.scale; rctx.stroke();
 
-        // Accent top border
+        // Top Corner HUD Bracket
         rctx.beginPath();
-        rctx.moveTo(px + 12 * t.scale, py);
-        rctx.lineTo(px + w - 12 * t.scale, py);
-        rctx.strokeStyle = `rgba(${rgb}, 0.35)`;
-        rctx.lineWidth = 2 * t.scale; rctx.stroke();
+        rctx.lineWidth = 2 * t.scale;
+        rctx.strokeStyle = acc;
+        rctx.moveTo(px + 20 * t.scale, py); rctx.lineTo(px, py); rctx.lineTo(px, py + 20 * t.scale);
+        rctx.stroke();
 
-        // Icon circle
-        const m = 14 * t.scale;
+        // 6. Icon HUD Module
+        const m = 12 * t.scale;
         const ir = 14 * t.scale;
         rctx.beginPath();
         rctx.arc(px + m + ir, py + m + ir, ir, 0, Math.PI * 2);
-        rctx.fillStyle = `rgba(${rgb}, 0.1)`; rctx.fill();
-        rctx.strokeStyle = `rgba(${rgb}, 0.25)`; rctx.lineWidth = 1 * t.scale; rctx.stroke();
+        rctx.fillStyle = `rgba(${rgb}, 0.08)`; rctx.fill();
+        rctx.strokeStyle = `rgba(${rgb}, 0.4)`; rctx.lineWidth = 0.5 * t.scale; rctx.stroke();
 
-        // Logo or letter
-        if (card.logoImg) {
-          const logoSize = ir * 1.8;
-          rctx.save();
-          rctx.beginPath();
-          rctx.arc(px + m + ir, py + m + ir, ir - 1, 0, Math.PI * 2);
-          rctx.clip();
-          rctx.drawImage(card.logoImg, px + m + ir - logoSize / 2, py + m + ir - logoSize / 2, logoSize, logoSize);
-          rctx.restore();
-        } else {
-          rctx.fillStyle = acc; rctx.font = `700 ${12 * t.scale}px Montserrat`;
-          rctx.textAlign = 'center'; rctx.textBaseline = 'middle';
-          rctx.fillText(c.sym.slice(0, 1), px + m + ir, py + m + ir + 0.5);
-        }
+        // Spinning HUD Ring
+        rctx.beginPath();
+        rctx.arc(px + m + ir, py + m + ir, ir + 3 * t.scale, rTime * 2, rTime * 2 + Math.PI * 0.6);
+        rctx.strokeStyle = acc; rctx.lineWidth = 1.2 * t.scale; rctx.stroke();
 
-        // Status pill
-        const pw = 48 * t.scale, ph = 16 * t.scale;
+        rctx.fillStyle = acc; rctx.font = `800 ${11 * t.scale}px Space Mono`;
+        rctx.textAlign = 'center'; rctx.textBaseline = 'middle';
+        rctx.fillText(c.sym.slice(0, 1), px + m + ir, py + m + ir + 0.5);
+
+        // 7. Status Pill (Glass style)
+        const pw = 50 * t.scale, ph = 14 * t.scale;
         const px2 = px + w - m - pw, py2 = py + m + (ir * 2 - ph) / 2;
         rrx(px2, py2, pw, ph, ph / 2);
-        rctx.fillStyle = 'rgba(255,255,255,0.04)'; rctx.fill();
-        rctx.strokeStyle = `rgba(255,255,255, 0.06)`; rctx.lineWidth = 0.5 * t.scale; rctx.stroke();
+        rctx.fillStyle = 'rgba(0,0,0,0.4)'; rctx.fill();
+        rctx.strokeStyle = `rgba(${rgb}, 0.3)`; rctx.lineWidth = 0.5 * t.scale; rctx.stroke();
 
         const dr = 2.5 * t.scale;
         rctx.beginPath(); rctx.arc(px2 + 8 * t.scale, py2 + ph / 2, dr, 0, Math.PI * 2);
-        rctx.fillStyle = acc; rctx.fill();
+        rctx.fillStyle = acc; rctx.globalAlpha = t.alpha * ep * (0.4 + 0.6 * pulse); rctx.fill();
+        rctx.globalAlpha = t.alpha * ep;
 
-        rctx.fillStyle = ip ? '#94a3b8' : '#94a3b8'; rctx.font = `600 ${8 * t.scale}px Montserrat`;
-        rctx.textAlign = 'left'; rctx.fillText(ip ? 'Active' : 'Risk', px2 + 14 * t.scale, py2 + ph / 2 + 0.5);
+        rctx.fillStyle = acc; rctx.font = `700 ${8.5 * t.scale}px Space Grotesk`;
+        rctx.textAlign = 'left'; rctx.fillText(ip ? 'ACTIVE' : 'RISK', px2 + 15 * t.scale, py2 + ph / 2 + 0.5);
 
-        // Main content
-        const contentY = py + m + ir * 2 + 14 * t.scale;
-        rctx.fillStyle = '#e2e8f0'; rctx.font = `700 ${15 * t.scale}px Montserrat`;
+        // 8. Technical HUD Labels (Small corner data)
+        rctx.fillStyle = 'rgba(255,255,255,0.2)';
+        rctx.font = `600 ${6 * t.scale}px Space Mono`;
+        rctx.textAlign = 'right';
+        rctx.fillText("SEC_LVL: 04", px + w - m, py + h - m);
+        rctx.textAlign = 'left';
+        rctx.fillText(`SIG_CONF: ${(70 + (card.angle % 20)).toFixed(0)}%`, px + m, py + h - m);
+
+        // 9. Main Content
+        const contentY = py + m + ir * 2 + 12 * t.scale;
+        rctx.fillStyle = '#E8EAF6'; rctx.font = `800 ${16 * t.scale}px Space Grotesk`;
         rctx.textAlign = 'left'; rctx.textBaseline = 'top';
-        rctx.fillText(c.sym, px + m, contentY);
+        rctx.fillText(c.sym + ' CYCLE', px + m, contentY);
 
-        rctx.fillStyle = '#64748b'; rctx.font = `500 ${9 * t.scale}px Montserrat`;
+        rctx.fillStyle = 'rgba(154, 168, 188, 0.6)'; rctx.font = `600 ${9 * t.scale}px Space Mono`;
         const chStr = (c.change >= 0 ? '+' : '') + c.change.toFixed(2) + '%';
-        rctx.fillText(fp(c.price) + `  ${chStr}`, px + m, contentY + 20 * t.scale);
+        rctx.fillText(fp(c.price) + ` (${chStr})`, px + m, contentY + 20 * t.scale);
 
         // Divider
-        rctx.beginPath(); rctx.moveTo(px + m, contentY + 36 * t.scale); rctx.lineTo(px + w - m, contentY + 36 * t.scale);
+        rctx.beginPath(); rctx.moveTo(px + m, contentY + 38 * t.scale); rctx.lineTo(px + w - m, contentY + 38 * t.scale);
         rctx.strokeStyle = 'rgba(255,255,255,0.06)'; rctx.lineWidth = 0.5 * t.scale; rctx.stroke();
 
-        // PnL
-        const pnlY = contentY + 44 * t.scale;
-        rctx.fillStyle = '#64748b'; rctx.font = `600 ${8 * t.scale}px Montserrat`;
-        rctx.fillText('P&L', px + m, pnlY);
+        // PnL HUD
+        const pnlY = contentY + 48 * t.scale;
+        rctx.fillStyle = 'rgba(74, 80, 112, 0.8)'; rctx.font = `700 ${8 * t.scale}px Space Mono`;
+        rctx.fillText('TOTAL PNL // REALTIME', px + m, pnlY);
 
         const pnlVal = (c.pnl >= 0 ? '+$' : '−$') + Math.abs(c.pnl).toLocaleString();
-        rctx.fillStyle = acc; rctx.font = `700 ${20 * t.scale}px Montserrat`;
+        rctx.fillStyle = acc; rctx.font = `800 ${22 * t.scale}px Space Grotesk`;
         rctx.fillText(pnlVal, px + m, pnlY + 14 * t.scale);
 
-        // Stats
-        const stY = pnlY + 42 * t.scale;
-        rctx.fillStyle = '#475569'; rctx.font = `500 ${7.5 * t.scale}px Montserrat`;
-        rctx.fillText('Win rate', px + m, stY);
-        rctx.fillText('Leverage', px + w / 2 + 2 * t.scale, stY);
+        // Stats Grid
+        const stY = pnlY + 44 * t.scale;
+        rctx.fillStyle = 'rgba(58, 64, 96, 0.7)'; rctx.font = `700 ${7.5 * t.scale}px Space Mono`;
+        rctx.fillText('WIN RATE', px + m, stY);
+        rctx.fillText('LEVERAGE', px + w / 2 + 2 * t.scale, stY);
 
-        rctx.fillStyle = '#94a3b8'; rctx.font = `600 ${11 * t.scale}px Montserrat`;
-        rctx.fillText('81%', px + m, stY + 12 * t.scale);
-        rctx.fillStyle = acc; rctx.fillText(c.lev, px + w / 2 + 2 * t.scale, stY + 12 * t.scale);
+        rctx.fillStyle = '#9AA8BC'; rctx.font = `700 ${11 * t.scale}px Space Grotesk`;
+        rctx.fillText('81%', px + m, stY + 10 * t.scale);
+        rctx.fillStyle = acc; rctx.fillText(c.lev, px + w / 2 + 2 * t.scale, stY + 10 * t.scale);
 
-        // Footer
-        const fy = py + h - 22 * t.scale;
-        rctx.fillStyle = '#475569'; rctx.font = `500 ${8 * t.scale}px Montserrat`;
+        // Interactive Footer Hint
+        const fy = py + h - 24 * t.scale;
+        rctx.fillStyle = 'rgba(255,255,255,0.15)'; rctx.font = `700 ${8 * t.scale}px Space Grotesk`;
         rctx.textAlign = 'center';
-        rctx.fillText('Click to inspect', px + w / 2, fy);
+        rctx.fillText('--- CLICK TO INSPECT MODULE ---', px + w / 2, fy);
       } else {
-        // Back side
+        // Backside technical appearance
         rrx(px, py, w, h, 12 * t.scale);
-        rctx.strokeStyle = 'rgba(255,255,255,0.04)'; rctx.lineWidth = 0.5 * t.scale; rctx.stroke();
-        rctx.fillStyle = 'rgba(255,255,255,0.03)';
-        rctx.font = `500 ${9 * t.scale}px Montserrat`;
+        rctx.strokeStyle = 'rgba(255,255,255,0.05)'; rctx.lineWidth = 0.5 * t.scale; rctx.stroke();
+        rctx.fillStyle = 'rgba(255,255,255,0.02)';
+        rctx.font = `700 ${10 * t.scale}px Space Mono`;
         rctx.textAlign = 'center';
-        rctx.fillText(card.data.sym, px + w / 2, py + h / 2);
+        rctx.fillText("VB_NODE_" + card.data.sym, px + w / 2, py + h / 2);
       }
 
       rctx.restore();
@@ -2671,25 +3268,20 @@
 
     function hitTest(mx, my) { for (const r of rHitList) { if (r.depth < -.05) continue; if (mx >= r.px && mx <= r.px + r.w && my >= r.py && my <= r.py + r.h) return r.idx; } return -1; }
 
-    rcv.addEventListener('mousedown', e => { rDrag = true; rLx = e.clientX; rLvx = 0; rMdx = e.clientX; rMdy = e.clientY; rMdt = Date.now(); rVel = 0; });
+    rcv.addEventListener('mousedown', e => { if (rPaused) return; rDrag = true; rLx = e.clientX; rLvx = 0; rMdx = e.clientX; rMdy = e.clientY; rMdt = Date.now(); rVel = 0; });
     rcv.addEventListener('mousemove', e => { if (!rDrag) return; const dx = e.clientX - rLx; rLvx = dx * .005; rCards.forEach(c => c.angle += rLvx); rLx = e.clientX; });
     rcv.addEventListener('mouseup', e => {
       if (!rDrag) return; rDrag = false;
       const dist = Math.hypot(e.clientX - rMdx, e.clientY - rMdy);
-      if (dist < 6 && Date.now() - rMdt < 280) {
-        const bnd = rcv.getBoundingClientRect();
-        const hit = hitTest(e.clientX - bnd.left, e.clientY - bnd.top);
-        if (hit >= 0) { openPopup(rCards[hit].data); return; }
-        else if (selectedCardIdx >= 0) { deselectCard(); return; }
-      }
+      if (dist < 6 && Date.now() - rMdt < 280) { const bnd = rcv.getBoundingClientRect(); const hit = hitTest(e.clientX - bnd.left, e.clientY - bnd.top); if (hit >= 0) { openPopup(rCards[hit].data); return; } }
       rVel = rLvx;
     });
     rcv.addEventListener('mouseleave', () => { if (rDrag) { rDrag = false; rVel = rLvx; } });
-    rcv.addEventListener('touchstart', e => { const tt = e.touches[0]; rDrag = true; rLx = tt.clientX; rLvx = 0; rMdx = tt.clientX; rMdy = tt.clientY; rMdt = Date.now(); rVel = 0; }, { passive: true });
+    rcv.addEventListener('touchstart', e => { if (rPaused) return; const tt = e.touches[0]; rDrag = true; rLx = tt.clientX; rLvx = 0; rMdx = tt.clientX; rMdy = tt.clientY; rMdt = Date.now(); rVel = 0; }, { passive: true });
     rcv.addEventListener('touchmove', e => { if (!rDrag) return; const tt = e.touches[0]; rLvx = (tt.clientX - rLx) * .005; rCards.forEach(c => c.angle += rLvx); rLx = tt.clientX; }, { passive: true });
     rcv.addEventListener('touchend', e => { rDrag = false; const tt = e.changedTouches[0]; const dist = Math.hypot(tt.clientX - rMdx, tt.clientY - rMdy); if (dist < 8) { const bnd = rcv.getBoundingClientRect(); const hit = hitTest(tt.clientX - bnd.left, tt.clientY - bnd.top); if (hit >= 0) { openPopup(rCards[hit].data); } } rVel = rLvx; });
 
-    /* SPREAD CARDS â€” image-2 style (HTML) */
+    /* SPREAD CARDS — image-2 style (HTML) */
     let dealIdx = 7;
 
     function makeSparkline(dir, acc) {
@@ -2731,131 +3323,142 @@
       const idx = forcedIdx !== null ? forcedIdx : cardGlobalIndex++;
       const el = document.createElement('div');
       const ip = data.change >= 0; // Is Positive
-      
+
       if (isPopup) {
-        /* â•â•â•â•â•â•â•â•â• POPUP CARD - SOL CYCLE STYLE â•â•â•â•â•â•â•â•â• */
+        /* ═════════ POPUP CARD - EXPANDED VIEW ═════════ */
         el.className = 'card popup-card v1 force-open';
-        const pnlStr = (data.pnl >= 0 ? '+$' : 'âˆ’$') + Math.abs(data.pnl).toFixed(1);
+        const tp = data.price * 1.05;
+        const lock = data.price * 1.02;
+        const entry = data.price;
+        const sl = data.price * (ip ? 0.92 : 1.08);
+        const range24h = data.price * 0.15;
+        const livePnL = ip ? -38.04 : 38.04;
+        const pnlStr = (data.pnl >= 0 ? '+$' : '−$') + Math.abs(data.pnl).toFixed(2);
         const changePct = Math.abs(data.change).toFixed(2);
-        const winRate = ip ? (60 + Math.random() * 30).toFixed(0) : (20 + Math.random() * 30).toFixed(0);
-        const pnlColor = ip ? '#00ff88' : '#ff4466';
-        const chgColor = ip ? '#00ff88' : '#ff4466';
-        const avgProfit = ip ? '+$' + (2 + Math.random() * 6).toFixed(2) : '-$' + (1 + Math.random() * 4).toFixed(2);
-        const maxDD = '-$' + (10 + Math.random() * 40).toFixed(1);
-        const barHeights = Array.from({length:14}, () => 20 + Math.random() * 80);
 
         el.innerHTML = `
-          <div style="width: 300px; background: #0d1626; border: 1px solid #1a3a2a; border-radius: 16px; padding: 0; overflow: hidden; position: relative; box-shadow: 0 0 40px rgba(0,255,120,0.08), inset 0 0 60px rgba(0,255,120,0.02); font-family: 'Courier New', monospace;">
-
-            <div style="position: absolute; top: 0; left: 0; right: 0; height: 2px; background: linear-gradient(90deg, transparent, #00ff88, transparent);"></div>
-            <div style="position: absolute; top: 0; left: 0; width: 2px; height: 60px; background: linear-gradient(180deg, #00ff88, transparent);"></div>
-            <div style="position: absolute; top: 0; right: 0; width: 2px; height: 60px; background: linear-gradient(180deg, #00ff88, transparent);"></div>
-
+          <div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; border: 2px solid #00ff88; border-radius: 16px; box-shadow: 0 0 20px rgba(0,255,136,0.3), inset 0 0 20px rgba(0,255,136,0.05); pointer-events: none;"></div>
+          
+          <div style="position: absolute; top: 10px; right: 10px; cursor: pointer; font-size:18px; color:#00ff88; z-index:20; transition:all 0.2s; width:26px; height:26px; display:flex; align-items:center; justify-content:center; background:transparent; border:1.5px solid #00ff88; border-radius:50%; font-family: 'Courier New', monospace;" onclick="closePopup()">×</div>
+          
+          <div style="padding: 16px; background: linear-gradient(135deg, rgba(5,15,20,0.98) 0%, rgba(8,20,25,0.98) 50%, rgba(5,12,18,0.98) 100%); font-family: 'Courier New', monospace; border-radius: 14px; flex: 1; display: flex; flex-direction: column; overflow-y: auto;">
+            
             <!-- HEADER -->
-            <div style="padding: 20px 20px 16px; border-bottom: 1px solid #1a2d20;">
-              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
-                <div style="display: flex; align-items: center; gap: 10px;">
-                  <div style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #00ff88; display: flex; align-items: center; justify-content: center; background: #0a1f12; font-size: 14px; font-weight: 700; color: #00ff88;">${data.sym.charAt(0)}</div>
-                  <div>
-                    <div style="font-size: 16px; font-weight: 700; color: #e8f5ee; letter-spacing: 2px;">${data.sym}USDT</div>
-                    <div style="font-size: 11px; color: #4a8a5e; letter-spacing: 1px;">${data.pair} PERPETUAL</div>
-                  </div>
-                </div>
-                <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
-                  <div style="display: flex; align-items: center; gap: 5px; background: #0a2016; border: 1px solid #1a5a30; border-radius: 20px; padding: 3px 10px;">
-                    <div style="width: 6px; height: 6px; border-radius: 50%; background: #00ff88; animation: pulse 1.5s infinite;"></div>
-                    <span style="font-size: 10px; color: #00ff88; letter-spacing: 1px;">ACTIVE</span>
-                  </div>
-                  <div style="font-size: 10px; color: #3a6a4a; letter-spacing: 1px;">SEC_LVL: 04</div>
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,255,136,0.2); gap: 8px;">
+              <div style="display: flex; align-items: center; gap: 10px; min-width: 0;">
+                <div style="width: 40px; height: 40px; border-radius: 50%; border: 2px solid #00ff88; display: flex; align-items: center; justify-content: center; background: rgba(0,255,136,0.08); font-size: 16px; font-weight: 700; color: #00ff88; font-family: 'Courier New', monospace; box-shadow: 0 0 12px rgba(0,255,136,0.3); flex-shrink: 0;">${data.sym.charAt(0)}</div>
+                <div style="min-width: 0;">
+                  <div style="font-size: 13px; font-weight: 700; color: #00ff88; letter-spacing: 1.5px; font-family: 'Courier New', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.sym} CYCLE</div>
+                  <div style="font-size: 10px; color: #00d4ff; letter-spacing: 0.5px; font-family: 'Courier New', monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${data.pair}</div>
                 </div>
               </div>
-              <div style="display: flex; align-items: baseline; gap: 8px;">
-                <span style="font-size: 22px; font-weight: 700; color: #e8f5ee;">$${data.price.toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2})}</span>
-                <span style="font-size: 13px; color: ${chgColor}; background: ${ip ? 'rgba(0,255,136,0.08)' : 'rgba(255,68,102,0.08)'}; padding: 2px 8px; border-radius: 4px;">${ip ? '+' : '-'}${changePct}%</span>
+              <div style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px; flex-shrink: 0;">
+                <div style="display: flex; align-items: center; gap: 4px; background: transparent; border: 1.5px solid #00ff88; border-radius: 14px; padding: 2px 8px; white-space: nowrap;">
+                  <div style="width: 5px; height: 5px; border-radius: 50%; background: #00ff88; animation: pulse 1.5s infinite;"></div>
+                  <span style="font-size: 8px; color: #00ff88; letter-spacing: 1px; font-weight: 700; font-family: 'Courier New', monospace;">ACTIVE</span>
+                </div>
+                <div style="font-size: 8px; color: #00d4ff; letter-spacing: 0.5px; font-family: 'Courier New', monospace;">LVL: 04</div>
               </div>
             </div>
 
-            <!-- TOTAL PNL -->
-            <div style="padding: 16px 20px; border-bottom: 1px solid #1a2d20;">
-              <div style="font-size: 10px; color: #3a6a4a; letter-spacing: 2px; margin-bottom: 6px;">TOTAL PNL // REALTIME</div>
-              <div style="font-size: 38px; font-weight: 700; color: ${pnlColor}; letter-spacing: 1px;">${pnlStr}</div>
-              <div style="margin-top: 8px; height: 3px; background: #0a1f12; border-radius: 2px; overflow: hidden;">
-                <div style="height: 100%; width: ${Math.min(100, Math.abs(data.pnl) / 5)}%; background: linear-gradient(90deg, #00cc66, #00ff88); border-radius: 2px;"></div>
+            <!-- PRICE & PNL -->
+            <div style="margin-bottom: 14px; padding-bottom: 12px; border-bottom: 1px solid rgba(0,255,136,0.15);">
+              <div style="display: flex; align-items: baseline; gap: 8px; margin-bottom: 8px;">
+                <span style="font-size: 22px; font-weight: 800; color: #fff; font-family: 'Courier New', monospace;">$${data.price.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}</span>
+                <span style="font-size: 10px; color: #00ff88; background: rgba(0,255,136,0.12); padding: 2px 6px; border-radius: 4px; font-weight: 700; font-family: 'Courier New', monospace;">${ip ? '−' : '+'}${changePct}%</span>
+              </div>
+              <div style="font-size: 8px; color: #00d4ff; letter-spacing: 1.5px; margin-bottom: 6px; text-transform: uppercase; font-family: 'Courier New', monospace;">TOTAL PNL // REALTIME</div>
+              <div style="font-size: 24px; font-weight: 900; color: #00ff88; letter-spacing: 1.5px; font-family: 'Courier New', monospace;">+ $ ${Math.abs(data.pnl).toFixed(1)}</div>
+              <div style="height: 2px; background: rgba(0,255,136,0.15); border-radius: 2px; overflow: hidden; margin-top: 6px;">
+                <div style="height: 100%; width: ${Math.min(100, Math.abs(data.pnl) / 5)}%; background: linear-gradient(90deg, #00ff88, #00d4ff); border-radius: 2px;"></div>
               </div>
             </div>
 
             <!-- KEY METRICS GRID -->
-            <div style="padding: 14px 20px; border-bottom: 1px solid #1a2d20; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
-              <div style="background: #0a1f12; border: 1px solid #1a3a22; border-radius: 8px; padding: 10px; text-align: center;">
-                <div style="font-size: 10px; color: #3a6a4a; letter-spacing: 1px; margin-bottom: 4px;">WIN RATE</div>
-                <div style="font-size: 20px; font-weight: 700; color: #00ff88;">${winRate}%</div>
+            <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 14px; padding: 12px; background: rgba(0,255,136,0.05); border: 1px solid rgba(0,255,136,0.2); border-radius: 10px;">
+              <div style="text-align: center; padding: 10px; border: 1px solid rgba(0,255,136,0.25); border-radius: 6px; background: rgba(0,255,136,0.04);">
+                <div style="font-size: 8px; color: #00d4ff; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; font-family: 'Courier New', monospace;">WIN RATE</div>
+                <div style="font-size: 16px; font-weight: 800; color: #00ff88; font-family: 'Courier New', monospace;">${ip ? (42 + Math.random() * 52).toFixed(0) : (12 + Math.random() * 36).toFixed(0)}%</div>
               </div>
-              <div style="background: #0a1f12; border: 1px solid #1a3a22; border-radius: 8px; padding: 10px; text-align: center;">
-                <div style="font-size: 10px; color: #3a6a4a; letter-spacing: 1px; margin-bottom: 4px;">LEVERAGE</div>
-                <div style="font-size: 20px; font-weight: 700; color: #00d4ff;">${data.lev}</div>
+              <div style="text-align: center; padding: 10px; border: 1px solid rgba(0,255,136,0.25); border-radius: 6px; background: rgba(0,255,136,0.04);">
+                <div style="font-size: 8px; color: #00d4ff; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; font-family: 'Courier New', monospace;">LEVERAGE</div>
+                <div style="font-size: 16px; font-weight: 800; color: #00d4ff; font-family: 'Courier New', monospace;">${data.lev}x</div>
               </div>
-              <div style="background: #0a1f12; border: 1px solid #1a3a22; border-radius: 8px; padding: 10px; text-align: center;">
-                <div style="font-size: 10px; color: #3a6a4a; letter-spacing: 1px; margin-bottom: 4px;">SIG_CONF</div>
-                <div style="font-size: 20px; font-weight: 700; color: #ffaa00;">75%</div>
+              <div style="text-align: center; padding: 10px; border: 1px solid rgba(255,170,0,0.25); border-radius: 6px; background: rgba(255,170,0,0.04);">
+                <div style="font-size: 8px; color: #ffaa00; letter-spacing: 1px; margin-bottom: 4px; text-transform: uppercase; font-family: 'Courier New', monospace;">SIG CONF</div>
+                <div style="font-size: 16px; font-weight: 800; color: #ffaa00; font-family: 'Courier New', monospace;">75%</div>
               </div>
             </div>
 
             <!-- PERFORMANCE METRICS -->
-            <div style="padding: 14px 20px; border-bottom: 1px solid #1a2d20;">
-              <div style="font-size: 10px; color: #3a6a4a; letter-spacing: 2px; margin-bottom: 10px;">PERFORMANCE METRICS</div>
+            <div style="padding: 12px; background: rgba(0,200,255,0.05); border: 1px solid rgba(0,200,255,0.15); border-radius: 10px; margin-bottom: 14px;">
+              <div style="font-size: 8px; color: #00d4ff; letter-spacing: 1.5px; margin-bottom: 10px; text-transform: uppercase; font-family: 'Courier New', monospace;">PERFORMANCE METRICS</div>
               <div style="display: flex; flex-direction: column; gap: 8px;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-size: 11px; color: #5a8a6a; letter-spacing: 1px;">TOTAL TRADES</span>
-                  <span style="font-size: 12px; color: #c8e8d8; font-weight: 700;">247</span>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; border-bottom: 1px solid rgba(0,255,136,0.1);">
+                  <span style="font-size: 9px; color: #00d4ff; letter-spacing: 0.5px; text-transform: uppercase; font-family: 'Courier New', monospace;">TOTAL TRADES</span>
+                  <span style="font-size: 10px; color: #fff; font-weight: 700; font-family: 'Courier New', monospace;">247</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; border-bottom: 1px solid rgba(0,255,136,0.1);">
+                  <span style="font-size: 9px; color: #00d4ff; letter-spacing: 0.5px; text-transform: uppercase; font-family: 'Courier New', monospace;">AVG PROFIT</span>
+                  <span style="font-size: 10px; color: #00ff88; font-weight: 700; font-family: 'Courier New', monospace;">+$4.82</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 6px; border-bottom: 1px solid rgba(0,255,136,0.1);">
+                  <span style="font-size: 9px; color: #00d4ff; letter-spacing: 0.5px; text-transform: uppercase; font-family: 'Courier New', monospace;">MAX DRAWDOWN</span>
+                  <span style="font-size: 10px; color: #ff4466; font-weight: 700; font-family: 'Courier New', monospace;">−$28.4</span>
                 </div>
                 <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-size: 11px; color: #5a8a6a; letter-spacing: 1px;">AVG PROFIT</span>
-                  <span style="font-size: 12px; color: #00ff88; font-weight: 700;">${avgProfit}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-size: 11px; color: #5a8a6a; letter-spacing: 1px;">MAX DRAWDOWN</span>
-                  <span style="font-size: 12px; color: #ff4466; font-weight: 700;">${maxDD}</span>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                  <span style="font-size: 11px; color: #5a8a6a; letter-spacing: 1px;">EXPOSURE</span>
-                  <span style="font-size: 12px; color: #ffaa00; font-weight: 700;">${data.vol}</span>
+                  <span style="font-size: 9px; color: #00d4ff; letter-spacing: 0.5px; text-transform: uppercase; font-family: 'Courier New', monospace;">EXPOSURE</span>
+                  <span style="font-size: 10px; color: #ffaa00; font-weight: 700; font-family: 'Courier New', monospace;">$142K</span>
                 </div>
               </div>
             </div>
 
             <!-- CYCLE ACTIVITY -->
-            <div style="padding: 14px 20px; border-bottom: 1px solid #1a2d20;">
-              <div style="font-size: 10px; color: #3a6a4a; letter-spacing: 2px; margin-bottom: 10px;">CYCLE ACTIVITY</div>
-              <div style="display: flex; align-items: flex-end; gap: 3px; height: 40px;">
-                ${barHeights.map((h, i) => {
-                  const isLoss = Math.random() < 0.2;
-                  const color = isLoss ? '#ff4466' : (h > 60 ? '#00ff88' : '#00cc66');
-                  return '<div style="flex:1; background:' + color + '; border-radius:2px 2px 0 0; height:' + h.toFixed(0) + '%;' + (isLoss ? '' : ' opacity:' + (0.7 + Math.random() * 0.3).toFixed(1)) + ';"></div>';
-                }).join('')}
+            <div style="padding: 12px; background: rgba(0,255,136,0.04); border: 1px solid rgba(0,255,136,0.15); border-radius: 10px; margin-bottom: 12px;">
+              <div style="font-size: 8px; color: #00d4ff; letter-spacing: 1.5px; margin-bottom: 10px; text-transform: uppercase; font-family: 'Courier New', monospace;">CYCLE ACTIVITY</div>
+              <div style="display: flex; align-items: flex-end; justify-content: space-around; height: 50px; gap: 2px;">
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 45%; animation: pulse 0.8s ease-in-out infinite;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 60%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #ff4466, #ff2244); border-radius: 1px; height: 30%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 55%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 50%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 65%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #ff4466, #ff2244); border-radius: 1px; height: 35%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 58%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 70%;"></div>
+                <div style="flex: 1; background: linear-gradient(180deg, #00ff88, #00cc66); border-radius: 1px; height: 48%;"></div>
               </div>
             </div>
 
             <!-- ACTION BUTTONS -->
-            <div style="padding: 14px 20px; display: flex; gap: 8px;">
-              <button style="flex: 1; background: transparent; border: 1px solid #00ff88; color: #00ff88; border-radius: 8px; padding: 10px; font-size: 11px; letter-spacing: 2px; cursor: pointer; font-family: 'Courier New', monospace; transition: all 0.15s;">INSPECT</button>
-              <button onclick="closePopup()" style="flex: 1; background: transparent; border: 1px solid #ff4466; color: #ff4466; border-radius: 8px; padding: 10px; font-size: 11px; letter-spacing: 2px; cursor: pointer; font-family: 'Courier New', monospace; transition: all 0.15s;">CLOSE</button>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; margin-top: auto;">
+              <button style="background: transparent; border: 1.5px solid #00ff88; color: #00ff88; border-radius: 6px; padding: 10px 12px; font-size: 9px; letter-spacing: 1.5px; cursor: pointer; font-weight: 700; text-transform: uppercase; transition: all 0.3s; font-family: 'Courier New', monospace; box-shadow: 0 0 12px rgba(0,255,136,0.2);">
+                INSPECT
+              </button>
+              <button style="background: transparent; border: 1.5px solid #ff4466; color: #ff4466; border-radius: 6px; padding: 10px 12px; font-size: 9px; letter-spacing: 1.5px; cursor: pointer; font-weight: 700; text-transform: uppercase; transition: all 0.3s; font-family: 'Courier New', monospace; box-shadow: 0 0 12px rgba(255,68,102,0.2);" onclick="closePopup()">
+                CLOSE
+              </button>
             </div>
 
             <!-- FOOTER -->
-            <div style="padding: 8px 20px 14px; display: flex; justify-content: space-between;">
-              <span style="font-size: 9px; color: #2a4a34; letter-spacing: 1px;">SIG_CONF: 75%</span>
-              <span style="font-size: 9px; color: #2a4a34; letter-spacing: 1px;">MODULE v2.4.1</span>
-              <span style="font-size: 9px; color: #2a4a34; letter-spacing: 1px;">SEC_LVL: 04</span>
+            <div style="padding-top: 10px; border-top: 1px solid rgba(0,255,136,0.15); display: flex; justify-content: space-between; font-size: 8px; color: #00d4ff; font-family: 'Courier New', monospace; letter-spacing: 0.5px;">
+              <span>SIG_CONF: 75%</span>
+              <span>MODULE v2.4.1</span>
+              <span>SEC_LVL: 04</span>
             </div>
-
-            <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 1px; background: linear-gradient(90deg, transparent, #00ff88, transparent);"></div>
           </div>
         `;
+
+
+        // Set CSS variables for neon cyberpunk styling
+        el.style.setProperty('--neon-rgb', '0,255,136');
+        el.style.setProperty('--dark-rgb', '5,15,20');
+        el.style.setProperty('--hex-color', '#00ff88');
       } else {
-        /* â•â•â•â•â•â•â•â•â• SMALL CARD - NORMAL VIEW â•â•â•â•â•â•â•â•â• */
+        /* ═════════ SMALL CARD - NORMAL VIEW ═════════ */
         el.className = 'card v1';
         el.dataset.v = '0';
-        const pnlStr = (data.pnl >= 0 ? '+$' : 'âˆ’$') + Math.abs(data.pnl).toFixed(2);
+        const pnlStr = (data.pnl >= 0 ? '+$' : '−$') + Math.abs(data.pnl).toFixed(2);
 
         // Apply coin-specific neon colors
         const colors = getCoinColors(data.sym);
@@ -2948,227 +3551,167 @@
         el.addEventListener('click', () => openPopup(data, el));
       });
       if (rCards.length < 12) {
-        const th = Math.floor(Math.random() * 12) + 1;
-        const tm = Math.floor(Math.random() * 60);
-        rCards.push({ data, angle: Math.PI, entryDone: false, entryAnim: 0, logoImg: null, tradeTime: `${th}h ${tm}m ago` });
+        rCards.push({ data, angle: Math.PI, entryDone: false, entryAnim: 0 });
         const nc = rCards[rCards.length - 1]; let st = 0;
-        fetchLogoImg(data.sym).then(img => { if (img) nc.logoImg = img; });
         const iv = setInterval(() => { st += .04; nc.entryAnim = st; if (st >= 1) { nc.entryDone = true; clearInterval(iv); } }, 16);
         const N = rCards.length, ta = rCards.map((_, i) => (i / N) * Math.PI * 2), sa = rCards.map(c => c.angle);
         let t2 = 0; const iv2 = setInterval(() => { t2 += .04; if (t2 >= 1) { t2 = 1; clearInterval(iv2); } const e = t2 < .5 ? 2 * t2 * t2 : (4 - 2 * t2) * t2 - 1; rCards.forEach((card, i) => { card.angle = sa[i] + (ta[i] - sa[i]) * e; }); }, 16);
         for (let i = 0; i < 12; i++) { const a = Math.random() * Math.PI * 2, sp = 1.5 + Math.random() * 2.5; particles.push({ x: RCX + RX * Math.cos(Math.PI), y: RCY + RY * Math.sin(Math.PI), vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - .8, r: 1 + Math.random() * 2, life: 0, maxLife: 44 + Math.random() * 24 }); }
       }
       document.getElementById('st-deck').textContent = rCards.length;
-      const toast = document.getElementById('toast'); toast.textContent = `âœ¦ ${data.sym} dealt into position`; toast.classList.add('on');
+      const toast = document.getElementById('toast'); toast.textContent = `✦ ${data.sym} dealt into position`; toast.classList.add('on');
       setTimeout(() => toast.classList.remove('on'), 2200);
     }
 
-    /* SELECT CARD — animate to center + show staggered text */
-    function openPopup(c, clickedEl) {
-      const idx = rCards.findIndex(rc => rc.data === c);
-      if (idx < 0) return;
-
-      // If same card, close
-      if (selectedCardIdx === idx) { deselectCard(); return; }
-
-      selectedCardIdx = idx;
-      const card = rCards[idx];
-      const ip = c.change >= 0;
-      const acc = ip ? '#4DB86A' : '#D65C5C';
-      const pnlVal = (c.pnl >= 0 ? '+$' : '\u2212$') + Math.abs(c.pnl).toFixed(2);
-      const changePct = (ip ? '+' : '') + c.change.toFixed(2) + '%';
-      const winRate = ip ? '68.4%' : '54.2%';
-      const avgProfit = ip ? '+$' + (Math.abs(c.pnl) * 0.42).toFixed(2) : '-$' + (Math.abs(c.pnl) * 0.28).toFixed(2);
-      const maxDD = '-$' + (Math.abs(c.pnl) * 0.28).toFixed(2);
-
-      // Build logo HTML
-      let logoHtml = '';
-      if (card.logoImg) {
-        logoHtml = `<img src="${card.logoImg.src}" alt="${c.sym}">`;
-      } else {
-        logoHtml = `<span class="cm-letter" style="color:${acc}">${c.sym.slice(0,1)}</span>`;
-      }
-
-      const content = document.getElementById('cardModalContent');
-      const winRateNum = ip ? 68.4 : 54.2;
-      content.innerHTML = `
-        <div class="cm-header">
-          <div class="cm-logo" style="border-color:${acc}30">
-            ${logoHtml}
-            <div class="cm-logo-ring" style="border-top-color:${acc}"></div>
-          </div>
-          <div class="cm-header-info">
-            <div class="cm-sym">${c.sym}USDT</div>
-            <div class="cm-pair">${c.pair} PERPETUAL</div>
-            <div class="cm-badge" style="border-color:${acc}30;background:${acc}0a;color:${acc}">
-              <span class="cm-badge-dot" style="background:${acc}"></span>${ip ? 'ACTIVE' : 'AT RISK'}
-            </div>
-          </div>
-        </div>
-
-        <div class="cm-pnl-section">
-          <div class="cm-price-row">
-            <span class="cm-price">$${c.price.toLocaleString('en-US',{minimumFractionDigits:2})}</span>
-            <span class="cm-change ${ip?'up':'down'}">${changePct}</span>
-          </div>
-          <div class="cm-pnl-label">TOTAL PNL</div>
-          <div class="cm-pnl ${ip?'pos':'neg'}" style="color:${acc}">${pnlVal}</div>
-        </div>
-
-        <div class="cm-stats">
-          <div class="cm-stat" style="transition-delay:0.35s">
-            <div class="cm-stat-label">DIRECTION</div>
-            <div class="cm-stat-val" style="color:${acc}">${c.dir}</div>
-          </div>
-          <div class="cm-stat" style="transition-delay:0.42s">
-            <div class="cm-stat-label">LEVERAGE</div>
-            <div class="cm-stat-val">${c.lev}</div>
-          </div>
-          <div class="cm-stat" style="transition-delay:0.49s">
-            <div class="cm-stat-label">AVG PROFIT</div>
-            <div class="cm-stat-val" style="color:${acc}">${avgProfit}</div>
-          </div>
-          <div class="cm-stat" style="transition-delay:0.56s">
-            <div class="cm-stat-label">MAX DRAWDOWN</div>
-            <div class="cm-stat-val" style="color:#D65C5C">${maxDD}</div>
-          </div>
-        </div>
-
-        <div class="cm-winrate-section" style="transition-delay:0.63s">
-          <div class="cm-wr-header">
-            <span class="cm-wr-label">WIN RATE</span>
-            <span class="cm-wr-val" style="color:${acc}">${winRateNum}%</span>
-          </div>
-          <div class="cm-wr-track">
-            <div class="cm-wr-fill" style="width:0%;background:${acc}"></div>
-          </div>
-        </div>
-
-        <div class="cm-bottom">
-          <div class="cm-bottom-item"><div class="cm-bottom-label">VOLUME</div><div class="cm-bottom-val">${c.vol}</div></div>
-          <div class="cm-bottom-item"><div class="cm-bottom-label">TRADES</div><div class="cm-bottom-val">${Math.floor(12 + Math.random() * 30)}</div></div>
-          <div class="cm-bottom-item"><div class="cm-bottom-label">TIME</div><div class="cm-bottom-val">${card.tradeTime || '2h 14m ago'}</div></div>
-        </div>
-      `;
-
-      // Animate win rate bar after modal opens
-      setTimeout(() => {
-        const fill = content.querySelector('.cm-wr-fill');
-        if (fill) fill.style.width = winRateNum + '%';
-      }, 50);
-
-      // Update card border accent
-      document.getElementById('cardModalCard').style.borderColor = `${acc}20`;
-
-      // Show overlay
-      const overlay = document.getElementById('cardModalOverlay');
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => { overlay.classList.add('active'); });
-      });
+    /* POPUP */
+    function buildSpk(dir, color) {
+      let v = 22; const pts = [];
+      for (let i = 0; i < 36; i++) { v += (Math.random() - .44) * 5 * (dir === 'LONG' ? 1 : -1); v = Math.max(5, Math.min(37, v)); pts.push([i / 35 * 250, v]); }
+      const d = pts.map((p, i) => (i === 0 ? `M${p[0].toFixed(1)},${p[1].toFixed(1)}` : `L${p[0].toFixed(1)},${p[1].toFixed(1)}`)).join('');
+      document.getElementById('pu-spk').innerHTML = `<path d="${d}" fill="none" stroke="${color}" stroke-width="1.7" stroke-linejoin="round" stroke-linecap="round"/>`;
     }
 
-    function deselectCard() {
-      if (selectedCardIdx < 0) return;
-      selectedCardIdx = -1;
+    /* Price level bar state */
+    let puBarInterval = null, puBarMk = 0, puBarEn = 0, puBarMn = 0, puBarMx = 0;
+    function puBarPos(v) { return (1 - (v - puBarMn) / (puBarMx - puBarMn)) * 100; }
+    function updatePuBar() {
+      puBarMk += (Math.random() - 0.478) * puBarMk * 0.002;
+      puBarMk = Math.max(puBarMn + (puBarMx - puBarMn) * 0.02, Math.min(puBarMx - (puBarMx - puBarMn) * 0.02, puBarMk));
+      const p = puBarPos(puBarMk);
+      document.getElementById('pu-bar-dot').style.top = p + '%';
+      document.getElementById('pu-bar-profit').style.height = p + '%';
+      document.getElementById('pu-bar-mktlbl').style.top = p + '%';
+      document.getElementById('pu-bar-mkt').textContent = fp(puBarMk);
+      const pnl = puBarMk - puBarEn, pct = pnl / puBarEn * 100;
+      const pnlEl = document.getElementById('pu-bar-pnl');
+      pnlEl.textContent = (pnl >= 0 ? '+$' : '-$') + Math.abs(pnl).toFixed(2);
+      pnlEl.style.color = pnl >= 0 ? '#00e676' : '#ef5350';
+    }
 
-      const overlay = document.getElementById('cardModalOverlay');
-      overlay.classList.remove('active');
+    let puConfettiCtx, puConfettiList = [], puConfId;
+    function fireConfetti(color) {
+      const cv = document.getElementById('pu-conf-cv');
+      cv.width = window.innerWidth;
+      cv.height = window.innerHeight;
+      puConfettiCtx = cv.getContext('2d');
+      puConfettiList = [];
+      const cx = cv.width / 2;
+      const cy = cv.height / 2;
+
+      for (let i = 0; i < 70; i++) {
+        const agl = Math.random() * Math.PI * 2;
+        const vel = 3 + Math.random() * 15;
+        puConfettiList.push({
+          x: cx,
+          y: cy,
+          vx: Math.cos(agl) * vel,
+          vy: Math.sin(agl) * vel - (Math.random() * 6 + 4), // upward explosive bias
+          size: 3 + Math.random() * 5,
+          color: Math.random() > 0.25 ? color : '#ffffff',
+          angle: Math.random() * Math.PI,
+          vAngle: (Math.random() - 0.5) * 0.5,
+          life: 1
+        });
+      }
+
+      cancelAnimationFrame(puConfId);
+      function drawConf() {
+        if (!puConfettiList.length) return;
+        puConfettiCtx.clearRect(0, 0, cv.width, cv.height);
+        let alive = false;
+        puConfettiList.forEach(p => {
+          if (p.life <= 0) return;
+          alive = true;
+          p.x += p.vx;
+          p.y += p.vy;
+          p.vy += 0.35; // gravity
+          p.angle += p.vAngle;
+          p.life -= 0.012; // fade speed
+
+          puConfettiCtx.save();
+          puConfettiCtx.translate(p.x, p.y);
+          puConfettiCtx.rotate(p.angle);
+          puConfettiCtx.globalAlpha = Math.max(0, p.life);
+          puConfettiCtx.fillStyle = p.color;
+          // create a 3D tumbling effect by squishing the shape based on rotation
+          const squish = Math.abs(Math.cos(p.angle * 2.5));
+          puConfettiCtx.fillRect(-p.size / 2, (-p.size * squish) / 2, p.size, p.size * squish);
+          puConfettiCtx.restore();
+        });
+        if (alive) {
+          puConfId = requestAnimationFrame(drawConf);
+        } else {
+          puConfettiCtx.clearRect(0, 0, cv.width, cv.height);
+        }
+      }
+      drawConf();
+    }
+
+    function openPopup(c, clickedEl) {
+      rPaused = true;
+      const wrap = document.getElementById('popup-wrap');
+      const mount = document.getElementById('pu-card-mount');
+
+      // Clear and create new card
+      mount.innerHTML = '';
+      const puCard = makeSpCard(c, null, true);
+      puCard.classList.add('force-open');
+      mount.appendChild(puCard);
+
+      // Enable popup - CSS handles the opacity transition
+      wrap.classList.add('on');
+
+      // Clear inline opacity to let CSS take over
       setTimeout(() => {
-        document.getElementById('cardModalContent').innerHTML = '';
+        mount.style.opacity = '';
+      }, 10);
+    }
+
+    function closePopup() {
+      rPaused = false;
+      const wrap = document.getElementById('popup-wrap');
+      const mount = document.getElementById('pu-card-mount');
+
+      // Trigger fade out via CSS state removal
+      wrap.classList.remove('on');
+
+      // Set opacity back to 0 for next open
+      mount.style.opacity = '0';
+
+      // Destroy the card cleanly after fadeout (0.5s animation)
+      setTimeout(() => {
+        mount.innerHTML = '';
       }, 500);
     }
 
-    function closePopup() { deselectCard(); }
-
-    // Close modal on overlay click or X button
-    document.getElementById('cardModalOverlay').addEventListener('click', (e) => {
-      if (e.target === e.currentTarget) deselectCard();
-    });
-    document.getElementById('cardModalClose').addEventListener('click', deselectCard);
-
-    function showDetailPanel(data) {
-      const dp = document.getElementById('detailPanel');
-      const pnl = data.pnl;
-      const pnlStr = (pnl >= 0 ? '+$' : '−$') + Math.abs(pnl).toFixed(2);
-      const isUp = data.change >= 0;
-      const changePct = (isUp ? '+' : '') + data.change.toFixed(2) + '%';
-      const colors = getCoinColors(data.sym);
-      const winRate = data.dir === 'LONG' ? '68.4' : '54.2';
-      const avgProfit = (pnl >= 0 ? '+$' : '−$') + (Math.abs(pnl) * 0.42).toFixed(2);
-      const maxDD = '−$' + (Math.abs(pnl) * 0.28).toFixed(2);
-
-      dp.classList.remove('visible');
-      dp.innerHTML = '';
-
-      const lines = [
-        `<div class="dp-status">ACTIVE · SEC_LVL: 04</div>`,
-        `<div class="dp-sym" style="color:${colors.hex}">${data.sym}</div>`,
-        `<div class="dp-pair">${data.pair} PERPETUAL</div>`,
-        `<div class="dp-price">$${data.price.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2})}</div>`,
-        `<div class="dp-change ${isUp ? 'up' : 'down'}">${changePct}</div>`,
-        `<div class="dp-divider"></div>`,
-        `<div class="dp-label">TOTAL PNL // REALTIME</div>`,
-        `<div class="dp-val ${pnl >= 0 ? 'dp-pnl-pos' : 'dp-pnl-neg'}">${pnlStr}</div>`,
-        `<div class="dp-row">
-          <div class="dp-col"><div class="dp-label">DIRECTION</div><div class="dp-val">${data.dir}</div></div>
-          <div class="dp-col"><div class="dp-label">LEVERAGE</div><div class="dp-val">${data.lev}</div></div>
-          <div class="dp-col"><div class="dp-label">WIN RATE</div><div class="dp-val">${winRate}%</div></div>
-        </div>`,
-        `<div class="dp-metrics-row">
-          <div class="dp-metric"><div class="dp-label">AVG PROFIT</div><div class="dp-val">${avgProfit}</div></div>
-          <div class="dp-metric"><div class="dp-label">DRAWDOWN</div><div class="dp-val">${maxDD}</div></div>
-          <div class="dp-metric"><div class="dp-label">VOLUME</div><div class="dp-val">${data.vol}</div></div>
-        </div>`
-      ];
-
-      lines.forEach(html => {
-        const div = document.createElement('div');
-        div.className = 'dp-line';
-        div.innerHTML = html;
-        dp.appendChild(div);
-      });
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => { dp.classList.add('visible'); });
-      });
-    }
-
-    // Click listeners kept minimal — no overlay dismiss needed
+    // Add click listeners to close popup when clicking off the card or on X
     const puWrap = document.getElementById('popup-wrap');
-    if (puWrap) {
-      puWrap.style.display = 'none'; // hide old popup overlay entirely
+    puWrap.addEventListener('click', e => {
+      // Close only if clicking on the overlay itself, not on content
+      if (e.target === puWrap) {
+        closePopup();
+      }
+    });
+
+    const puXBtn = document.getElementById('pu-x');
+    if (puXBtn) {
+      puXBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closePopup();
+      });
     }
+
+    // Keyboard support: ESC to close popup
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && puWrap.classList.contains('on')) {
+        closePopup();
+      }
+    });
 
     /* MAIN LOOP */
     function loop() {
       rTime += .016;
-      if (!rDrag) {
-        rCards.forEach((c, i) => {
-          // Don't orbit the selected card — it stays at center
-          if (i !== selectedCardIdx) c.angle += rVel;
-        });
-        rVel += (.0038 - rVel) * .03;
-      }
-
-      // Fill gap: redistribute cards evenly
-      const activeGroup = selectedCardIdx >= 0
-        ? rCards.filter((_, i) => i !== selectedCardIdx)
-        : rCards;
-      const AN = activeGroup.length;
-      if (AN > 1) {
-        const sorted = [...activeGroup].sort((a, b) => {
-          return ((a.angle % (Math.PI*2) + Math.PI*4) % (Math.PI*2))
-               - ((b.angle % (Math.PI*2) + Math.PI*4) % (Math.PI*2));
-        });
-        const idealGap = (Math.PI * 2) / AN;
-        for (let i = 1; i < AN; i++) {
-          const target = sorted[0].angle + i * idealGap;
-          let diff = target - sorted[i].angle;
-          while (diff > Math.PI) diff -= Math.PI * 2;
-          while (diff < -Math.PI) diff += Math.PI * 2;
-          sorted[i].angle += diff * 0.04;
-        }
-      }
+      if (!rPaused && !rDrag) { rCards.forEach(c => c.angle += rVel); rVel += (.0038 - rVel) * .03; }
       drawFrame(); requestAnimationFrame(loop);
     }
 
@@ -3178,7 +3721,7 @@
       document.getElementById('ftr-time').textContent = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
     }, 1000);
 
-    /* ðŸ“¡ WARP-GRID RADAR ENGINE [Upgrade] */
+    /* 📡 WARP-GRID RADAR ENGINE [Upgrade] */
     const rcv2 = document.getElementById('radarCanvas');
     const rctx2 = rcv2 ? rcv2.getContext('2d') : null;
     const rUI = document.getElementById('radarUI');
@@ -3324,7 +3867,7 @@
     buildTicker(); resizeRing(); initRCards(); initSpread(); buildActivity(); loop();
     setInterval(() => { if (!rPaused && rCards.length < 12) dealNew(); }, 12000);
 
-    /* ðŸŒ LIVE DATA STREAM UPDATER [Middle Section HUD] */
+    /* 🌐 LIVE DATA STREAM UPDATER [Middle Section HUD] */
     const streamPrices = { BTC: 64820, ETH: 3191, SOL: 161, BNB: 594, ARB: 1.12, LINK: 14.82, AVAX: 38.4, INJ: 28.6 };
     function updateDataStream() {
       const right = document.getElementById('ring-stream-right');

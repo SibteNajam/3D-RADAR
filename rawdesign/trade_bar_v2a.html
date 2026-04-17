@@ -1,0 +1,264 @@
+
+<style>
+  .vb-wrap {
+    font-family: var(--font-mono, monospace);
+    display: flex;
+    justify-content: center;
+    padding: 24px 0;
+  }
+  .vb-card {
+    background: #080f1e;
+    border-radius: 18px;
+    padding: 20px;
+    width: 220px;
+    border: 1px solid rgba(255,255,255,0.07);
+    position: relative;
+  }
+  .vb-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+  }
+  .vb-pair { font-size: 13px; color: #e2eaf8; letter-spacing: 0.04em; }
+  .vb-pair em { font-style: normal; color: rgba(255,255,255,0.3); font-size: 10px; }
+  .vb-long-badge { font-size: 9px; background: rgba(0,230,118,0.1); color: #00e676; padding: 2px 6px; border-radius: 3px; border: 1px solid rgba(0,230,118,0.25); }
+
+  .vb-column {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 0 auto;
+    position: relative;
+    height: 320px;
+  }
+
+  .vb-labels-left {
+    width: 56px;
+    position: relative;
+    flex-shrink: 0;
+  }
+  .vb-labels-right {
+    width: 56px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .vb-track-col {
+    width: 40px;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .vb-track {
+    position: absolute;
+    left: 50%;
+    top: 0; bottom: 0;
+    transform: translateX(-50%);
+    width: 10px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 5px;
+    overflow: visible;
+  }
+
+  .vb-fill-profit {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    border-radius: 5px 5px 0 0;
+    background: rgba(0,230,118,0.4);
+    transition: height 0.7s ease;
+  }
+  .vb-fill-entry-lock {
+    position: absolute;
+    left: 0; right: 0;
+    background: rgba(255,193,7,0.15);
+    transition: top 0.7s ease, height 0.7s ease;
+  }
+  .vb-fill-loss {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    border-radius: 0 0 5px 5px;
+    background: rgba(239,83,80,0.15);
+    height: 28%;
+  }
+
+  .vb-mkt-dot {
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: #00e676;
+    border: 3px solid #080f1e;
+    box-shadow: 0 0 0 3px rgba(0,230,118,0.3);
+    z-index: 5;
+    transition: top 0.7s ease;
+  }
+
+  .vb-tick {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    z-index: 4;
+    transition: top 0.7s ease;
+  }
+  .vb-tick-dash {
+    width: 100%;
+    height: 2px;
+    border-top-width: 2px;
+    border-top-style: dashed;
+  }
+
+  .tp-tick .vb-tick-dash { border-color: rgba(0,230,118,0.6); }
+  .tl-tick .vb-tick-dash { border-color: rgba(255,193,7,0.7); }
+  .sl-tick .vb-tick-dash { border-color: rgba(239,83,80,0.6); }
+  .e-tick .vb-tick-dash { border-color: rgba(255,255,255,0.3); border-top-style: solid; }
+
+  .vb-label-left {
+    position: absolute;
+    right: 4px;
+    transform: translateY(-50%);
+    text-align: right;
+    transition: top 0.7s ease;
+  }
+  .vb-label-right {
+    position: absolute;
+    left: 4px;
+    transform: translateY(-50%);
+    transition: top 0.7s ease;
+  }
+
+  .lbl-tag {
+    font-size: 10px;
+    font-weight: 500;
+    font-family: var(--font-mono, monospace);
+    letter-spacing: 0.05em;
+  }
+  .lbl-price {
+    font-size: 9px;
+    font-family: var(--font-mono, monospace);
+    opacity: 0.7;
+  }
+
+  .tp-color { color: #00e676; }
+  .tl-color { color: #ffc107; }
+  .sl-color { color: #ef5350; }
+  .e-color { color: rgba(255,255,255,0.55); }
+  .mk-color { color: #00e676; }
+
+  .vb-footer {
+    margin-top: 16px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+    padding-top: 12px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .vb-stat { display: flex; flex-direction: column; gap: 2px; }
+  .vb-stat-lbl { font-size: 8px; color: rgba(255,255,255,0.3); letter-spacing: 0.08em; }
+  .vb-stat-val { font-size: 13px; font-weight: 500; }
+
+  @keyframes vb-pulse {
+    0%,100% { box-shadow: 0 0 0 3px rgba(0,230,118,0.3); }
+    50% { box-shadow: 0 0 0 5px rgba(0,230,118,0.5); }
+  }
+  .vb-mkt-dot { animation: vb-pulse 2s ease-in-out infinite; }
+</style>
+
+<div class="vb-wrap">
+  <div class="vb-card">
+    <div class="vb-header">
+      <span class="vb-pair">STO<em>USDT</em></span>
+      <span class="vb-long-badge">▲ LONG</span>
+    </div>
+
+    <div class="vb-column">
+      <div class="vb-labels-left" id="lleft">
+        <div class="vb-label-left tp-color" id="ll-tp" style="top:8%">
+          <div class="lbl-tag tp-color">TP</div>
+          <div class="lbl-price">$0.9600</div>
+        </div>
+        <div class="vb-label-left tl-color" id="ll-tl" style="top:28%">
+          <div class="lbl-tag tl-color">TL</div>
+          <div class="lbl-price" id="ll-tl-p">$0.9137</div>
+        </div>
+        <div class="vb-label-left e-color" style="top:68%">
+          <div class="lbl-tag e-color">E</div>
+          <div class="lbl-price">$0.8888</div>
+        </div>
+        <div class="vb-label-left sl-color" style="top:88%">
+          <div class="lbl-tag sl-color">SL</div>
+          <div class="lbl-price">$0.8700</div>
+        </div>
+      </div>
+
+      <div class="vb-track-col">
+        <div class="vb-track" id="vTrack">
+          <div class="vb-fill-profit" id="vProfit" style="height:42%"></div>
+          <div class="vb-fill-entry-lock" id="vZone" style="top:28%;height:40%"></div>
+          <div class="vb-fill-loss"></div>
+          <div class="vb-mkt-dot" id="vDot" style="top:42%"></div>
+          <div class="vb-tick tp-tick" style="top:8%"><div class="vb-tick-dash"></div></div>
+          <div class="vb-tick tl-tick" id="vTL" style="top:28%"><div class="vb-tick-dash"></div></div>
+          <div class="vb-tick e-tick" style="top:68%"><div class="vb-tick-dash"></div></div>
+          <div class="vb-tick sl-tick" style="top:88%"><div class="vb-tick-dash"></div></div>
+        </div>
+      </div>
+
+      <div class="vb-labels-right">
+        <div class="vb-label-right mk-color" id="lr-mkt" style="top:42%">
+          <div class="lbl-tag mk-color" id="lr-mkt-p">$0.9369</div>
+          <div class="lbl-price mk-color">NOW</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="vb-footer">
+      <div class="vb-stat">
+        <div class="vb-stat-lbl">LIVE P&L</div>
+        <div class="vb-stat-val" style="color:#00e676" id="vPnl">+$0.8102</div>
+      </div>
+      <div class="vb-stat" style="text-align:right">
+        <div class="vb-stat-lbl">LOCK P&L</div>
+        <div class="vb-stat-val" style="color:#ffc107">+$0.4194</div>
+      </div>
+      <div class="vb-stat">
+        <div class="vb-stat-lbl">PCT</div>
+        <div class="vb-stat-val" style="color:#00e676" id="vPct">+5.41%</div>
+      </div>
+      <div class="vb-stat" style="text-align:right">
+        <div class="vb-stat-lbl">LOCKED</div>
+        <div class="vb-stat-val" style="color:#ffc107">+2.80%</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  const en=0.8888, mn=0.86, mx=0.97;
+  let mk=0.9369;
+  function pos(v){ return (1-(v-mn)/(mx-mn))*100; }
+  function upd(){
+    const p = pos(mk);
+    document.getElementById('vDot').style.top = p+'%';
+    document.getElementById('vProfit').style.height = p+'%';
+    document.getElementById('lr-mkt').style.top = p+'%';
+    document.getElementById('lr-mkt-p').textContent = '$'+mk.toFixed(4);
+    const pnl = (mk-en)*1;
+    const pct = pnl/en*100;
+    document.getElementById('vPnl').textContent = (pnl>=0?'+':'')+' $'+Math.abs(pnl).toFixed(4);
+    document.getElementById('vPct').textContent = (pct>=0?'+':'')+pct.toFixed(2)+'%';
+  }
+  setInterval(()=>{
+    mk += (Math.random()-0.48)*0.003;
+    mk = Math.max(mn+0.01,Math.min(mx-0.01,mk));
+    upd();
+  }, 2000);
+  upd();
+})();
+</script>

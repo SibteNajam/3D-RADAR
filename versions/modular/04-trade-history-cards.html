@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trade History Cards - VaultBot</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #070810;
+      font-family: 'Montserrat', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ════════ SECTION ════════ */
+    .history-section {
+      width: 100%;
+      max-width: 1500px;
+      padding: 20px 0;
+    }
+
+    .sec-hd {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px;
+      border-bottom: .5px solid #111828;
+    }
+
+    .sec-title {
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: #4A5070;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .sec-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #4DB86A;
+      box-shadow: 0 0 8px rgba(77,184,106,.6);
+      animation: pulse 2s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:.5} 50%{opacity:1} }
+
+    .sec-count {
+      font-family: 'Space Mono', monospace;
+      font-size: 10px;
+      color: #3A4060;
+      border: .5px solid #1A1F30;
+      border-radius: 4px;
+      padding: 4px 10px;
+      background: rgba(13,16,24,.4);
+    }
+
+    .track-wrap {
+      overflow-x: auto;
+      overflow-y: visible;
+      padding: 32px 20px 42px;
+      scrollbar-width: none;
+    }
+    .track-wrap::-webkit-scrollbar { display: none; }
+
+    .track {
+      display: flex;
+      width: max-content;
+      gap: 18px;
+      padding: 8px;
+    }
+
+    /* ════════════════════════════════════════════════
+       CARD
+       Matches the Uiverse structure exactly:
+       - overflow:hidden clips the circle orbs
+       - No bracket lines
+       - Logo top-left (big, prominent)
+    ════════════════════════════════════════════════ */
+    .th-card {
+      position: relative;
+      width: 200px;
+      height: 270px;
+      flex-shrink: 0;
+      cursor: pointer;
+      overflow: hidden;
+      border-radius: 12px;
+
+      background-image:
+        repeating-linear-gradient(0deg,
+          transparent 0px, transparent 3px,
+          rgba(255,255,255,.010) 3px, rgba(255,255,255,.010) 4px
+        ),
+        linear-gradient(150deg,
+          rgba(14,18,34,.98) 0%,
+          rgba(7,10,20,1) 100%
+        );
+
+      box-shadow:
+        0 0 0 1px rgba(var(--neon),.18),
+        0 20px 50px rgba(0,0,0,.5);
+
+      transition:
+        transform .5s cubic-bezier(.785,.135,.15,.86),
+        box-shadow .5s cubic-bezier(.785,.135,.15,.86);
+    }
+
+    .th-card:hover {
+      transform: scale(1.06);
+      box-shadow:
+        0 0 0 1px rgba(var(--neon),.42),
+        0 0 26px rgba(var(--neon),.10),
+        0 22px 50px rgba(0,0,0,.6);
+    }
+
+    /* ─── Neon border ring ─── */
+    .th-border {
+      position: absolute;
+      inset: 0;
+      border-radius: 12px;
+      border: 1px solid rgba(var(--neon),.18);
+      pointer-events: none;
+      z-index: 100;
+      transition: border-color .5s ease;
+    }
+    .th-card:hover .th-border {
+      border-color: rgba(var(--neon),.38);
+    }
+
+    /* ─── Logo (top-left) ─── */
+    .th-logo-wrap {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 90;
+      pointer-events: none;
+    }
+
+    .th-logo-img {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      object-fit: contain;
+      display: block;
+      background: rgba(0,0,0,.4);
+      padding: 3px;
+      box-shadow: 0 0 10px rgba(var(--neon),.22);
+    }
+
+    .th-logo-letter {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(var(--neon),.10);
+      border: 1.5px solid rgba(var(--neon),.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 12px;
+      font-weight: 800;
+      color: var(--hex);
+      box-shadow: 0 0 10px rgba(var(--neon),.18);
+    }
+
+    /* HUD micro-labels */
+    .th-sig {
+      position: absolute;
+      bottom: 12px; right: 12px;
+      font-family: 'Space Mono', monospace;
+      font-size: 7px;
+      color: rgba(255,255,255,.08);
+      letter-spacing: .06em;
+      z-index: 7;  /* between content (8, hidden by :has) and orbs (13-15) */
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.2s ease;
+    }
+
+    /* ════════════════════════════════════════════════
+       SIDEBAR LAYERING SYSTEM
+       
+       The three 12px vertical strips on the right edge act as the layers.
+       When hovered, they expand to cover the entire card.
+       
+       Onion-peel stacking:
+         layer-3 (bottom) = lowest z-index (13)
+         layer-2 (middle) = middle z-index (14)
+         layer-1 (top)    = highest z-index (15)
+
+       No z-index changes on hover. If layer-3 expands (z:13), 
+       layer-2 and layer-1 remain visible as strips on top of it, 
+       maintaining accessibility.
+    ════════════════════════════════════════════════ */
+
+    .th-layer {
+      position: absolute;
+      right: 0;
+      width: 10px; /* sidebar strip width */
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      padding-left: 18px; /* keeps text off the immediate edge when expanded */
+      overflow: hidden;
+      transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    /* Content wrapper inside layer */
+    .th-layer .layer-inner {
+      width: 170px;
+      opacity: 0;
+      transform: translateX(20px);
+      transition: all 0.3s ease 0.1s;
+      pointer-events: none;
+    }
+
+    .th-layer .layer-title {
+      display: block;
+      color: #fff;
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      margin-bottom: 8px;
+      letter-spacing: .04em;
+      white-space: nowrap;
+    }
+
+    .th-layer .layer-text {
+      color: rgba(255,255,255,.72);
+      font-family: 'Space Mono', monospace;
+      font-size: 8.5px;
+      line-height: 1.85;
+      white-space: nowrap;
+    }
+
+    .th-layer .layer-text b {
+      color: #fff;
+      font-weight: 700;
+    }
+
+    /* ── Hover expansion ── */
+    .th-card .th-layer:hover {
+      width: 100%;
+      height: 100%;
+      top: 0;
+      border-radius: 12px;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.6); /* drop shadow over default content */
+    }
+
+    .th-card .th-layer:hover .layer-inner {
+      opacity: 1;
+      transform: translateX(0);
+      pointer-events: auto;
+    }
+
+    /* ── Layer positions & colors ── */
+
+    /* layer-3: Bottom strip, Lowest Z (13) */
+    .th-layer.layer-3 {
+      top: 66.66%;
+      height: 33.34%;
+      z-index: 13;
+      background: linear-gradient(145deg, rgba(var(--orb3),.98), rgba(var(--orb3),.75));
+    }
+
+    /* layer-2: Middle strip, Middle Z (14) */
+    .th-layer.layer-2 {
+      top: 33.33%;
+      height: 33.34%; /* overlapping .01% avoids subpixel gaps */
+      z-index: 14;
+      background: linear-gradient(145deg, rgba(var(--orb2),.98), rgba(var(--orb2),.75));
+    }
+
+    /* layer-1: Top strip, Highest Z (15) */
+    .th-layer.layer-1 {
+      top: 0;
+      height: 33.34%;
+      z-index: 15;
+      background: linear-gradient(145deg, rgba(var(--orb1),.98), rgba(var(--orb1),.75));
+    }
+
+    /* ════════
+       DEFAULT CARD CONTENT
+    ════════ */
+    .th-content {
+      position: absolute;
+      inset: 0;
+      padding: 11px 20px 11px 11px; /* extra right padding to avoid the 10px strips */
+      z-index: 8;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      gap: 4px;
+      pointer-events: none;
+      opacity: 1;
+      transition: opacity 0.2s ease;
+    }
+
+    /* Hide default content + sig label when ANY layer is expanded */
+    .th-card:has(.th-layer:hover) .th-content {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .th-card:has(.th-layer:hover) .th-sig {
+      opacity: 0;
+    }
+
+    .th-sym {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: #E8EAF6;
+      letter-spacing: .02em;
+    }
+
+    .th-pair {
+      font-family: 'Space Mono', monospace;
+      font-size: 7px;
+      font-weight: 700;
+      color: rgba(154,168,188,.42);
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .th-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 10px;
+      border-radius: 20px;
+      background: rgba(0,0,0,.45);
+      border: 1px solid rgba(var(--neon),.20);
+      width: fit-content;
+      margin: 2px 0;
+    }
+
+    .th-status-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--hex);
+      box-shadow: 0 0 5px var(--hex);
+    }
+
+    .th-status-text {
+      font-family: 'Space Mono', monospace;
+      font-size: 7.5px;
+      font-weight: 700;
+      color: var(--hex);
+      letter-spacing: .13em;
+    }
+
+    .th-pnl {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -.02em;
+      line-height: 1.1;
+    }
+    .th-pnl.profit { color: #4DB86A; }
+    .th-pnl.loss   { color: #D65C5C; }
+
+    .th-tags {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+      margin: 1px 0;
+    }
+
+    .th-tag {
+      font-family: 'Space Mono', monospace;
+      font-size: 7px;
+      font-weight: 700;
+      color: var(--hex);
+      padding: 2px 7px;
+      border-radius: 3px;
+      border: 1px solid rgba(var(--neon),.20);
+      background: rgba(var(--neon),.06);
+      letter-spacing: .06em;
+    }
+
+    .th-time {
+      font-family: 'Space Mono', monospace;
+      font-size: 7px;
+      color: rgba(154,168,188,.22);
+      letter-spacing: .05em;
+      margin-top: 2px;
+    }
+
+    /* Entry animation */
+    @keyframes slideIn {
+      from { transform: translateY(46px) scale(.93); opacity: 0; }
+      to   { transform: translateY(0) scale(1); opacity: 1; }
+    }
+    .th-card.entering {
+      animation: slideIn .65s cubic-bezier(.22,1,.36,1) forwards;
+    }
+
+
+
+    /* Toast */
+    #toast {
+      position: fixed;
+      top: 20px; right: 20px;
+      z-index: 999;
+      background: rgba(9,12,24,.96);
+      border: .5px solid rgba(77,184,106,.22);
+      border-radius: 8px;
+      padding: 9px 15px;
+      font-size: 10px;
+      font-family: 'Space Mono', monospace;
+      color: #4DB86A;
+      opacity: 0;
+      transform: translateX(16px);
+      transition: opacity .28s, transform .28s;
+      pointer-events: none;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 30px rgba(0,0,0,.4);
+    }
+    #toast.on { opacity: 1; transform: translateX(0); }
+  </style>
+</head>
+<body>
+
+<div class="history-section">
+  <div class="sec-hd">
+    <span class="sec-title">
+      <span class="sec-dot"></span>
+      Trade History // Completed Spot Trades
+    </span>
+    <span class="sec-count" id="card-count">7 RECORDS</span>
+  </div>
+  <div class="track-wrap">
+    <div class="track" id="history-track"></div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+  /* ════════════════════════
+     SPOT TRADE DATA
+     Realistic completed spot trades:
+     buyAt  = entry price
+     sellAt = exit price
+     qty    = amount traded (with unit)
+     vol    = approx USD volume of position
+  ════════════════════════ */
+  const POOL = [
+    { sym:'BTC',  pair:'BTC/USDT SPOT',  side:'BUY→SELL', qty:'0.048 BTC', buyAt:62400,  sellAt:64820, vol:'$3,110',  pnl: 116.16, roi: 3.88 },
+    { sym:'ETH',  pair:'ETH/USDT SPOT',  side:'BUY→SELL', qty:'1.40 ETH',  buyAt:3050,   sellAt:3191,  vol:'$4,467',  pnl: 197.40, roi: 4.62 },
+    { sym:'SOL',  pair:'SOL/USDT SPOT',  side:'BUY→SELL', qty:'12.5 SOL',  buyAt:168.50, sellAt:161.0, vol:'$2,012',  pnl: -93.75, roi:-4.45 },
+    { sym:'BNB',  pair:'BNB/USDT SPOT',  side:'BUY→SELL', qty:'3.20 BNB',  buyAt:582.00, sellAt:594.0, vol:'$1,900',  pnl:  38.40, roi: 2.06 },
+    { sym:'AVAX', pair:'AVAX/USDT SPOT', side:'BUY→SELL', qty:'18.0 AVAX', buyAt:40.20,  sellAt:38.40, vol:'$691',   pnl: -32.40, roi:-4.48 },
+    { sym:'ARB',  pair:'ARB/USDT SPOT',  side:'BUY→SELL', qty:'250 ARB',   buyAt:1.04,   sellAt:1.12,  vol:'$280',   pnl:  20.00, roi: 7.69 },
+    { sym:'LINK', pair:'LINK/USDT SPOT', side:'BUY→SELL', qty:'30.0 LINK', buyAt:14.40,  sellAt:14.82, vol:'$444',   pnl:  12.60, roi: 2.92 },
+    { sym:'INJ',  pair:'INJ/USDT SPOT',  side:'BUY→SELL', qty:'4.50 INJ',  buyAt:31.70,  sellAt:28.60, vol:'$128',   pnl: -13.95, roi:-9.78 },
+    { sym:'TIA',  pair:'TIA/USDT SPOT',  side:'BUY→SELL', qty:'55.0 TIA',  buyAt:8.80,   sellAt:9.14,  vol:'$502',   pnl:  18.70, roi: 3.86 },
+    { sym:'WIF',  pair:'WIF/USDT SPOT',  side:'BUY→SELL', qty:'40.0 WIF',  buyAt:3.02,   sellAt:2.87,  vol:'$114',   pnl:  -6.00, roi:-4.97 },
+    { sym:'JUP',  pair:'JUP/USDT SPOT',  side:'BUY→SELL', qty:'100 JUP',   buyAt:0.88,   sellAt:0.94,  vol:'$94',    pnl:   6.00, roi: 6.82 },
+    { sym:'SEI',  pair:'SEI/USDT SPOT',  side:'BUY→SELL', qty:'120 SEI',   buyAt:0.65,   sellAt:0.61,  vol:'$73',    pnl:  -4.80, roi:-6.15 },
+  ];
+
+  /* Coin neon colour (identical to ring cards) */
+  function getCoinColors(sym) {
+    return ({
+      BTC:  { neon:'255,170,0',   hex:'#ffaa00' },
+      ETH:  { neon:'98,126,234',  hex:'#627eea' },
+      SOL:  { neon:'0,255,136',   hex:'#00ff88' },
+      BNB:  { neon:'240,165,23',  hex:'#f0a517' },
+      AVAX: { neon:'232,65,66',   hex:'#e84142' },
+      ARB:  { neon:'40,185,239',  hex:'#28b9ef' },
+      LINK: { neon:'84,71,255',   hex:'#5447ff' },
+      INJ:  { neon:'244,208,63',  hex:'#f4d03f' },
+      TIA:  { neon:'98,71,234',   hex:'#6247ea' },
+      WIF:  { neon:'139,95,191',  hex:'#8b5fbf' },
+      JUP:  { neon:'255,215,0',   hex:'#ffd700' },
+      SEI:  { neon:'32,185,163',  hex:'#20b9a3' },
+    })[sym] || { neon:'0,255,136', hex:'#00ff88' };
+  }
+
+  /* 3 visually distinct shades per coin for the orb layers */
+  function getOrbRGBs(sym) {
+    return ({
+      BTC:  { o1:'215,105,0',   o2:'255,155,10',  o3:'255,205,60'  },
+      ETH:  { o1:'28,38,155',   o2:'68,88,210',   o3:'115,140,240' },
+      SOL:  { o1:'0,125,72',    o2:'0,188,112',   o3:'48,228,148'  },
+      BNB:  { o1:'165,102,0',   o2:'212,148,12',  o3:'252,188,42'  },
+      AVAX: { o1:'162,22,22',   o2:'208,48,48',   o3:'242,98,78'   },
+      ARB:  { o1:'8,98,175',    o2:'32,152,218',  o3:'78,192,244'  },
+      LINK: { o1:'32,22,148',   o2:'62,48,192',   o3:'102,88,238'  },
+      INJ:  { o1:'172,142,12',  o2:'218,182,38',  o3:'252,222,78'  },
+      TIA:  { o1:'48,22,162',   o2:'72,52,202',   o3:'112,88,232'  },
+      WIF:  { o1:'78,32,128',   o2:'118,68,168',  o3:'158,108,202' },
+      JUP:  { o1:'182,148,0',   o2:'228,188,22',  o3:'255,228,58'  },
+      SEI:  { o1:'8,108,98',    o2:'18,152,138',  o3:'48,192,168'  },
+    })[sym] || { o1:'0,120,70', o2:'0,185,110', o3:'50,225,145' };
+  }
+
+  /* Logo fetch — same CDN as ring cards */
+  async function fetchLogoUrl(sym) {
+    const name = sym.toLowerCase();
+    const urls = [
+      `https://raw.githubusercontent.com/atomiclabs/cryptocurrency-icons/master/128/color/${name}.png`,
+      `https://cryptologos.cc/logos/${name}-${name}-logo.png`,
+    ];
+    for (const u of urls) {
+      try {
+        const r = await fetch(u, { mode:'cors' });
+        if (r.ok) return u;
+      } catch(e) {}
+    }
+    return null;
+  }
+
+  /* Format helpers */
+  const fmtPrice = v => v >= 1000
+    ? '$' + v.toLocaleString(undefined,{minimumFractionDigits:0,maximumFractionDigits:0})
+    : '$' + v.toFixed(v < 1 ? 3 : 2);
+
+  let dealIdx = 7;
+
+  /* ════════════════════════
+     CARD BUILDER
+     DOM order is CRITICAL for the orb hover logic:
+       orb-3 FIRST  → lowest z (front large arc)
+       orb-2 SECOND → middle z
+       orb-1 LAST   → highest z (deep small arc at top-right)
+  ════════════════════════ */
+  function createCard(data, animate = false) {
+    const c   = getCoinColors(data.sym);
+    const o   = getOrbRGBs(data.sym);
+    const win = data.pnl >= 0;
+    const pnlStr = (win ? '+$' : '\u2212$') + Math.abs(data.pnl).toFixed(2);
+    const roiStr = (data.roi >= 0 ? '+' : '') + data.roi.toFixed(2) + '%';
+    const th  = Math.floor(Math.random()*12) + 1;
+    const tm  = Math.floor(Math.random()*60);
+    const ago = `${th}h ${tm}m ago`;
+    const fee = (Math.abs(data.pnl) * 0.0015).toFixed(2); // 0.15% fee estimate
+    const net = (data.pnl - parseFloat(fee) * (win ? -1 : 1)).toFixed(2);
+
+    const card = document.createElement('div');
+    card.className = 'th-card' + (animate ? ' entering' : '');
+    card.style.setProperty('--neon', c.neon);
+    card.style.setProperty('--hex',  c.hex);
+    card.style.setProperty('--orb1', o.o1);
+    card.style.setProperty('--orb2', o.o2);
+    card.style.setProperty('--orb3', o.o3);
+
+    card.innerHTML = `
+      <!-- Neon border ring — always on top, z-index:100 -->
+      <div class="th-border"></div>
+
+      <!-- Logo — top-left, z-index:90 -->
+      <div class="th-logo-wrap">
+        <div class="th-logo-letter">${data.sym[0]}</div>
+      </div>
+
+      <span class="th-sig">VB·SPOT·${data.sym}</span>
+
+      <!-- layer-3: FIRST in DOM = lowest z ─ bottom strip ─ P&L layer -->
+      <div class="th-layer layer-3">
+        <div class="layer-inner">
+          <span class="layer-title">💰 P&L Summary</span>
+          <span class="layer-text">
+            Gross P&L: <b>${pnlStr}</b><br>
+            Net (after fee): <b>${win ? '+$' : '−$'}${Math.abs(parseFloat(net)).toFixed(2)}</b><br>
+            Return: <b>${roiStr}</b><br>
+            Trade fee: <b>$${fee}</b>
+          </span>
+        </div>
+      </div>
+
+      <!-- layer-2: SECOND in DOM = middle z ─ middle strip ─ trade details layer -->
+      <div class="th-layer layer-2">
+        <div class="layer-inner">
+          <span class="layer-title">📈 Trade Details</span>
+          <span class="layer-text">
+            Qty traded: <b>${data.qty}</b><br>
+            Buy at: <b>${fmtPrice(data.buyAt)}</b><br>
+            Sold at: <b>${fmtPrice(data.sellAt)}</b><br>
+            Position size: <b>${data.vol}</b>
+          </span>
+        </div>
+      </div>
+
+      <!-- layer-1: LAST in DOM = highest z ─ top strip ─ market layer -->
+      <div class="th-layer layer-1">
+        <div class="layer-inner">
+          <span class="layer-title">📊 Market Info</span>
+          <span class="layer-text">
+            Market: <b>Spot / CEX</b><br>
+            Pair: <b>${data.pair}</b><br>
+            Closed: <b>${ago}</b><br>
+            Result: <b>${win ? 'Profitable ✓' : 'Stopped out ✗'}</b>
+          </span>
+        </div>
+      </div>
+
+      <!-- Default content — always visible in the lower portion of the card -->
+      <div class="th-content">
+        <div class="th-sym">${data.sym}</div>
+        <div class="th-pair">${data.pair}</div>
+        <div class="th-status">
+          <span class="th-status-dot"></span>
+          <span class="th-status-text">${win ? 'PROFIT' : 'LOSS'}</span>
+        </div>
+        <div class="th-pnl ${win ? 'profit' : 'loss'}">${pnlStr}</div>
+        <div class="th-tags">
+          <span class="th-tag">SPOT</span>
+          <span class="th-tag">${data.qty.split(' ')[1]}</span>
+          <span class="th-tag">${roiStr}</span>
+        </div>
+        <div class="th-time">${ago}</div>
+      </div>
+    `;
+
+    /* Async logo swap */
+    const logoWrap = card.querySelector('.th-logo-wrap');
+    fetchLogoUrl(data.sym).then(url => {
+      if (url && logoWrap) {
+        logoWrap.innerHTML = `<img class="th-logo-img" src="${url}" alt="${data.sym}" crossorigin="anonymous" onerror="this.parentElement.innerHTML='<div class=th-logo-letter>${data.sym[0]}</div>'">`;
+      }
+    });
+
+    return card;
+  }
+
+  /* ════════════════════════
+     INIT & DEAL
+  ════════════════════════ */
+  function initHistory() {
+    const track = document.getElementById('history-track');
+    track.innerHTML = '';
+    POOL.slice(0, 7).forEach((data, i) => {
+      const card = createCard(data);
+      card.style.opacity = '0';
+      card.style.transform = 'translateY(44px) scale(.93)';
+      track.appendChild(card);
+      setTimeout(() => {
+        card.style.transition = 'all .62s cubic-bezier(.22,1,.36,1)';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0) scale(1)';
+      }, i * 110);
+    });
+    updateCount();
+  }
+
+  function dealNew() {
+    const data = POOL[dealIdx % POOL.length];
+    dealIdx++;
+    const track = document.getElementById('history-track');
+    const card = createCard(data, true);
+    track.appendChild(card);
+    updateCount();
+
+    const toast = document.getElementById('toast');
+    toast.textContent = `✦ ${data.sym} spot trade closed`;
+    toast.classList.add('on');
+    setTimeout(() => toast.classList.remove('on'), 2400);
+
+    const wrap = document.querySelector('.track-wrap');
+    setTimeout(() => wrap.scrollTo({ left: wrap.scrollWidth, behavior: 'smooth' }), 120);
+  }
+
+  function updateCount() {
+    const n = document.getElementById('history-track').children.length;
+    document.getElementById('card-count').textContent = `${n} RECORD${n === 1 ? '' : 'S'}`;
+  }
+
+  initHistory();
+  setInterval(dealNew, 14000);
+</script>
+</body>
+</html>

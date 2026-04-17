@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VaultBot Dashboard — Combined View</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Space+Grotesk:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      background: #070810;
+      min-height: 100vh;
+      font-family: 'Space Grotesk', sans-serif;
+      color: #E8EAF6;
+      overflow-x: hidden;
+    }
+
+    /* ══════════════════════════
+       TOP NAV BAR
+    ══════════════════════════ */
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 52px;
+      border-bottom: .5px solid #0E1220;
+      background: rgba(7, 8, 16, 0.98);
+      position: sticky;
+      top: 0;
+      z-index: 500;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-logo-mark {
+      width: 26px; height: 26px;
+      background: linear-gradient(135deg, #4DB86A, #00ff88);
+      border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Space Mono', monospace;
+      font-size: 11px;
+      font-weight: 700;
+      color: #070810;
+      box-shadow: 0 0 12px rgba(0,255,136,.3);
+    }
+
+    .nav-logo-text {
+      font-family: 'Space Grotesk', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: #E8EAF6;
+      letter-spacing: .02em;
+    }
+
+    .nav-logo-text span {
+      color: #4DB86A;
+    }
+
+    .nav-status {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .nav-live {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      font-weight: 700;
+      color: #4DB86A;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .nav-live-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #4DB86A;
+      box-shadow: 0 0 8px rgba(77,184,106,.8);
+      animation: blink 1.4s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:.4} 50%{opacity:1} }
+
+    .nav-time {
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: #3A4060;
+      letter-spacing: .06em;
+    }
+
+    /* ══════════════════════════
+       PAGE WRAPPER
+    ══════════════════════════ */
+    .dashboard {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      width: 100%;
+    }
+
+    /* ══════════════════════════
+       SECTION LABEL (between components)
+    ══════════════════════════ */
+    .section-divider {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 32px 6px;
+    }
+
+    .section-divider::before, .section-divider::after {
+      content: '';
+      flex: 1;
+      height: .5px;
+      background: #0E1220;
+    }
+
+    .section-label {
+      font-family: 'Space Mono', monospace;
+      font-size: 8px;
+      font-weight: 700;
+      color: #1E2438;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    /* ══════════════════════════
+       IFRAMES
+       Each file loads fully in its own iframe.
+       scrolling="no" prevents individual scrollbars.
+       The bg color matches so seams are invisible.
+    ══════════════════════════ */
+    .frame-wrap {
+      width: 100%;
+      position: relative;
+    }
+
+    iframe {
+      display: block;
+      width: 100%;
+      border: none;
+      background: #070810;
+      /* overflow is clipped by scrolling=no */
+    }
+
+    #frame-rings {
+      height: 560px;   /* ring cards + their padding */
+    }
+
+    #frame-history {
+      height: 430px;   /* header + card track (270px cards) + padding */
+    }
+
+    /* ══════════════════════════
+       BOTTOM STATUS STRIP
+    ══════════════════════════ */
+    .status-strip {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 32px;
+      border-top: .5px solid #0E1220;
+      background: rgba(7,8,16,.98);
+    }
+
+    .strip-left {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .strip-item {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: 'Space Mono', monospace;
+      font-size: 9px;
+      color: #3A4060;
+      letter-spacing: .08em;
+    }
+
+    .strip-item-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .strip-item.green  { color: #4DB86A; }
+    .strip-item.yellow { color: #f0a517; }
+    .strip-item.red    { color: #e84142; }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav class="nav">
+    <div class="nav-logo">
+      <div class="nav-logo-mark">VB</div>
+      <span class="nav-logo-text">Vault<span>Bot</span></span>
+    </div>
+    <div class="nav-status">
+      <span class="nav-live">
+        <span class="nav-live-dot"></span>
+        Live Feed
+      </span>
+      <span class="nav-time" id="nav-clock">--:--:--</span>
+    </div>
+  </nav>
+
+  <!-- MAIN DASHBOARD -->
+  <div class="dashboard">
+
+    <!-- SECTION 1: ACTIVE TRADES (rotating ring cards) -->
+    <div class="frame-wrap">
+      <!--
+        iframe loads 01-rotating-ring-cards.html in full.
+        scrolling="no" hides that file's own scrollbar.
+        The file's background (#070810) matches ours — seamless.
+      -->
+      <iframe
+        id="frame-rings"
+        src="01-rotating-ring-cards.html"
+        scrolling="no"
+        title="Active Trades — Rotating Ring Cards"
+        loading="eager"
+      ></iframe>
+    </div>
+
+    <!-- DIVIDER -->
+    <div class="section-divider">
+      <span class="section-label">Completed Positions</span>
+    </div>
+
+    <!-- SECTION 2: TRADE HISTORY (horizontal glassy cards) -->
+    <div class="frame-wrap">
+      <!--
+        iframe loads 04-trade-history-cards.html in full.
+      -->
+      <iframe
+        id="frame-history"
+        src="04-trade-history-cards.html"
+        scrolling="no"
+        title="Trade History — Closed Spot Trades"
+        loading="eager"
+      ></iframe>
+    </div>
+
+  </div>
+
+  <!-- STATUS STRIP -->
+  <div class="status-strip">
+    <div class="strip-left">
+      <span class="strip-item green">
+        <span class="strip-item-dot"></span>
+        Engine Online
+      </span>
+      <span class="strip-item yellow">
+        <span class="strip-item-dot"></span>
+        3 Active Trades
+      </span>
+      <span class="strip-item red">
+        <span class="strip-item-dot"></span>
+        1 Stop Hit
+      </span>
+    </div>
+    <span class="strip-item">VaultBot v2.4.1 · Binance Spot</span>
+  </div>
+
+  <script>
+    /* Live clock in the nav */
+    function tick() {
+      const now = new Date();
+      const pad = n => String(n).padStart(2, '0');
+      document.getElementById('nav-clock').textContent =
+        `${pad(now.getHours())}:${pad(now.getMinutes())}:${pad(now.getSeconds())} UTC+5`;
+    }
+    tick();
+    setInterval(tick, 1000);
+  </script>
+
+</body>
+</html>
